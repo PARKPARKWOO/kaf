@@ -15,6 +15,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder encoder;
 
+    public Optional<Member> findByUsername(String userId) {
+        return memberRepository.findByName(userId);
+    }
+
 
     //-- Security Join --//
 }
