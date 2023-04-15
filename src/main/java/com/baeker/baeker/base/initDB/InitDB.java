@@ -28,7 +28,7 @@ public class InitDB {
         private final MemberService memberService;
 
         public void initData() {
-            MemberJoinForm form = new MemberJoinForm("userId", "name", "1234", "1234");
+            MemberJoinForm form = new MemberJoinForm("user1", "name", "1234", "1234");
             Member member = memberService.join(form).getData();
         }
     }

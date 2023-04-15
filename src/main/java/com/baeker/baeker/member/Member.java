@@ -28,6 +28,8 @@ public class Member {
     private Long id;
     @Column(unique = true)
     private String userId;
+    @Column(unique = true)
+    private String studyId;
     private String name;
     private String password;
     private String provider;

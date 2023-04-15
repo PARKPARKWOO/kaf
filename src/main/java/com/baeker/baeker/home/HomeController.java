@@ -13,6 +13,7 @@ public class HomeController {
 
     private final Rq rq;
 
+    //-- welcome page --//
     @GetMapping("/")
     public String home() {
         log.info("홈페이지 요청 확인");
