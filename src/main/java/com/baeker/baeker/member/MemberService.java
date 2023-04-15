@@ -20,7 +20,7 @@ public class MemberService {
 
 
     //-- find by name --//
-    public Optional<Member> findByUsername(String userId) {
+    public Optional<Member> getMember(String userId) {
         return memberRepository.findByUserId(userId);
     }
 
@@ -37,7 +37,7 @@ public class MemberService {
     //-- Join : Social + Security 실질적인 처리 --//
     private RsData<Member> join(String provider, String userId, String name, String password) {
 
-        if (this.findByUsername(userId).isPresent())
+        if (this.getMember(userId).isPresent())
             return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(userId));
 
         if (StringUtils.hasText(password))
@@ -51,7 +51,7 @@ public class MemberService {
     //-- Social login --//
     @Transactional
     public RsData<Member> whenSocialLogin(String provider, String userId, String username) {
-        Optional<Member> opMember = findByUsername(username);
+        Optional<Member> opMember = getMember(username);
 
         if (opMember.isPresent())
             return RsData.of("S-2", "로그인 되었습니다.", opMember.get());
