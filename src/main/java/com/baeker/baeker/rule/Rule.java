@@ -45,6 +45,6 @@ public class Rule {
     @OneToOne(fetch = FetchType.LAZY)
     private StudyRule studyRule;
 
-    @Enumerated(EnumType.STRING)
-    private Difficulty difficulty;
+
+    private String difficulty;
 }

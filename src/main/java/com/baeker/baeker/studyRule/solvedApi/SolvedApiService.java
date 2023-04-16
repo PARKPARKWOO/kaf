@@ -1,9 +1,12 @@
 package com.baeker.baeker.studyRule.solvedApi;
 
+import com.baeker.baeker.rule.Rule;
+import com.baeker.baeker.rule.RuleRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,7 @@ public class SolvedApiService {
     private final SolvedApiManager solvedApiManager;
 
 
+
     //== 티어확인 및 문제풀이 리턴==//
     public Long getTier(String tier) throws IOException, ParseException, UnsupportedEncodingException {
         JSONArray test = this.solvedApiManager.getProblemCount();
@@ -25,7 +29,7 @@ public class SolvedApiService {
         if (test.size() > 0) {
             for (Object o : test) {
                 JSONObject jsonObj = (JSONObject) o;
-                switch (tier.toUpperCase()) {
+                switch (tier) {
                     case "BRONZE" -> {
                         if (jsonObj.get("level").equals(1L) || jsonObj.get("level").equals(2L) || jsonObj.get("level").equals(3L) || jsonObj.get("level").equals(4L) || jsonObj.get("level").equals(5L)) {
                             temp += (Long) jsonObj.get("solved");
