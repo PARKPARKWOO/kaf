@@ -19,10 +19,21 @@ public class MemberService {
     private final PasswordEncoder encoder;
 
 
-    //-- find by name --//
+    //-- find by username --//
     public Optional<Member> getMember(String username) {
         return memberRepository.findByUsername(username);
     }
+
+    //-- find by id --//
+    public RsData<Member> getMember(Long id) {
+        Optional<Member> byId = memberRepository.findById(id);
+
+        if (byId.isPresent())
+            return RsData.successOf(byId.get());
+
+        return RsData.of("F-1", "존재하지 않는 id 입니다.");
+    }
+
 
     //-- Security Join ( password 검증 ) --//
     @Transactional
