@@ -19,12 +19,23 @@ public class MemberService {
     private final PasswordEncoder encoder;
 
 
-    //-- find by name --//
+    //-- find by username --//
     public Optional<Member> getMember(String username) {
         return memberRepository.findByUsername(username);
     }
 
-    //-- Security Join : password 검증 --//
+    //-- find by id --//
+    public RsData<Member> getMember(Long id) {
+        Optional<Member> byId = memberRepository.findById(id);
+
+        if (byId.isPresent())
+            return RsData.successOf(byId.get());
+
+        return RsData.of("F-1", "존재하지 않는 id 입니다.");
+    }
+
+
+    //-- Security Join ( password 검증 ) --//
     @Transactional
     public RsData<Member> join(MemberJoinForm form) {
 
@@ -33,6 +44,19 @@ public class MemberService {
 
         return join("Baeker", form.getUsername(), form.getName(), form.getAbout(), form.getPassword());
     }
+
+    //-- Social Join, Login --//
+    @Transactional
+    public RsData<Member> whenSocialLogin(String provider, String username, String name) {
+        Optional<Member> opMember = getMember(username);
+
+        if (opMember.isPresent())
+            return RsData.of("S-2", "로그인 되었습니다.", opMember.get());
+
+        return join(provider, username, name, "", "");
+    }
+
+
 
     //-- Join : Social + Security 실질적인 처리 --//
     private RsData<Member> join(String provider, String username, String name, String about, String password) {
@@ -46,16 +70,5 @@ public class MemberService {
         Member member = Member.createMember(provider, username, name, about, password);
         memberRepository.save(member);
         return RsData.of("S-1", "회원가입이 완료되었습니다. \n로그인 해주세요.", member);
-    }
-
-    //-- Social login --//
-    @Transactional
-    public RsData<Member> whenSocialLogin(String provider, String username, String name) {
-        Optional<Member> opMember = getMember(username);
-
-        if (opMember.isPresent())
-            return RsData.of("S-2", "로그인 되었습니다.", opMember.get());
-
-        return join(provider, username, name, "", "");
     }
 }
