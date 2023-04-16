@@ -27,7 +27,7 @@ public class Member {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @Column(unique = true)
-    private String userId;
+    private String username;
     @Column(unique = true)
     private String studyId;
     private String name;
@@ -42,9 +42,9 @@ public class Member {
 
 
     //-- crate method --//
-    protected static Member createMember(String userId, String name, String password) {
+    protected static Member createMember(String username, String name, String password) {
         return builder()
-                .userId(userId)
+                .username(username)
                 .name(name)
                 .password(password)
                 .build();
@@ -58,7 +58,7 @@ public class Member {
         grantedAuthorities.add(new SimpleGrantedAuthority("member"));
 
         // admin 권한 부여 //
-        if ("admin".equals(userId))
+        if ("admin".equals(username))
             grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
 
         return grantedAuthorities;

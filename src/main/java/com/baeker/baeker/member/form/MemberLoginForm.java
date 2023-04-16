@@ -12,7 +12,7 @@ public class MemberLoginForm {
 
     @NotBlank
     @Size(min = 4, max = 20)
-    private String userId;
+    private String username;
 
     @NotBlank
     @Size(min = 4, max = 20)

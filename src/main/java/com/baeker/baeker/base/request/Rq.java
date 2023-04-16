@@ -23,6 +23,7 @@ public class Rq {
     private final User user;
     private Member member = null; // 레이지 로딩, 처음부터 넣지 않고, 요청이 들어올 때 넣는다.
 
+
     public Rq(MemberService memberService, HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
         this.memberService = memberService;
         this.req = req;
@@ -48,6 +49,7 @@ public class Rq {
     public boolean isLogout() {
         return !isLogin();
     }
+
 
     // 로그인 된 회원의 객체
     public Member getMember() {
@@ -75,6 +77,7 @@ public class Rq {
         return historyBack(rsData.getMsg());
     }
 
+
     // 302 + 메세지
     public String redirectWithMsg(String url, RsData rsData) {
         return redirectWithMsg(url, rsData.getMsg());
@@ -84,6 +87,8 @@ public class Rq {
     public String redirectWithMsg(String url, String msg) {
         return "redirect:" + urlWithMsg(url, msg);
     }
+
+
 
     private String urlWithMsg(String url, String msg) {
         // 기존 URL에 혹시 msg 파라미터가 있다면 그것을 지우고 새로 넣는다.

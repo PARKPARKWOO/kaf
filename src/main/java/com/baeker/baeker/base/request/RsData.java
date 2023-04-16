@@ -22,6 +22,8 @@ public class RsData<T> {
         return of(resultCode, msg, null);
     }
 
+
+
     public static <T> RsData<T> successOf(T data) {
         return of("S-1", "성공", data);
     }
@@ -29,6 +31,8 @@ public class RsData<T> {
     public static <T> RsData<T> failOf(T data) {
         return of("F-1", "실패", data);
     }
+
+
 
     //-- RsData Checker --//
     public boolean isSuccess() {
