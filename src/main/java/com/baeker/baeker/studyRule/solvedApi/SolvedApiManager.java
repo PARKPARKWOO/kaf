@@ -1,5 +1,6 @@
 package com.baeker.baeker.studyRule.solvedApi;
 
+import com.baeker.baeker.member.Member;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,19 +19,22 @@ public class SolvedApiManager {
     private final String api_problem = "/problem_stats";
     private final String api_handle = "?handle=";
 
+    private Member member;
 
 
     private String getUserInformation() throws UnsupportedEncodingException {
         return BASE_URL +
                 api_user +
-                api_handle + "wy9295";
+                api_handle +
+                member.getStudyId();
     }
 
     private String getProblemStats() throws UnsupportedEncodingException{
         RestTemplate restTemplate = new RestTemplate();
         return BASE_URL +
                 api_problem +
-                api_handle + "wy9295";
+                api_handle +
+                member.getStudyId();
     }
 
 

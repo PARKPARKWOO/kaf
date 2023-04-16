@@ -30,7 +30,7 @@ public class Rule {
 
     private String provider;
 
-    private Integer xp;
+//    private Integer xp; // Study에만 있으면 될거같음
 
 //    @Builder.Default
 //    @Convert(converter = RuleForm.class)
@@ -44,4 +44,7 @@ public class Rule {
 
     @OneToOne(fetch = FetchType.LAZY)
     private StudyRule studyRule;
+
+    @Enumerated(EnumType.STRING)
+    private Difficulty difficulty;
 }
