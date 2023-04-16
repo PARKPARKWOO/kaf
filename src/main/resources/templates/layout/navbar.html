@@ -1,30 +1,27 @@
 <nav th:fragment="navbarFragment" class="sticky top-0 bg-gray-500">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
 
-        <a href="#" class="text-white font-bold text-xl ml-5 mt-3 mb-3">BaekJoonSupporter</a>
+        <a href="/" class="text-white font-bold text-xl ml-5 mt-3 mb-3">BaekJoonSupporter</a>
 
         <ul class="flex mr-5 mt-3 mb-3">
 
             <li th:if="${@rq.logout}">
-                <a class="text-white hover:text-gray-200 px-3 py-2 rounded">
+                <a href="/member/join"
+                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
                     Join
                 </a>
             </li>
 
             <li th:if="${@rq.logout}">
-                <a class="text-white hover:text-gray-200 px-3 py-2 rounded">
+                <a href="/member/login"
+                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
                     Login
                 </a>
             </li>
 
             <li th:if="${@rq.login}">
-                <a class="text-white hover:text-gray-200 px-3 py-2 rounded">
-                    Logout
-                </a>
-            </li>
-
-            <li th:if="${@rq.login}">
-                <a class="text-white hover:text-gray-200 px-3 py-2 rounded">
+                <a href="/member/profile"
+                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
                     Profile
                 </a>
             </li>
@@ -39,6 +36,14 @@
                 <a class="text-white hover:text-gray-200 px-3 py-2 rounded">
                     Study
                 </a>
+            </li>
+
+            <li th:if="${@rq.login}">
+                <a href="javascript:;" onclick="$(this).next().submit();"
+                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
+                    Logout
+                </a>
+                <form th:action="|/member/logout|" method="post"  hidden></form>
             </li>
 
         </ul>

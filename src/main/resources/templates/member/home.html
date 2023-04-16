@@ -4,14 +4,25 @@
 
 <div layout:fragment="content" class="flex-grow flex items-center justify-center min-h-screen flex flex-col">
 
-  <h1>hi</h1>
+    <div class="hero min-h-screen"
+         style="background-image: url(/images/welcome.jpg);">
 
-  <a href="/member/login"
-     class="bg-blue-500 text-white py-2 px-4
-               rounded-md hover:bg-blue-600 transition
-               duration-200 ease-in-out cursor-pointer">
-    로그인
-  </a>
+        <div class="hero-overlay bg-opacity-60"></div>
+        <div class="hero-content text-center text-neutral-content">
+
+            <div class="max-w-md">
+
+                <h1 class="mb-5 text-5xl font-bold">Hello there</h1>
+
+                <p class="mb-5">
+                    알고리즘 실력 향상은 BAEKER!<br>
+                    알고리즘 공부를 위한 스터디 그룹을 만들고 가입하세요.<br>
+                    다양한 규칙 수행 보상을 통해 스터디 랭커에 도전해 보세요!<br>
+                </p>
+                <a href="/member/login" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </div>
 
 </div>
 </html>

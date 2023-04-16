@@ -12,6 +12,20 @@
 
   <div class="form-control">
     <label class="label">
+      <span class="label-text">이름</span>
+    </label>
+    <input type="text" th:field="*{name}" name="username" placeholder="이름" class="input input-bordered" autofocus />
+  </div>
+
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">한줄 소개</span>
+    </label>
+    <input type="text" th:field="*{about}" name="username" placeholder="소개" class="input input-bordered" autofocus />
+  </div>
+
+  <div class="form-control">
+    <label class="label">
       <span class="label-text">비빌번호</span>
     </label>
     <input type="password" th:field="*{password}" placeholder="비빌번호" class="input input-bordered" />
