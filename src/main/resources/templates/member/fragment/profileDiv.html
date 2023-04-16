@@ -7,7 +7,7 @@
         th:text="|${@rq.member.name} 님의 프로필|">
     </h2>
 
-    <p>If a dog chews shoes whose shoes does he choose?</p>
+    <p th:text="${@rq.member.about}"></p>
 
     <div class="mt-8">
       <span>해결한 문제 :</span>

@@ -31,6 +31,15 @@
             return;
         }
 
+        //-- about 검증 --//
+        form.about.value = form.about.value.trim();
+
+        if (form.about.value.length > 20) {
+            toastWarning('길이가 초과되었습니다.');
+            form.about.focus();
+            return;
+        }
+
         //-- password 검증 --//
         form.password.value = form.password.value.trim();
 

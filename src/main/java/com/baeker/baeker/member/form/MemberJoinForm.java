@@ -16,6 +16,9 @@ public class MemberJoinForm {
     @Size(min = 2, max = 10)
     private String name;
 
+    @Size(max = 20)
+    private String about;
+
     @NotBlank
     @Size(min = 4, max = 20)
     private String password;

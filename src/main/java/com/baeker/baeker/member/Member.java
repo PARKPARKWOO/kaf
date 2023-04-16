@@ -31,6 +31,7 @@ public class Member {
     @Column(unique = true)
     private String studyId;
     private String name;
+    private String about;
     private String password;
     private String provider;
     private String token;
@@ -42,11 +43,12 @@ public class Member {
 
 
     //-- crate method --//
-    protected static Member createMember(String provider, String username, String name, String password) {
+    protected static Member createMember(String provider, String username, String name, String about, String password) {
         return builder()
                 .provider(provider)
                 .username(username)
                 .name(name)
+                .about(about)
                 .password(password)
                 .build();
     }
