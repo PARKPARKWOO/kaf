@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +62,10 @@ public class MemberController {
     //-- profile --//
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
-    public String profile() {
-        return "";
+    public String profile(Model model) {
+        Member member = rq.getMember();
+        log.info("프로필 요청 확인 member = {}", member.toString());
+
+        return "member/profile";
     }
 }

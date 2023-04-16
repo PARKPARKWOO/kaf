@@ -6,25 +6,33 @@
         <ul class="flex mr-5 mt-3 mb-3">
 
             <li th:if="${@rq.logout}">
-                <a class="text-white hover:text-gray-200 px-3 py-2 rounded">
+                <a href="/member/join"
+                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
                     Join
                 </a>
             </li>
 
             <li th:if="${@rq.logout}">
-                <a class="text-white hover:text-gray-200 px-3 py-2 rounded">
+                <a href="/member/login"
+                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
                     Login
                 </a>
             </li>
 
             <li th:if="${@rq.login}">
-                <a class="text-white hover:text-gray-200 px-3 py-2 rounded">
+                <a href="javascript:;" onclick="$(this).next().submit();"
+                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
                     Logout
                 </a>
+                <form th:if="${@rq.logout}" hidden
+                      th:action="|/member/logout|" method="post">
+
+                </form>
             </li>
 
             <li th:if="${@rq.login}">
-                <a class="text-white hover:text-gray-200 px-3 py-2 rounded">
+                <a href="/member/profile"
+                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
                     Profile
                 </a>
             </li>
