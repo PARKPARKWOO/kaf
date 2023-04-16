@@ -1,5 +1,6 @@
 package com.baeker.baeker.member;
 
+import com.baeker.baeker.myStudy.MyStudy;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -40,6 +41,11 @@ public class Member {
     private LocalDateTime createDate;
     @LastModifiedDate
     private LocalDateTime modifyDate;
+
+
+    @Builder.Default
+    @OneToMany(mappedBy = "member")
+    private List<MyStudy> myStudies = new ArrayList<>();
 
 
     //-- crate method --//
