@@ -60,8 +60,8 @@ public class Study {
     //-- business logic --//
 
     // 이름, 소개, 최대 인원 변경 //
-    public void modifyStudy(String name, String about, Integer capacity) {
-        this.toBuilder()
+    public Study modifyStudy(String name, String about, Integer capacity) {
+        return this.toBuilder()
                 .name(name)
                 .about(about)
                 .capacity(capacity)
@@ -70,8 +70,8 @@ public class Study {
     }
 
     // 리더 변경 //
-    public void modifyLeader(String leader) {
-        this.toBuilder()
+    public Study modifyLeader(String leader) {
+        return this.toBuilder()
                 .leader(leader)
                 .modifyDate(LocalDateTime.now())
                 .build();
