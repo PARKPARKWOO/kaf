@@ -57,4 +57,11 @@ public class MemberController {
         log.info("회원가입 성공 username = {}", memberRs.getData().getUsername());
         return rq.redirectWithMsg("/member/login", memberRs.getMsg());
     }
+
+    //-- profile --//
+    @GetMapping("/profile")
+    @PreAuthorize("isAuthenticated()")
+    public String profile() {
+        return "";
+    }
 }
