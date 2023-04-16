@@ -4,6 +4,7 @@ import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberLoginForm;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +44,7 @@ public class MemberController {
     //-- join 처리 --//
     @PostMapping("/join")
     @PreAuthorize("isAnonymous()")
-    public String join(MemberJoinForm form) {
+    public String join(@Valid MemberJoinForm form) {
         log.info("회원가입 처리 요청 확인 username = {}, name = {}", form.getUsername(), form.getName());
 
         RsData<Member> memberRs = memberService.join(form);
