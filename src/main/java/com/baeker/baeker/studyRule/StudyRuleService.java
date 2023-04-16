@@ -1,15 +1,17 @@
 package com.baeker.baeker.studyRule;
 
-import com.baeker.baeker.DataNotFoundException;
-import jakarta.validation.Valid;
+import com.baeker.baeker.base.request.Rq;
+import com.baeker.baeker.base.request.RsData;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class StudyRuleService {
 
     private StudyRuleRepository studyRuleRepository;
+
 
 //    public StudyRule create(@Valid StudyRuleForm studyRuleForm) {
 //        StudyRule studyRule = StudyRule.builder()
@@ -20,13 +22,8 @@ public class StudyRuleService {
 //        return studyRule;
 //    }
 
-    public StudyRule getStudyRule(Long id) {
-        Optional<StudyRule> studyRule = studyRuleRepository.findById(id);
-        if (studyRule.isPresent()) {
-            return studyRule.get();
-        } else {
-            throw new DataNotFoundException("StudyRule not found");
-        }
+    public Optional<StudyRule> getStudyRule(Long id) {
+        return studyRuleRepository.findById(id);
     }
 
     public void modify(StudyRule studyRule) {
