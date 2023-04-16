@@ -21,7 +21,7 @@ class MemberServiceTest {
 
     @Test
     void 회원가입() {
-        MemberJoinForm form = new MemberJoinForm("username", "name", "1234", "1234");
+        MemberJoinForm form = new MemberJoinForm("username", "name",  "","1234", "1234");
         RsData<Member> memberRs = memberService.join(form);
         Member member = memberRs.getData();
 
