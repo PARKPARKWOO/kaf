@@ -43,7 +43,7 @@ public class MemberService {
         if (StringUtils.hasText(password))
             password = encoder.encode(password);
 
-        Member member = Member.createMember(username, name, password);
+        Member member = Member.createMember(provider, username, name, password);
         memberRepository.save(member);
         return RsData.of("S-1", "회원가입이 완료되었습니다. \n로그인 해주세요.", member);
     }
