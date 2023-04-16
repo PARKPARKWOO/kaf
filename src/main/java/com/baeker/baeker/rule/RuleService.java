@@ -11,7 +11,7 @@ public class RuleService {
 
     private RuleRepository ruleRepository;
 
-    public RsData<Rule> create(String name, String about, String provider, Difficulty difficulty) {
+    public RsData<Rule> create(String name, String about, String provider, String difficulty) {
         Rule rule = Rule.builder()
                 .name(name)
                 .about(about)
@@ -22,7 +22,7 @@ public class RuleService {
         return RsData.of("S-1", "Rule 생성 완료", rule);
     }
 
-    public RsData<Rule> modify(Rule rule, String name, String about, String provider, Difficulty difficulty) {
+    public RsData<Rule> modify(Rule rule, String name, String about, String provider, String difficulty) {
         Rule rule1 = rule.toBuilder()
                 .name(name)
                 .about(about)

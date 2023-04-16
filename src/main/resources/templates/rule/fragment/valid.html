@@ -1,0 +1,58 @@
+<script th:fragment="rule">
+    function RuleForm__submit(form) {
+
+        //-- 규칙명 검증 --//
+        form.name.value = form.name.value.trim();
+
+        if (form.name.value.length == 0) {
+            toastWarning('규칙명을 입력해주세요.');
+            form.name.focus();
+            return;
+        }
+
+        if (form.username.value.length > 10) {
+            toastWarning('규칙명을 10글자 이내로 작성해주세요.');
+            form.name.focus();
+            return;
+        }
+
+        //-- 소개 검증 --//
+        form.about.value = form.name.value.trim();
+
+        if (form.about.value.length > 30) {
+            toastWarning('30자 이내로 작성해주세요.');
+            form.about.focus();
+            return;
+        }
+
+        //-- OJ 사이트 검증 --//
+        form.provider.value = form.provider.value.trim();
+
+        if (form.provider.value.length != 2) {
+            toastWarning('2글자로 작성해주세요!');
+            form.provider.focus();
+            return;
+        }
+
+        if (form.provider.value.length == 0) {
+            toastWarning('사용하려는 사이트를 작성해주세요.');
+            form.provider.focus();
+            return;
+        }
+        form.difficulty.value = form.difficulty.value.trim();
+        if (form.difficulty.value.length == 0) {
+            toastWarning('난이도를 설정해주세요');
+            form.difficulty.focus();
+            return;
+        }
+        if (form.difficulty.value.length > 1) {
+            toastWarning('1개만 선택해주세요');
+            form.difficulty.focus();
+            return;
+        }
+
+
+        //-- 폼 발송 --//
+        form.submit();
+    }
+</script>

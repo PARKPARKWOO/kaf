@@ -1,0 +1,74 @@
+<form th:fragment="ruleForm (ruleForm)"
+      th:action th:object="${ruleForm}" method="post"
+      class="flex flex-col gap-6"
+      onsubmit="RuleForm__submit(this); return false;">
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">규칙 명</span>
+        </label>
+        <input type="text" th:field="*{name}" name="name" placeholder="규칙 이름" class="input input-bordered" autofocus/>
+    </div>
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Rule 소개</span>
+        </label>
+        <input type="text" th:field="*{about}" name="username" placeholder="간단 소개" class="input input-bordered" autofocus/>
+    </div>
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">사용하는 OJ</span>
+        </label>
+        <input type="text" th:field="*{provider}" name="username" placeholder="OJ 사이트" class="input input-bordered"
+               autofocus/>
+    </div>
+
+    <!--    난이도-->
+    <div>
+        <div class="form-control">
+            <label class="label cursor-pointer">
+                <span class="label-text">BRONZE</span>
+                <input type="radio" name="difficulty" value="BRONZE" class="radio focus:bg-red-100">
+            </label>
+        </div>
+        <div class="form-control">
+            <label class="label cursor-pointer">
+                <span class="label-text">SILVER</span>
+                <input type="radio" name="difficulty" value="SILVER" class="radio focus:bg-red-100">
+            </label>
+        </div>
+        <div class="form-control">
+            <label class="label cursor-pointer">
+                <span class="label-text">GOLD</span>
+                <input type="radio" name="difficulty" value="GOLD" class="radio focus:bg-red-100">
+            </label>
+        </div>
+        <div class="form-control">
+            <label class="label cursor-pointer">
+                <span class="label-text">PLATINUM</span>
+                <input type="radio" name="difficulty" value="PLATINUM" class="radio focus:bg-red-100">
+            </label>
+        </div>
+        <div class="form-control">
+            <label class="label cursor-pointer">
+                <span class="label-text">DIAMOND</span>
+                <input type="radio" name="difficulty" value="DIAMOND" class="radio focus:bg-red-100">
+            </label>
+        </div>
+        <div class="form-control">
+            <label class="label cursor-pointer">
+                <span class="label-text">RUBY</span>
+                <input type="radio" name="difficulty" value="RUBY" class="radio focus:bg-red-100">
+            </label>
+        </div>
+    </div>
+
+    <!--    난이도 끝 -->
+    <button class="btn btn-block btn-primary gap-1">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        <span>생성</span>
+    </button>
+
+</form>
