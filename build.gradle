@@ -27,6 +27,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'com.h2database:h2' //h2 인메모리
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
