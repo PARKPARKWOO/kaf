@@ -1,5 +1,6 @@
 package com.baeker.baeker.goal;
 
+import com.baeker.baeker.member.Member;
 import com.baeker.baeker.studyRule.StudyRule;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,12 +20,11 @@ public class Goal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    private Object attribute;
-
     private Integer goal;
 
-    private boolean status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
 
-    //스터디룰? 스터디??
+    private boolean status;
 
 }

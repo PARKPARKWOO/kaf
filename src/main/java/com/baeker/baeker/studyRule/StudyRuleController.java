@@ -3,6 +3,7 @@ package com.baeker.baeker.studyRule;
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.rule.Rule;
+import com.baeker.baeker.studyRule.solvedApi.SolvedApiManager;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/study")
 public class StudyRuleController {
 
     private StudyRuleService studyRuleService;
@@ -24,11 +26,12 @@ public class StudyRuleController {
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public String create(@Valid StudyRuleForm studyRuleForm, BindingResult bindingResult) {
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm);
+    public String create(@Valid StudyRuleForm studyRuleForm, BindingResult bindingResult, Rule rule) {
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule);
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
         }
+        SolvedApiManager solvedApiManager = new SolvedApiManager(rsData.getData().getRule().getDifficulty());
         return rq.redirectWithMsg("스터디페이지", rsData.getMsg());
     }
 
@@ -39,7 +42,7 @@ public class StudyRuleController {
         RsData<StudyRule> rsData = studyRuleService.getStudyRule(id);
         if (rsData.isSuccess()) {
             StudyRule studyRule = rsData.getData();
-            studyRuleService.showModify(studyRule, studyRuleForm);
+            studyRuleService.setModify(studyRule, studyRuleForm);
             return "studyRule/studyRule";
         } else {
             return rq.historyBack(rsData);

@@ -1,6 +1,8 @@
 package com.baeker.baeker.studyRule;
 
 import com.baeker.baeker.rule.Rule;
+import com.baeker.baeker.study.Study;
+import com.baeker.baeker.studyRule.solvedApi.SolvedApiManager;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -33,11 +37,14 @@ public class StudyRule {
     @LastModifiedDate
     private LocalDateTime modifyDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rule")
     private Rule rule;
 
     // Goal 추가
 
-    // study 추가
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Study study;
+
 
 }
