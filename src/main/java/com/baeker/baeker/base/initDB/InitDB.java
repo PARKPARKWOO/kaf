@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class InitDB {
 
@@ -32,10 +32,10 @@ public class InitDB {
         private final StudyService studyService;
 
         public void initData() {
-            MemberJoinForm memberForm = new MemberJoinForm("user1", "name", "반가워요!", "1234", "1234");
+            MemberJoinForm memberForm = new MemberJoinForm("user1", "알파", "안녕하세요 알파입니다.", "1234", "1234");
             Member member = memberService.join(memberForm).getData();
 
-            StudyCreateForm studyFrom = new StudyCreateForm("study1", "hello", 10);
+            StudyCreateForm studyFrom = new StudyCreateForm("Baeker love", "Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.", 10);
             Study study = studyService.create(studyFrom, member).getData();
         }
 

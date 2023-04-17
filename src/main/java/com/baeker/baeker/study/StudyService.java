@@ -29,6 +29,11 @@ public class StudyService {
     @Transactional
     public RsData<Study> create(StudyCreateForm form, Member member) {
 
+        // 스터디 이름 중복검사
+        RsData<Study> studyRs = this.getStudy(form.getName());
+        if (studyRs.isSuccess())
+            return RsData.of("F-1", "는 이미 사용 보중입니다.");
+
         MyStudy myStudy = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
 
         myStudyRepository.save(myStudy);
@@ -45,6 +50,16 @@ public class StudyService {
             return RsData.successOf(byId.get());
 
         return RsData.of("F-1", "존재 하지않는 id");
+    }
+
+    //-- find by name --//
+    public RsData<Study> getStudy(String name) {
+        Optional<Study> byName = studyRepository.findByName(name);
+
+        if (byName.isPresent())
+            return RsData.successOf(byName.get());
+
+        return RsData.of("F-1", "존재 하지않는 name");
     }
 
     //-- find all member --//

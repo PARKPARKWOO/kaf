@@ -1,0 +1,52 @@
+<script th:fragment="create">
+    function JoinForm__submit(form) {
+
+        //-- name 검증 --//
+        form.name.value = form.name.value.trim();
+
+        if (form.name.value.length == 0) {
+            toastWarning('스터디 이름을 입력해주세요.');
+            form.name.focus();
+            return;
+        }
+
+        if (form.name.value.length < 2) {
+            toastWarning('스터디 이름을 2글자 이상 입력해주세요.');
+            form.name.focus();
+            return;
+        }
+
+        if (form.name.value.length > 15) {
+            toastWarning('이름이 너무 길어요.');
+            form.name.focus();
+            return;
+        }
+
+        //-- about 검증 --//
+        form.about.value = form.about.value.trim();
+
+        if (form.about.value.length > 50) {
+            toastWarning('소개가 너무 길어요.');
+            form.about.focus();
+            return;
+        }
+
+        //-- capacity 검증 --//
+        form.capacity.value = form.capacity.value.trim();
+
+        if (form.capacity.value < 2) {
+            toastWarning('최소 인원은 2명 이상입니다.');
+            form.capacity.focus();
+            return;
+        }
+
+        if (form.capacity.value > 20) {
+            toastWarning('최대 인원은 20명 이하입니다.');
+            form.capacity.focus();
+            return;
+        }
+
+        //-- 폼 발송 --//
+        form.submit();
+    }
+</script>
