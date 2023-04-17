@@ -22,7 +22,7 @@ public class RuleController {
     private Rq rq;
 
 
-
+    // 생성 //
     @GetMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String showCreate(RuleForm ruleForm) {
@@ -32,49 +32,50 @@ public class RuleController {
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String create(@Valid RuleForm ruleForm, BindingResult bindingResult) {
-        RsData<Rule> rsData = ruleService.create(ruleForm.getName(), ruleForm.getAbout(), ruleForm.getProvider(), ruleForm.getDifficulty());
+        RsData<Rule> rsData = ruleService.create(ruleForm);
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
         }
-        return rq.redirectWithMsg("스터디페이지", "스터디 규칙이 생성 되었습니다.");
+        return rq.redirectWithMsg("스터디페이지", rsData.getMsg());
     }
 
 
+    // 수정 //
     @GetMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String showModify(@PathVariable("id") Long id) {
-        Optional<Rule> checkRule = ruleService.getRule(id);
-        if (checkRule.isPresent()) {
-            Rule rule = checkRule.get();
-            RuleForm ruleForm = new RuleForm(rule.getName(), rule.getAbout(), rule.getProvider(), rule.getDifficulty());
+    public String showModify(@PathVariable("id") Long id, RuleForm ruleForm) {
+        RsData<Rule> rsData = this.ruleService.getRule(id);
+        if (rsData.isSuccess()) {
+            Rule rule = rsData.getData();
+            ruleService.showModify(rule, ruleForm);
             return "rule/rule";
         } else {
-            return rq.historyBack("규칙이 없습니다.");
+            return rq.historyBack(rsData);
         }
     }
 
 
-//    @PostMapping("/modify/{id}")
-//    @PreAuthorize("isAuthenticated()")
-//    public String modify(@PathVariable("id") Long id, @Valid RuleForm ruleForm, BindingResult bindingResult) {
-//        Optional<Rule> checkRule = ruleService.getRule(id);
-//        if (checkRule.isPresent() && !bindingResult.hasErrors()) {
-//            ruleService.modify(checkRule.get(), ruleForm.getName(), ruleForm.getAbout(), ruleForm.getProvider(), ruleForm.getDifficulty());
-//            return rq.redirectWithMsg();
-//        } else {
-//            return rq.historyBack("규칙을 확인해주세요");
-//        }
-//    }
+    @PostMapping("/modify/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String modify(@PathVariable("id") Long id, @Valid RuleForm ruleForm, BindingResult bindingResult) {
+        RsData<Rule> rsData = ruleService.getRule(id);
+        if (rsData.isFail() || bindingResult.hasErrors()) {
+            return rq.historyBack(rsData);
+        }
+        ruleService.modify(rsData.getData(), ruleForm);
+        return rq.redirectWithMsg("스터디 url", rsData.getMsg());
+    }
 
+    // 삭제 //
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String  delete(@PathVariable("id") Long id) {
-        Optional<Rule> checkRule = ruleService.getRule(id);
-        if (checkRule.isPresent()) {
-            ruleService.delete(checkRule.get());
-            return "스터디 html";
+    public String delete(@PathVariable("id") Long id) {
+        RsData<Rule> rsData = ruleService.getRule(id);
+        if (rsData.isSuccess()) {
+            ruleService.delete(rsData.getData());
+            return rq.redirectWithMsg("스터디 url", rsData.getMsg());
         } else {
-            return rq.historyBack("규칙이 없습니다.");
+            return rq.historyBack(rsData.getMsg());
         }
     }
 }

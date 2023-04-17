@@ -1,0 +1,39 @@
+<script th:fragment="studyRule">
+    function StudyRuleForm__submit(form) {
+
+        //-- 규칙명 검증 --//
+        form.name.value = form.name.value.trim();
+
+        if (form.name.value.length == 0) {
+            toastWarning('name을 입력해주세요');
+            form.name.focus();
+            return;
+        }
+
+        if (form.name.value.length > 10) {
+            toastWarning('10글자 이내로 작성해주세요.');
+            form.name.focus();
+            return;
+        }
+
+        if (form.name.value.length > 10) {
+            toastWarning('2글자 이상 작성해주세요.');
+            form.name.focus();
+            return;
+        }
+
+        //-- 소개 검증 --//
+        form.about.value = form.name.value.trim();
+
+        if (form.about.value.length > 30) {
+            toastWarning('30자 이내로 작성해주세요.');
+            form.about.focus();
+            return;
+        }
+
+
+
+        //-- 폼 발송 --//
+        form.submit();
+    }
+</script>

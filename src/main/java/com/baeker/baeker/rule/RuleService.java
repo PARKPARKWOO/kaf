@@ -1,44 +1,55 @@
 package com.baeker.baeker.rule;
 
 import com.baeker.baeker.base.request.RsData;
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class RuleService {
 
-    private RuleRepository ruleRepository;
+    private final RuleRepository ruleRepository;
 
-    public RsData<Rule> create(String name, String about, String provider, String difficulty) {
+    public RsData<Rule> create(RuleForm ruleForm) {
         Rule rule = Rule.builder()
-                .name(name)
-                .about(about)
-                .provider(provider)
-                .difficulty(difficulty)
+                .name(ruleForm.getName())
+                .about(ruleForm.getAbout())
+                .provider(ruleForm.getProvider())
+                .difficulty(ruleForm.getDifficulty())
                 .build();
-        this.ruleRepository.save(rule);
+        ruleRepository.save(rule);
         return RsData.of("S-1", "Rule 생성 완료", rule);
     }
 
-    public RsData<Rule> modify(Rule rule, String name, String about, String provider, String difficulty) {
+    public void modify(Rule rule, RuleForm ruleForm) {
         Rule rule1 = rule.toBuilder()
-                .name(name)
-                .about(about)
-                .provider(provider)
-                .difficulty(difficulty)
+                .name(ruleForm.getName())
+                .about(ruleForm.getAbout())
+                .provider(ruleForm.getProvider())
+                .difficulty(ruleForm.getDifficulty())
                 .build();
         ruleRepository.save(rule1);
-        return RsData.of("S-1", "규칙이 수정 되었습니다.", rule1);
+        RsData.of("S-1", "규칙이 수정 되었습니다.", rule1);
     }
 
-    public Optional<Rule> getRule(Long id) {
-        return ruleRepository.findById(id);
+    public RsData<Rule> getRule(Long id) {
+        Optional<Rule> rs = ruleRepository.findById(id);
+        return rs.map(RsData::successOf).orElseGet(() -> RsData.of("F-1", "없는 사용자 입니다."));
     }
 
-    public RsData<Rule> delete(Rule rule) {
+    public void delete(Rule rule) {
         this.ruleRepository.delete(rule);
-        return RsData.of("S-1", "규칙이 삭제 되었습니다.");
+        RsData.of("S-1", "규칙이 삭제 되었습니다.");
+    }
+
+    public void showModify(Rule rule, RuleForm ruleForm) {
+        ruleForm.setName(rule.getName());
+        ruleForm.setAbout(rule.getAbout());
+        ruleForm.setProvider(rule.getProvider());
+        ruleForm.setDifficulty(rule.getDifficulty());
     }
 }

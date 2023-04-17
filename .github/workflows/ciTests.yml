@@ -6,7 +6,7 @@ on:  # 우선 main 브랜치만 설정 했지만 dev 브랜치 하나 생성(건
       - main
   push:
     branches:
-      - main
+
 
 
 jobs:

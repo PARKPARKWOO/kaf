@@ -1,0 +1,26 @@
+<form th:fragment="studyRuleForm (studyRuleForm)"
+      th:action th:object="${studyRuleForm}" method="post"
+      class="flex flex-col gap-6"
+      onsubmit="StudyRuleForm__submit(this); return false;">
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">name</span>
+        </label>
+        <input type="text" th:field="*{name}" name="name" placeholder="규칙 이름" class="input input-bordered" autofocus/>
+    </div>
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Rule 소개</span>
+        </label>
+        <input type="text" th:field="*{about}" name="username" placeholder="간단 소개" class="input input-bordered" autofocus/>
+    </div>
+
+
+    <button class="btn btn-block btn-primary gap-1">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        <span>생성</span>
+    </button>
+
+</form>
