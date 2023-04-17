@@ -23,7 +23,6 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final MyStudyRepository myStudyRepository;
-    private final MemberService memberService;
 
 
     //-- create --//

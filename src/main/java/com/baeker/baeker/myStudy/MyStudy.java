@@ -27,9 +27,6 @@ public class MyStudy {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private String memberName;
-    private String studyName;
-
     @Enumerated(EnumType.STRING)
     private StudyStatus status;
 
@@ -58,7 +55,7 @@ public class MyStudy {
     }
 
     // 스터디 가입할 때 //
-    protected MyStudy joinStudy(Member member, Study study) {
+    protected static MyStudy joinStudy(Member member, Study study) {
         MyStudy myStudy = create(member, study);
         myStudy.status = StudyStatus.PENDING;
 
@@ -69,7 +66,7 @@ public class MyStudy {
     }
 
     // 스터디로 초대할 때 //
-    protected MyStudy inviteStudy(Member member, Study study) {
+    protected static MyStudy inviteStudy(Member member, Study study) {
         MyStudy myStudy = create(member, study);
         myStudy.status = StudyStatus.INVITING;
 
@@ -79,20 +76,19 @@ public class MyStudy {
         return myStudy;
     }
 
+    // my study 생성 //
     private static MyStudy create(Member member, Study study) {
         return builder()
                 .member(member)
                 .study(study)
-                .memberName(member.getName())
-                .studyName(study.getName())
                 .build();
     }
 
 
     //-- business logic --//
 
-    // 스터디 가입 처리 //
-    protected void studyJoin() {
+    // 가입, 초대 신청 승인 //
+    protected void accept() {
         this.status = StudyStatus.MEMBER;
     }
 }
