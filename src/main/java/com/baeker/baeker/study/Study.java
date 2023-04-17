@@ -43,7 +43,7 @@ public class Study {
 
 
     //-- create method --//
-    public static Study createStudy(String name, String about, Integer capacity, Member member) {
+    public static MyStudy createStudy(String name, String about, Integer capacity, Member member) {
         Study study = builder()
                 .name(name)
                 .about(about)
@@ -52,8 +52,7 @@ public class Study {
                 .xp(0)
                 .build();
 
-        MyStudy.createNewStudy(member, study);
-        return study;
+        return MyStudy.createNewStudy(member, study);
     }
 
 
