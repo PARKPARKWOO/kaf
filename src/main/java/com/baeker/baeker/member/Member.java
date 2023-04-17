@@ -16,7 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Getter @ToString
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Builder(toBuilder = true)

@@ -4,6 +4,8 @@ import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.myStudy.MyStudyRepository;
+import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +22,17 @@ import java.util.Optional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
-    private final MemberService memberService;
+    private final MyStudyRepository myStudyRepository;
 
 
     //-- create --//
     @Transactional
     public RsData<Study> create(StudyCreateForm form, Member member) {
 
-        Study study = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
-        Study saveStudy = studyRepository.save(study);
+        MyStudy myStudy = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
+
+        myStudyRepository.save(myStudy);
+        Study saveStudy = studyRepository.save(myStudy.getStudy());
         return RsData.of("S-1", "새로운 스터디가 개설되었습니다!", saveStudy);
     }
 
