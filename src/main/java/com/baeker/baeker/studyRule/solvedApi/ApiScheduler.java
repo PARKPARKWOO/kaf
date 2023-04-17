@@ -21,14 +21,14 @@ public class ApiScheduler {
 
     private Rule rule;
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 1000)
     public void tierSchedule() throws IOException, ParseException {
         log.info("티어별 실행");
         Long solvedCount = solvedApiService.getTier(rule.getDifficulty().toString().toUpperCase());
         System.out.println(solvedCount);
     }
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 1000)
     public void solvedCountSchedule() throws IOException, ParseException {
         log.info("문제풀이수 스케줄러");
         Long solvedCount = solvedApiService.getSolvedCount();
