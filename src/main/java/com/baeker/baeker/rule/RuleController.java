@@ -3,6 +3,7 @@ package com.baeker.baeker.rule;
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,13 +14,12 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/rule")
+@RequiredArgsConstructor
 public class RuleController {
 
-    @Autowired
-    private RuleService ruleService;
+    private final RuleService ruleService;
 
-    @Autowired
-    private Rq rq;
+    private final Rq rq;
 
 
     // 생성 //
@@ -47,7 +47,7 @@ public class RuleController {
         RsData<Rule> rsData = this.ruleService.getRule(id);
         if (rsData.isSuccess()) {
             Rule rule = rsData.getData();
-            ruleService.showModify(rule, ruleForm);
+            ruleService.setModify(rule, ruleForm);
             return "rule/rule";
         } else {
             return rq.historyBack(rsData);

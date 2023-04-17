@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -19,19 +20,24 @@ public class StudyRuleService {
     private final StudyRuleRepository studyRuleRepository;
 
 
-    public RsData<StudyRule> create(StudyRuleForm studyRuleForm) {
+    /**
+     * 생성
+     */
+
+    public RsData<StudyRule> create(StudyRuleForm studyRuleForm, Rule rule) {
         StudyRule studyRule = StudyRule.builder()
                 .name(studyRuleForm.getName())
                 .about(studyRuleForm.getAbout())
+                .rule(rule)
                 .build();
+        rule.getStudyRules().add(studyRule);
         studyRuleRepository.save(studyRule);
-        return RsData.of("S-1", "스터디 규칙 생성완료." , studyRule);
+        return RsData.of("S-1", "스터디 규칙 생성완료.", studyRule);
     }
 
-    public RsData<StudyRule> getStudyRule(Long id) {
-        Optional<StudyRule> rs = studyRuleRepository.findById(id);
-        return rs.map(RsData::successOf).orElseGet(() -> RsData.of("F-1", "없습니다."));
-    }
+    /**
+     * 수정
+     */
 
     public void modify(StudyRule studyRule, StudyRuleForm studyRuleForm) {
         StudyRule modifyRule = studyRule.toBuilder()
@@ -42,13 +48,30 @@ public class StudyRuleService {
         RsData.of("S-1", "수정되었습니다.", modifyRule);
     }
 
-    public void showModify(StudyRule studyRule, StudyRuleForm studyRuleForm) {
+    public void setModify(StudyRule studyRule, StudyRuleForm studyRuleForm) {
         studyRuleForm.setName(studyRule.getName());
         studyRuleForm.setAbout(studyRule.getAbout());
     }
 
+    /**
+     * 삭제
+     */
+
     public void delete(StudyRule studyRule) {
         studyRuleRepository.delete(studyRule);
         RsData.of("S-1", "삭제되었습니다");
+    }
+
+    /**
+     * 조회
+     */
+
+    public RsData<StudyRule> getStudyRule(Long id) {
+        Optional<StudyRule> rs = studyRuleRepository.findById(id);
+        return rs.map(RsData::successOf).orElseGet(() -> RsData.of("F-1", "없습니다."));
+    }
+
+    public List<StudyRule> getAll() {
+        return studyRuleRepository.findAll();
     }
 }

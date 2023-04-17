@@ -8,7 +8,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,9 +34,6 @@ public class Rule {
 
 //    private Integer xp; // Study에만 있으면 될거같음
 
-//    @Builder.Default
-//    @Convert(converter = RuleForm.class)
-//    private Map<String, Object> attributes = new HashMap<>();
 
     @CreatedDate
     private LocalDateTime createDate;
@@ -42,8 +41,9 @@ public class Rule {
     @LastModifiedDate
     private LocalDateTime modifyDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private StudyRule studyRule;
+    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<StudyRule> studyRules = new ArrayList<>();
 
 
     private String difficulty;
