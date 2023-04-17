@@ -16,7 +16,6 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@ToString
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = PROTECTED)

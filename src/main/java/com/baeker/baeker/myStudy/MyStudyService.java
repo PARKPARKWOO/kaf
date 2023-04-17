@@ -21,8 +21,9 @@ public class MyStudyService {
     @Transactional
     public RsData<MyStudy> join(Member member, Study study) {
 
-        RsData<MyStudy> checkRs = duplicationCheck(member, study);
-        if (checkRs.isFail()) return checkRs;
+        // 가입한 사람이 이미 스터디 맴버인지 검증
+        RsData<MyStudy> isDuplicate = duplicationCheck(member, study);
+        if (isDuplicate.isFail()) return isDuplicate;
 
         MyStudy myStudy = MyStudy.joinStudy(member, study);
         MyStudy save = myStudyRepository.save(myStudy);
@@ -31,14 +32,25 @@ public class MyStudyService {
 
     //-- 맴버 스터디에 초대 --//
     @Transactional
-    public RsData<MyStudy> invite(Member member, Study study) {
+    public RsData<MyStudy> invite(Member inviter, Member invitee,  Study study) {
 
-        RsData<MyStudy> checkRs = duplicationCheck(member, study);
-        if (checkRs.isFail()) return checkRs;
+        // 초대를 한 사람이 스터디원인지 검증
+        RsData<MyStudy> isStudyMember = getMyStudy(inviter, study);
+        if (isStudyMember.isFail())
+            return isStudyMember;
 
-        MyStudy myStudy = MyStudy.inviteStudy(member, study);
+        else if (!isStudyMember.getData().getStatus().equals(StudyStatus.MEMBER))
+            return RsData.of("F-2", "초대 권한이 없습니다.");
+
+
+        // 초대받은 사람이 스터디 맴버인지 검증
+        RsData<MyStudy> isDuplicate = duplicationCheck(invitee, study);
+        if (isDuplicate.isFail())
+            return isDuplicate;
+
+        MyStudy myStudy = MyStudy.inviteStudy(invitee, study);
         MyStudy save = myStudyRepository.save(myStudy);
-        return RsData.of("S-1", member.getName() + "님께 초대가 완료되었습니다.", save);
+        return RsData.of("S-1", inviter.getName() + "님을 스터디에 초대했습니다.", save);
     }
 
     //-- 가입, 초대신청 승인 --//
