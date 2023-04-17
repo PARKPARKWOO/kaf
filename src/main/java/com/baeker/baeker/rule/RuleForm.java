@@ -3,6 +3,7 @@ package com.baeker.baeker.rule;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,9 +20,9 @@ public class RuleForm {
     private String about;
 
     @Size(min = 2, max = 2)
-    @NotBlank(message = "어디를 이용하실 건가요?")
+    @NotBlank
     private String provider;
 
-    @NotBlank(message = "난이도를 설정해주세요.")
+    @NotEmpty
     private String difficulty;
 }

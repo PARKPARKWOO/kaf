@@ -10,7 +10,7 @@
             return;
         }
 
-        if (form.username.value.length > 10) {
+        if (form.name.value.length > 10) {
             toastWarning('규칙명을 10글자 이내로 작성해주세요.');
             form.name.focus();
             return;
@@ -39,17 +39,16 @@
             form.provider.focus();
             return;
         }
-        form.difficulty.value = form.difficulty.value.trim();
-        if (form.difficulty.value.length == 0) {
-            toastWarning('난이도를 설정해주세요');
-            form.difficulty.focus();
+        //-- 난이도 검증 --//
+        const $checkedGenderRadioButton = $(form).find("[name=difficulty]:checked");
+
+        if ($checkedGenderRadioButton.length == 0) {
+            toastWarning('난이도를 선택해주세요.');
+            $(form).find("[name=difficulty]:first").focus();
             return;
         }
-        if (form.difficulty.value.length > 1) {
-            toastWarning('1개만 선택해주세요');
-            form.difficulty.focus();
-            return;
-        }
+
+
 
 
         //-- 폼 발송 --//
