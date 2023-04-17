@@ -1,6 +1,6 @@
 <h1 align="center">Project - Baeker</h3>
-
-<img align="center" width="300" src="">
+<p align="center">
+<img width="200" style="display: block" src="https://user-images.githubusercontent.com/115536240/232476999-c994a379-f374-45c5-a56a-ea225088ba12.png">
 
 <h3 align="center">Baeker</h3>
 
