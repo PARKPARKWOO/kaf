@@ -57,26 +57,26 @@ public class ApiScheduler {
 
 
 
-    @Scheduled(fixedRate = 1000)
-    public void checkStudyRule() throws IOException, ParseException {
-        log.info("스케줄러 실행");
-        List<StudyRule> studyRules = studyRuleService.getAll();
-        for (StudyRule studyRule : studyRules) {
-            for (MyStudy myStudy: studyRule.getStudy().getMyStudies()) {
-                if (studyRule.getRule().getDifficulty().equals("NONE")) {
-                    log.info("난이도 X");
-                    Integer solvedCount = solvedApiService.getSolvedCount(studyRule.getRule().getDifficulty(), myStudy);
-                    // goal 에 저장
-                    myStudy.toBuilder().solvedCount(solvedCount);
-                    //
-                } else {
-                    log.info("난이도 O");
-                    Integer solvedCount = solvedApiService.getSolvedCount(studyRule.getRule().getDifficulty().toUpperCase(),myStudy);
-                    //goal 에 저장
-                    myStudy.toBuilder().solvedCount(solvedCount);
-                    //
-                }
-            }
-        }
-    }
+//    @Scheduled(fixedRate = 1000)
+//    public void checkStudyRule() throws IOException, ParseException {
+//        log.info("스케줄러 실행");
+//        List<StudyRule> studyRules = studyRuleService.getAll();
+//        for (StudyRule studyRule : studyRules) {
+//            for (MyStudy myStudy: studyRule.getStudy().getMyStudies()) {
+//                if (studyRule.getRule().getDifficulty().equals("NONE")) {
+//                    log.info("난이도 X");
+//                    Integer solvedCount = solvedApiService.getSolvedCount(studyRule.getRule().getDifficulty(), myStudy);
+//                    // goal 에 저장
+//                    myStudy.toBuilder().solvedCount(solvedCount);
+//                    //
+//                } else {
+//                    log.info("난이도 O");
+//                    Integer solvedCount = solvedApiService.getSolvedCount(studyRule.getRule().getDifficulty().toUpperCase(),myStudy);
+//                    //goal 에 저장
+//                    myStudy.toBuilder().solvedCount(solvedCount);
+//                    //
+//                }
+//            }
+//        }
+//    }
 }
