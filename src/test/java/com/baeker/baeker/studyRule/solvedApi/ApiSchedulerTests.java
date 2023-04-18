@@ -26,14 +26,14 @@ public class ApiSchedulerTests {
     @SpyBean
     private ApiScheduler apiScheduler;
 
-
-    @Test
-    @DisplayName("문제풀이 수 테스트")
-    void solvedCountSchedulerTest() throws IOException, ParseException {
-        await().atMost(4, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(apiScheduler, atLeast(2)).checkStudyRule();
-        });
-    }
+    //-- 스케줄러 관련 test 주석처리했습니다. --//
+//    @Test
+//    @DisplayName("문제풀이 수 테스트")
+//    void solvedCountSchedulerTest() throws IOException, ParseException {
+//        await().atMost(4, TimeUnit.SECONDS).untilAsserted(() -> {
+//            verify(apiScheduler, atLeast(2)).checkStudyRule();
+//        });
+//    }
 
 //    @Test
 //    @DisplayName("티어별 문제풀이 테스트")

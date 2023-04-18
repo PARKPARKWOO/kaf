@@ -1,0 +1,27 @@
+<html layout:decorate="~{layout/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<head><title th:text="|${member.name} 님의 프로필|"></title></head>
+
+<div layout:fragment="content" class="min-h-screen flex flex-col gap-12">
+
+  <div class="m-3"></div>
+
+  <!-- 프로필 -->
+  <div class="flex-grow flex flex-row items-center justify-center">
+
+    <div th:replace="~{member/fragment/member/profile :: profile (${member})}"></div>
+
+    <div th:replace="~{member/fragment/member/status :: status (${member})}"></div>
+
+  </div>
+
+  <!-- 스터디 리스트 -->
+  <div class="lex-grow flex flex-row justify-center min-h-screen">
+
+    <form th:replace="~{member/fragment/member/study :: study (${member.myStudies})}"></form>
+
+  </div>
+
+
+</div>
+</html>

@@ -1,0 +1,21 @@
+<div th:fragment="profile"
+     class="card w-96 bg-base-100 shadow-xl">
+
+    <figure class="px-10 pt-10">
+        <img src="https://picsum.photos/200" alt="profile image" class="rounded-xl" />
+    </figure>
+
+    <div class="card-body items-center text-center">
+
+        <h2 class="card-title"
+            th:text="${@rq.member.name}">
+        </h2>
+
+        <p th:text="${@rq.member.about}"></p>
+
+        <div class="card-actions mt-5">
+            <button class="btn btn-primary">프로필 수정</button>
+        </div>
+
+    </div>
+</div>

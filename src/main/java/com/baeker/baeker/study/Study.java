@@ -30,6 +30,7 @@ public class Study {
     private String name;
     private String about;
     private String leader;
+    private Integer solvedCount;
     private Integer capacity;
     private Integer xp;
 
@@ -50,6 +51,7 @@ public class Study {
                 .leader(member.getName())
                 .capacity(capacity)
                 .xp(0)
+                .solvedCount(member.getSolvedCount())
                 .build();
 
         return MyStudy.createNewStudy(member, study);
@@ -79,5 +81,10 @@ public class Study {
     // 경험치 상승 //
     public void xpUp(Integer addXp) {
         this.xp += addXp;
+    }
+
+    // 해결한 문제수 업데이트 //
+    public void updateSolve(Integer solvedCount) {
+        this.solvedCount += solvedCount;
     }
 }
