@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -59,12 +60,38 @@ public class MemberController {
         return rq.redirectWithMsg("/member/login", memberRs.getMsg());
     }
 
-    //-- profile --//
+    //-- my profile --//
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
-    public String profile() {
+    public String myProfile() {
         Member member = rq.getMember();
-        log.info("프로필 요청 확인 member = {}", member.toString());
+        log.info("내 프로필 요청 확인 member = {}", member.toString());
         return "member/profile";
+    }
+
+    //-- member profile --//
+    @GetMapping("/member/{id}")
+    public String profile(
+            @PathVariable Long id,
+            Model model
+    ) {
+        log.info("맴버 프로필 요청 확인 member id = {}", id);
+
+        RsData<Member> memberRs = memberService.getMember(id);
+
+        if (memberRs.isFail()) {
+            log.info("getMember(id) 조회 실패 msa = {}", memberRs.getMsg());
+            return rq.historyBack(memberRs.getMsg());
+        }
+
+        // 자기 자신의 프로필일 경우 리다이렉트
+        Member member = memberRs.getData();
+        if (member.getName().equals(rq.getMember().getName()))
+            return "redirect:/member/profile";
+
+        model.addAttribute("member", member);
+
+        log.info("member 조회 성공 member name = {}", member.getName());
+        return "member/member";
     }
 }

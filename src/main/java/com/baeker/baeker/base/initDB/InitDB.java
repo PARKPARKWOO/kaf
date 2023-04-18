@@ -46,7 +46,7 @@ public class InitDB {
 
             // init 맴버 8명 생성후 "Baeker lover" 에 가입
             for (int i = 2; i < 10; i++) {
-                Member memberA = memberService.join(new MemberJoinForm("user" + i, "member" + i, "hello", "1234", "1234")).getData();
+                Member memberA = memberService.join(new MemberJoinForm("user" + i, "member" + i, "hello" + i, "1234", "1234")).getData();
                 MyStudy myStudy = myStudyService.join(memberA, study0).getData();
                 myStudyService.accept(myStudy);
             }

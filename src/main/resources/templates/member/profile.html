@@ -9,16 +9,16 @@
     <!-- 프로필 -->
     <div class="flex-grow flex flex-row items-center justify-center">
 
-        <div th:replace="~{member/fragment/mainProfile :: mainProfile}"></div>
+        <div th:replace="~{member/fragment/profile/profile :: profile}"></div>
 
-        <div th:replace="~{member/fragment/status :: status}"></div>
+        <div th:replace="~{member/fragment/profile/status :: status}"></div>
 
     </div>
 
     <!-- 스터디 리스트 -->
     <div class="lex-grow flex flex-row justify-center min-h-screen">
 
-        <form th:replace="~{member/fragment/study :: study}"></form>
+        <form th:replace="~{member/fragment/profile/study :: study}"></form>
 
     </div>
 
