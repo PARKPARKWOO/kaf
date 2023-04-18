@@ -1,5 +1,7 @@
 package com.baeker.baeker.member;
 
+import com.baeker.baeker.member.embed.BaekJoon;
+import com.baeker.baeker.member.embed.Programmers;
 import com.baeker.baeker.myStudy.MyStudy;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,6 +41,11 @@ public class Member {
     @CreatedDate
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
+
+    @Embedded
+    private BaekJoon baekJoon;
+    @Embedded
+    private Programmers programmers;
 
 
     @Builder.Default
