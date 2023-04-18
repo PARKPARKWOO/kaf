@@ -56,6 +56,7 @@ public class Member {
                 .name(name)
                 .about(about)
                 .password(password)
+                .solvedCount(0)
                 .build();
     }
 
