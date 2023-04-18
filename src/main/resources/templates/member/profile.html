@@ -2,9 +2,26 @@
 
 <head><title>My Profile</title></head>
 
-<div layout:fragment="content" class="flex-grow flex items-center justify-center min-h-screen flex flex-col">
+<div layout:fragment="content" class="min-h-screen flex flex-col gap-12">
 
-    <form th:replace="~{member/fragment/profileDiv :: profileDiv}"></form>
+    <div class="m-3"></div>
+
+    <!-- 프로필 -->
+    <div class="flex-grow flex flex-row items-center justify-center">
+
+        <div th:replace="~{member/fragment/mainProfile :: mainProfile}"></div>
+
+        <div th:replace="~{member/fragment/status :: status}"></div>
+
+    </div>
+
+    <!-- 스터디 리스트 -->
+    <div class="lex-grow flex flex-row justify-center min-h-screen">
+
+        <form th:replace="~{member/fragment/study :: study}"></form>
+
+    </div>
+
 
 </div>
 </html>
