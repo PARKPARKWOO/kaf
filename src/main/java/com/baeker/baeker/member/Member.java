@@ -3,6 +3,7 @@ package com.baeker.baeker.member;
 import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.embed.Programmers;
 import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.study.Study;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -38,7 +39,6 @@ public class Member {
     private String password;
     private String provider;
     private String token;
-    private Integer solvedCount;
 
     @CreatedDate
     private LocalDateTime createDate;
@@ -63,21 +63,45 @@ public class Member {
                 .name(name)
                 .about(about)
                 .password(password)
-                .solvedCount(0)
                 .build();
     }
 
     //-- business logic --//
 
-    // solved count 최신화 , study solved count 합산 //
-    protected void updateSolve(Integer solvedCount) {
-        int addCount = solvedCount - this.solvedCount;
+    // BaekJoon 생성 //
+    protected BaekJoon createSolve(BaekJoon baekJoon) {
+        this.baekJoon = baekJoon;
 
-        this.solvedCount = solvedCount;
+        if (myStudies.size() != 0)
+            for (MyStudy myStudy : myStudies) {
+                Study study = myStudy.getStudy();
 
-        if (this.myStudies.size() != 0)
-            for (MyStudy myStudy : this.myStudies)
-                myStudy.getStudy().updateSolve(addCount);
+                if (study.getBaekJoon() == null)
+                    study.createSolve(baekJoon);
+                else
+                    study.updateSolve(baekJoon);
+            }
+
+        return baekJoon;
+    }
+
+    // BaekJoon 최신화 , Study BaekJoon 합산 //
+    protected BaekJoon updateSolve(BaekJoon baekJoon) {
+        BaekJoon addedSolved = BaekJoon.builder()
+                .bronze(baekJoon.getBronze() - this.baekJoon.getBronze())
+                .sliver(baekJoon.getSliver() - this.baekJoon.getSliver())
+                .gold(baekJoon.getGold() - this.baekJoon.getGold())
+                .platinum(baekJoon.getPlatinum() - this.baekJoon.getPlatinum())
+                .diamond(baekJoon.getDiamond() - this.baekJoon.getDiamond())
+                .ruby(baekJoon.getRuby() - this.baekJoon.getRuby())
+                .build();
+
+        this.baekJoon = baekJoon;
+        if (myStudies.size() != 0)
+            for (MyStudy myStudy : myStudies)
+                myStudy.getStudy().updateSolve(addedSolved);
+
+        return addedSolved;
     }
 
 

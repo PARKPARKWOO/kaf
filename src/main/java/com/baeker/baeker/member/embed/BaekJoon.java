@@ -11,14 +11,26 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Embeddable
 @Builder(toBuilder = true)
-@AllArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class BaekJoon {
 
-    private Integer bronze;
-    private Integer sliver;
-    private Integer gold;
-    private Integer platinum;
-    private Integer diamond;
-    private Integer ruby;
+    @Builder.Default
+    private Integer bronze = 0;
+    @Builder.Default
+    private Integer sliver = 0;
+    @Builder.Default
+    private Integer gold = 0;
+    @Builder.Default
+    private Integer platinum = 0;
+    @Builder.Default
+    private Integer diamond = 0;
+    @Builder.Default
+    private Integer ruby = 0;
+
+
+    //-- business logic --//
+    public Integer totalSolved() {
+        return bronze + sliver + gold + platinum + diamond + ruby;
+    }
 }

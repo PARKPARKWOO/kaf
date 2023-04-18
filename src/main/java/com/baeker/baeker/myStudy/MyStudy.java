@@ -1,6 +1,7 @@
 package com.baeker.baeker.myStudy;
 
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.study.Study;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,7 +44,7 @@ public class MyStudy {
     //-- create method --//
 
     // 새로운 스터디 만들 때 //
-    public static MyStudy createNewStudy(Member member, Study study){
+    public static MyStudy createNewStudy(Member member, Study study) {
         MyStudy myStudy = create(member, study);
         myStudy.status = StudyStatus.MEMBER;
 
@@ -87,9 +88,13 @@ public class MyStudy {
     //-- business logic --//
 
     // 가입, 초대 신청 승인 //
-    protected void accept() {
-        Integer solvedCount = this.member.getSolvedCount();
-        this.study.updateSolve(solvedCount);
+    protected BaekJoon accept() {
+        BaekJoon baekJoon = this.member.getBaekJoon();
+
+        if (member.getBaekJoon() != null)
+            this.study.updateSolve(baekJoon);
+
         this.status = StudyStatus.MEMBER;
+        return baekJoon;
     }
 }

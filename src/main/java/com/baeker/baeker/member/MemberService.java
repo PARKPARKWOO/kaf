@@ -1,6 +1,7 @@
 package com.baeker.baeker.member;
 
 import com.baeker.baeker.base.request.RsData;
+import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -82,18 +83,24 @@ public class MemberService {
     }
 
 
-    //-- 해결한 문제 최신화 --//
+    //-- 백준 최신화 --//
     @Transactional
-    public RsData<Member> updateSolve(Long memberId, Integer solvedCount) {
+    public RsData<BaekJoon> solve(Long memberId, BaekJoon baekJoon) {
         RsData<Member> memberRs = this.getMember(memberId);
+        BaekJoon addedSolve;
 
         if (memberRs.isFail())
-            return RsData.failOf(memberRs.getData());
+            return RsData.failOf(memberRs.getData().getBaekJoon());
 
         Member member = memberRs.getData();
-        member.updateSolve(solvedCount);
 
-        return RsData.successOf(member);
+        if (member.getBaekJoon() == null)
+            addedSolve = member.createSolve(baekJoon);
+        else
+            addedSolve = member.updateSolve(baekJoon);
+
+        // 더해진 값 반환
+        return RsData.successOf(addedSolve);
     }
 
 

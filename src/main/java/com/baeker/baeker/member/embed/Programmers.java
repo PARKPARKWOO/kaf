@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Embeddable
 @Builder(toBuilder = true)
-@AllArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class Programmers {
 
@@ -24,4 +24,8 @@ public class Programmers {
     private Integer lv3;
     private Integer lv4;
     private Integer lv5;
+
+    public Integer totalSolved() {
+        return lv1 + lv2 + lv3 + lv4 + lv5;
+    }
 }
