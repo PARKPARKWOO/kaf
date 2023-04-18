@@ -1,0 +1,27 @@
+<div th:fragment="member (myStudies)"
+     class="overflow-x-auto">
+  <table class="table table-zebra w-full">
+
+    <thead>
+
+    <tr>
+      <th></th>
+      <th>이름</th>
+      <th>백준 티어</th>
+      <th>프로그래머스 레벨</th>
+    </tr>
+
+    </thead>
+
+    <tbody>
+
+    <tr th:each="myStudy, loop : ${myStudies}" th:object="${myStudy.member}">
+      <th th:text="${loop.count}"></th>
+      <td th:text="*{name}"></td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+
+    </tbody>
+  </table>
+</div>

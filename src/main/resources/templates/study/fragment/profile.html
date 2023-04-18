@@ -1,0 +1,38 @@
+<div th:fragment="profile (study)"
+     class="hero h-80 bg-base-200 flex justify-start">
+    <div class="hero-content flex-col lg:flex-row">
+
+        <img src="https://picsum.photos/200" class="max-w-sm rounded-lg shadow-2xl"/>
+
+        <div>
+            <h1 th:text="${study.name}"
+                class="text-5xl font-bold"></h1>
+
+            <p th:text="${study.about}"
+               class="py-6"></p>
+
+            <div class="flex justify-between items-center mr-8">
+                <span class="flex justify-start gap-3">
+                    <span>스터디장</span>
+                    <span class="badge" th:text="${study.leader}"></span>
+
+                    <span class="ml-8">경험치</span>
+                    <span class="badge" th:text="|${study.xp} XP|"></span>
+
+                    <span class="ml-8">랭크</span>
+                    <span class="badge">순위 없음</span>
+
+                    <span class="ml-8">인원</span>
+                    <span class="badge" th:text="|${study.myStudies.size}/${study.capacity}|"></span>
+                </span>
+
+                <span th:if="${@rq.login}">
+                    <button th:if="${study.leader eq @rq.member.name}"
+                            class="btn btn-primary">정보 수정
+                    </button>
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>

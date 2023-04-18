@@ -1,0 +1,14 @@
+<html layout:decorate="~{layout/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<head><title>스터디</title></head>
+
+<main layout:fragment="content" class="flex-grow flex min-h-screen flex flex-col">
+
+    <div class="flex-column">
+        <div th:replace="~{study/fragment/profile :: profile(${study})}"></div>
+
+        <div th:replace="~{study/fragment/member :: member(${study.myStudies})}"></div>
+    </div>
+
+</main>
+</html>

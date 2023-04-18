@@ -26,6 +26,8 @@ public class MyStudy {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    private Integer solvedCount;
+
     @Enumerated(EnumType.STRING)
     private StudyStatus status;
 

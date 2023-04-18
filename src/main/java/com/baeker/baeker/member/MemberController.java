@@ -62,10 +62,9 @@ public class MemberController {
     //-- profile --//
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
-    public String profile(Model model) {
+    public String profile() {
         Member member = rq.getMember();
         log.info("프로필 요청 확인 member = {}", member.toString());
-
         return "member/profile";
     }
 }

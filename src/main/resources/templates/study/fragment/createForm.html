@@ -1,0 +1,33 @@
+<form th:fragment="createForm (studyCreateForm)"
+      th:action th:object="${studyCreateForm}" method="post"
+      class="flex flex-col gap-6"
+      onsubmit="JoinForm__submit(this); return false;">
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">스터디 이름</span>
+        </label>
+        <input type="text" th:field="*{name}" placeholder="스터디 이름" class="input input-bordered" autofocus />
+    </div>
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">스터디 소개</span>
+        </label>
+        <input type="text" th:field="*{about}"  placeholder="소개" class="input input-bordered" autofocus />
+    </div>
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">스터디 최대 인원</span>
+        </label>
+        <input type="text" th:field="*{capacity}" placeholder="인원" class="input input-bordered" autofocus />
+    </div>
+
+
+    <button class="btn btn-block btn-primary gap-1">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        <span>개설하기</span>
+    </button>
+
+</form>
