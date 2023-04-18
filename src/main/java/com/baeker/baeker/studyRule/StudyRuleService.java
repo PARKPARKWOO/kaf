@@ -68,7 +68,8 @@ public class StudyRuleService {
 
     public RsData<StudyRule> getStudyRule(Long id) {
         Optional<StudyRule> rs = studyRuleRepository.findById(id);
-        return rs.map(RsData::successOf).orElseGet(() -> RsData.of("F-1", "없습니다."));
+        return rs.map(studyRule -> RsData.of("S-1", "StudyRule 조회 성공", studyRule))
+                .orElseGet(() -> RsData.of("F-1", "StudyRule 조회 실패"));
     }
 
     public List<StudyRule> getAll() {

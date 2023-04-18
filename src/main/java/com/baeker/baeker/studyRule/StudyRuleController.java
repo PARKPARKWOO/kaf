@@ -31,7 +31,6 @@ public class StudyRuleController {
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
         }
-        SolvedApiManager solvedApiManager = new SolvedApiManager(rsData.getData().getRule().getDifficulty());
         return rq.redirectWithMsg("스터디페이지", rsData.getMsg());
     }
 
