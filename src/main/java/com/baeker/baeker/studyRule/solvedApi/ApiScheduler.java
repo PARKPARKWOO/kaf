@@ -34,7 +34,7 @@ public class ApiScheduler {
     /**
      * 티어 체크 후 Study
      */
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 1000)
     public void tierSchedule() throws IOException, ParseException {
         List<StudyRule> all = studyRuleService.getAll();
         for (StudyRule studyRule : all) {
@@ -47,7 +47,7 @@ public class ApiScheduler {
         }
     }
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 1000)
     public void solvedCountSchedule() throws IOException, ParseException {
         log.info("문제풀이수 스케줄러");
         Long solvedCount = solvedApiService.getSolvedCount();

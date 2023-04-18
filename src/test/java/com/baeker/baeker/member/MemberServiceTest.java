@@ -31,4 +31,9 @@ class MemberServiceTest {
         assertThat(member).isSameAs(findMember);
         assertThat(member.getName()).isEqualTo(findMember.getName());
     }
+
+    @Test
+    void 해결한_문제_수_업데이트() {
+
+    }
 }

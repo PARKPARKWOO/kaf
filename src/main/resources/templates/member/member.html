@@ -1,6 +1,6 @@
 <html layout:decorate="~{layout/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
 
-<head><title>My Profile</title></head>
+<head><title th:text="|${member.name} 님의 프로필|"></title></head>
 
 <div layout:fragment="content" class="min-h-screen flex flex-col gap-12">
 

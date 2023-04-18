@@ -13,7 +13,8 @@
 
         <p th:text="${member.about}"></p>
 
-        <div class="card-actions mt-5">
+        <div th:if="${@rq.login}"
+             class="card-actions mt-5">
             <button th:if="${member.myStudies.size gt 0}"
                     class="btn btn-primary">스터디로 초대하기</button>
         </div>

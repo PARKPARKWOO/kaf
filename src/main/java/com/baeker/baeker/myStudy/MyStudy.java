@@ -26,8 +26,6 @@ public class MyStudy {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private Integer solvedCount;
-
     @Enumerated(EnumType.STRING)
     private StudyStatus status;
 
@@ -90,6 +88,8 @@ public class MyStudy {
 
     // 가입, 초대 신청 승인 //
     protected void accept() {
+        Integer solvedCount = this.member.getSolvedCount();
+        this.study.updateSolve(solvedCount);
         this.status = StudyStatus.MEMBER;
     }
 }
