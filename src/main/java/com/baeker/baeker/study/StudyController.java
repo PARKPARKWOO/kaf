@@ -35,7 +35,7 @@ public class StudyController {
     //-- 스터디 생성 처리 --//
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public String create(StudyCreateForm form) {
+    public String showCreate(StudyCreateForm form) {
         log.info("스터디 생성 요청 확인 form ={}", form.toString());
         Member member = rq.getMember();
 
