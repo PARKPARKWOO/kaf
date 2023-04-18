@@ -34,9 +34,11 @@ public class Member {
     private String studyId;
     private String name;
     private String about;
+    private String profileImg;
     private String password;
     private String provider;
     private String token;
+    private Integer solvedCount;
 
     @CreatedDate
     private LocalDateTime createDate;
@@ -61,8 +63,23 @@ public class Member {
                 .name(name)
                 .about(about)
                 .password(password)
+                .solvedCount(0)
                 .build();
     }
+
+    //-- business logic --//
+
+    // solved count 최신화 , study solved count 합산 //
+    protected void updateSolve(Integer solvedCount) {
+        int addCount = solvedCount - this.solvedCount;
+
+        this.solvedCount = solvedCount;
+
+        if (this.myStudies.size() != 0)
+            for (MyStudy myStudy : this.myStudies)
+                myStudy.getStudy().updateSolve(addCount);
+    }
+
 
     //-- create authorize --//
     public List<? extends GrantedAuthority> getGrantedAuthorities() {

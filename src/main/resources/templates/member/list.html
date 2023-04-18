@@ -1,0 +1,30 @@
+<html layout:decorate="~{layout/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<head><title>랭킹 리스트</title></head>
+
+<main layout:fragment="content" class="flex-grow flex items-center justify-center min-h-screen flex flex-col">
+
+    <div class="m-12"></div>
+
+    <div class="max-w-2xl w-full px-4">
+        <h1 class="mb-4">
+            알고리즘 랭킹
+        </h1>
+
+        <form th:replace="~{member/fragment/listTable :: listTable(${paging})}"></form>
+
+        <!-- 페이징 이동 버튼 -->
+        <div class="btn-group w-full h-60 flex justify-center">
+            <th:block th:each="page: ${#numbers.sequence(0, paging.totalPages - 1)}">
+                <a th:text="${page + 1}"
+                   class="btn btn-sm"
+                   th:classappend="${page == paging.number} ? 'btn-active'"
+                   th:href="@{/member/list(page=${page})}" >
+                </a>
+            </th:block>
+        </div>
+
+    </div>
+
+</main>
+</html>
