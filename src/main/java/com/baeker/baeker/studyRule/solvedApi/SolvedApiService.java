@@ -1,5 +1,8 @@
 package com.baeker.baeker.studyRule.solvedApi;
 
+import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.MemberService;
+import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.rule.RuleRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +23,13 @@ public class SolvedApiService {
 
     private final SolvedApiManager solvedApiManager;
 
+    private final MemberService memberService;
+
 
 
     //== 티어확인 및 문제풀이 리턴==//
-    public Integer getTier(String tier) throws IOException, ParseException, UnsupportedEncodingException {
-        JSONArray test = this.solvedApiManager.getProblemCount();
+    public Integer getSolvedCount(String tier, MyStudy myStudy) throws IOException, ParseException, UnsupportedEncodingException {
+        JSONArray test = this.solvedApiManager.getProblemCount(myStudy);
         Integer temp = 0;
         if (test.size() > 0) {
             for (Object o : test) {
@@ -66,7 +71,7 @@ public class SolvedApiService {
         return temp;
     }
 
-    public Long getSolvedCount() throws IOException, ParseException, UnsupportedEncodingException{
-        return Long.parseLong(this.solvedApiManager.getSolvedCount());
+    public Integer getSolvedCount(MyStudy myStudy) throws IOException, ParseException, UnsupportedEncodingException{
+        return Integer.parseInt(this.solvedApiManager.getSolvedCount(myStudy));
     }
 }

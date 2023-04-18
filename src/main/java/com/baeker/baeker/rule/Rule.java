@@ -32,8 +32,9 @@ public class Rule {
 
     private String provider;
 
-//    private Integer xp; // Study에만 있으면 될거같음
+    private Integer xp;
 
+    private String difficulty;
 
     @CreatedDate
     private LocalDateTime createDate;
@@ -44,7 +45,4 @@ public class Rule {
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
     @Builder.Default
     private List<StudyRule> studyRules = new ArrayList<>();
-
-
-    private String difficulty;
 }

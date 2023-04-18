@@ -31,15 +31,15 @@ public class ApiSchedulerTests {
     @DisplayName("문제풀이 수 테스트")
     void solvedCountSchedulerTest() throws IOException, ParseException {
         await().atMost(4, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(apiScheduler, atLeast(2)).solvedCountSchedule();
+            verify(apiScheduler, atLeast(2)).checkStudyRule();
         });
     }
 
-    @Test
-    @DisplayName("티어별 문제풀이 테스트")
-    void tierSchedulerTest() throws IOException, ParseException {
-        await().atMost(4, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(apiScheduler, atLeast(2)).tierSchedule();
-        });
-    }
+//    @Test
+//    @DisplayName("티어별 문제풀이 테스트")
+//    void tierSchedulerTest() throws IOException, ParseException {
+//        await().atMost(4, TimeUnit.SECONDS).untilAsserted(() -> {
+//            verify(apiScheduler, atLeast(2)).tierSchedule();
+//        });
+//    }
 }

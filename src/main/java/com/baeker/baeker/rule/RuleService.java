@@ -25,6 +25,7 @@ public class RuleService {
                 .about(ruleForm.getAbout())
                 .provider(ruleForm.getProvider())
                 .difficulty(ruleForm.getDifficulty())
+                .xp(ruleForm.getXp())
                 .build();
         ruleRepository.save(rule);
         return RsData.of("S-1", "Rule 생성 완료", rule);
@@ -57,7 +58,8 @@ public class RuleService {
 
     public RsData<Rule> getRule(Long id) {
         Optional<Rule> rs = ruleRepository.findById(id);
-        return rs.map(RsData::successOf).orElseGet(() -> RsData.of("F-1", "없는 사용자 입니다."));
+        return rs.map(rule -> RsData.of("S-1", "Rule 조회 성공", rule))
+                .orElseGet(() -> RsData.of("F-1", "Rule 조회 실패"));
     }
 
     /**
