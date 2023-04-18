@@ -1,46 +1,64 @@
-<form th:fragment="joinForm (memberJoinForm)"
+<form th:fragment="joinForm (memberJoinForm, random)"
       th:action th:object="${memberJoinForm}" method="post"
       class="flex flex-col gap-6"
       onsubmit="JoinForm__submit(this); return false;">
+    <div id="onDiv">
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">아이디</span>
+            </label>
+            <input type="text" th:field="*{username}" placeholder="아이디" class="input input-bordered" autofocus/>
+        </div>
 
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">아이디</span>
-    </label>
-    <input type="text" th:field="*{username}" placeholder="아이디" class="input input-bordered" autofocus />
-  </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">비밀번호</span>
+            </label>
+            <input type="password" th:field="*{password}" placeholder="비밀번호" class="input input-bordered"/>
+        </div>
 
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">이름</span>
-    </label>
-    <input type="text" th:field="*{name}" placeholder="이름" class="input input-bordered" autofocus />
-  </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">비밀번호 확인</span>
+            </label>
+            <input type="password" th:field="*{password2}" placeholder="비밀번호 확인" class="input input-bordered"/>
+        </div>
 
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">한줄 소개</span>
-    </label>
-    <input type="text" th:field="*{about}" placeholder="소개" class="input input-bordered" autofocus />
-  </div>
+        <button type="button"
+                class="btn btn-block mt-8"
+                onclick="offDisplay()">다음
+        </button>
+    </div>
 
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">비빌번호</span>
-    </label>
-    <input type="password" th:field="*{password}" placeholder="비빌번호" class="input input-bordered" />
-  </div>
 
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">비빌번호 확인</span>
-    </label>
-    <input type="password" th:field="*{password2}" placeholder="비빌번호 확인" class="input input-bordered" />
-  </div>
+    <div class="flex flex-col justify-center"
+         id="noneDiv" style="display:none;">
 
-  <button class="btn btn-block btn-primary gap-1">
-    <i class="fa-solid fa-arrow-right-to-bracket"></i>
-    <span>가입하기</span>
-  </button>
+        <div th:replace="~{member/fragment/slide :: slide (${random}, ${memberJoinForm})}"></div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">닉네임</span>
+            </label>
+            <input type="text" th:field="*{name}" placeholder="이름" class="input input-bordered" autofocus/>
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">한줄 소개</span>
+            </label>
+            <input type="text" th:field="*{about}" placeholder="소개" class="input input-bordered" autofocus/>
+        </div>
+
+        <button type="button"
+                class="btn btn-block mt-8"
+                onclick="offDisplay()">이전
+        </button>
+
+        <button class="btn btn-block btn-primary gap-1 mt-8">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <span>가입하기</span>
+        </button>
+    </div>
 
 </form>

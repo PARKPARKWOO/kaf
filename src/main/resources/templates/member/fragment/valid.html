@@ -69,9 +69,34 @@
             form.password.focus();
             return;
         }
-
+전
 
         //-- 폼 발송 --//
         form.submit();
     }
+
+        function offDisplay() {
+        let on = document.getElementById("onDiv");
+        let none = document.getElementById("noneDiv");
+
+        if (on.style.display != "none"){
+            on.style.display = "none";
+            none.style.display = "block";
+        }
+        else {
+            on.style.display = "block";
+            none.style.display = "none";
+        }
+    }
+
+    // JavaScript 코드
+    const img = document.getElementById("random-person");
+
+    // 랜덤 숫자를 생성하여 URL 생성
+    const randomNum = Math.floor(Math.random() * 1000) + 1;
+    const url = `https://picsum.photos/200/300?random=${randomNum}`;
+
+    // 이미지 URL을 img 요소에 할당
+    img.src = url;
+
 </script>

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -37,9 +39,16 @@ public class MemberController {
     //-- join form -- //
     @GetMapping("/join")
     @PreAuthorize("isAnonymous()")
-    public String joinForm(MemberJoinForm form) {
-
+    public String joinForm(MemberJoinForm form, Model model) {
         log.info("회원가입 폼 요청 확인");
+
+        List<Integer> random = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++)
+            random.add((int) (Math.random() * 99) + 1);
+
+        model.addAttribute("random", random);
+        log.info("회원가입 폼 응답 완료");
         return "member/join";
     }
 

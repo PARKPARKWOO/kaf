@@ -35,7 +35,7 @@ public class Member {
     private String studyId;
     private String name;
     private String about;
-    private String profileImg;
+    private Integer profileImg;
     private String password;
     private String provider;
     private String token;
@@ -56,13 +56,14 @@ public class Member {
 
 
     //-- crate method --//
-    protected static Member createMember(String provider, String username, String name, String about, String password) {
+    protected static Member createMember(String provider, String username, String name, String about, String password, Integer profileImg) {
         return builder()
                 .provider(provider)
                 .username(username)
                 .name(name)
                 .about(about)
                 .password(password)
+                .profileImg(profileImg)
                 .build();
     }
 

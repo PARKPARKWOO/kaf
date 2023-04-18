@@ -68,7 +68,7 @@ public class MemberService {
         if (!form.getPassword().equals(form.getPassword2()))
             return RsData.of("F-1", "비밀번호가 일치하지 않습니다.");
 
-        return join("Baeker", form.getUsername(), form.getName(), form.getAbout(), form.getPassword());
+        return join("Baeker", form.getUsername(), form.getName(), form.getAbout(), form.getPassword(), form.getProfileImg());
     }
 
     //-- Social Join, Login --//
@@ -79,7 +79,7 @@ public class MemberService {
         if (opMember.isPresent())
             return RsData.of("S-2", "로그인 되었습니다.", opMember.get());
 
-        return join(provider, username, name, "", "");
+        return join(provider, username, name, "", "", null);
     }
 
 
@@ -105,8 +105,7 @@ public class MemberService {
 
 
     //-- Join : Social + Security 실질적인 처리 --//
-    private RsData<Member> join(String provider, String username, String name, String about, String password) {
-        Member member = Member.createMember(provider, username, name, about, password);
+    private RsData<Member> join(String provider, String username, String name, String about, String password, Integer profileImg) {
 
         if (this.getMember(username).isPresent()) {
             return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(username));
@@ -116,6 +115,7 @@ public class MemberService {
             password = encoder.encode(password);
         }
 
+        Member member = Member.createMember(provider, username, name, about, password, profileImg);
         memberRepository.save(member);
         return RsData.of("S-1", "회원가입이 완료되었습니다. \n로그인 해주세요.", member);
     }
