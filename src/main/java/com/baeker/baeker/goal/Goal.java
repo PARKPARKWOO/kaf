@@ -1,16 +1,15 @@
 package com.baeker.baeker.goal;
 
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.study.Study;
 import com.baeker.baeker.studyRule.StudyRule;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Builder(toBuilder = true)
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,9 +21,13 @@ public class Goal {
 
     private Integer goal;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
-
     private boolean status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_mystudy")
+    private MyStudy myStudy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_studyrule")
+    private StudyRule studyRule;
 }

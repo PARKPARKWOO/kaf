@@ -14,7 +14,8 @@
         <label class="label">
             <span class="label-text">Rule 소개</span>
         </label>
-        <input type="text" th:field="*{about}" name="username" placeholder="간단 소개" class="input input-bordered" autofocus/>
+        <input type="text" th:field="*{about}" name="username" placeholder="간단 소개" class="input input-bordered"
+               autofocus/>
     </div>
 
     <div class="form-control">
@@ -29,42 +30,48 @@
     <section class="flex">
         <label class="label">
             <span class="label-text">난이도</span>
-        <div class="form-control">
-            <label class="label cursor-pointer">
-                <span class="peer-checked:text-[red] label-text">BRONZE</span>
-                <input type="radio" name="difficulty" value="BRONZE" class="peer radio focus:bg-red-100">
-            </label>
-        </div>
-        <div class="form-control">
-            <label class="label cursor-pointer">
-                <span class="peer-checked:text-[red] label-text">SILVER</span>
-                <input type="radio" name="difficulty" value="SILVER" class="peer radio focus:bg-red-100">
-            </label>
-        </div>
-        <div class="form-control">
-            <label class="label cursor-pointer">
-                <span class="peer-checked:text-[red] label-text">GOLD</span>
-                <input type="radio" name="difficulty" value="GOLD" class="peer radio focus:bg-red-100">
-            </label>
-        </div>
-        <div class="form-control">
-            <label class="label cursor-pointer">
-                <span class="peer-checked:text-[red] label-text">PLATINUM</span>
-                <input type="radio" name="difficulty" value="PLATINUM" class="peer radio focus:bg-red-100">
-            </label>
-        </div>
-        <div class="form-control">
-            <label class="label cursor-pointer">
-                <span class="peer-checked:text-[red] label-text">DIAMOND</span>
-                <input type="radio" name="difficulty" value="DIAMOND" class="peer radio focus:bg-red-100">
-            </label>
-        </div>
-        <div class="form-control">
-            <label class="label cursor-pointer">
-                <span class="peer-checked:text-[red] label-text">RUBY</span>
-                <input type="radio" name="difficulty" value="RUBY" class="peer radio focus:bg-red-100">
-            </label>
-        </div>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="peer-checked:text-[red] label-text">NONE</span>
+                    <input type="radio" name="difficulty" value="NONE" class="peer radio focus:bg-red-100">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="peer-checked:text-[red] label-text">BRONZE</span>
+                    <input type="radio" name="difficulty" value="BRONZE" class="peer radio focus:bg-red-100">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="peer-checked:text-[red] label-text">SILVER</span>
+                    <input type="radio" name="difficulty" value="SILVER" class="peer radio focus:bg-red-100">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="peer-checked:text-[red] label-text">GOLD</span>
+                    <input type="radio" name="difficulty" value="GOLD" class="peer radio focus:bg-red-100">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="peer-checked:text-[red] label-text">PLATINUM</span>
+                    <input type="radio" name="difficulty" value="PLATINUM" class="peer radio focus:bg-red-100">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="peer-checked:text-[red] label-text">DIAMOND</span>
+                    <input type="radio" name="difficulty" value="DIAMOND" class="peer radio focus:bg-red-100">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="peer-checked:text-[red] label-text">RUBY</span>
+                    <input type="radio" name="difficulty" value="RUBY" class="peer radio focus:bg-red-100">
+                </label>
+            </div>
         </label>
     </section>
 

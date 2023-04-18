@@ -25,6 +25,16 @@
             return;
         }
 
+        //== 경험치 ==//
+
+        form.xp.value = form.xp.value.trim();
+
+        if (!form.xp.value) {
+            toastWarning('경험치 작성해주세요!');
+            form.provider.focus();
+            return;
+        }
+
         //-- OJ 사이트 검증 --//
         form.provider.value = form.provider.value.trim();
 
