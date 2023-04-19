@@ -5,6 +5,8 @@ import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
+import com.baeker.baeker.rule.RuleForm;
+import com.baeker.baeker.rule.RuleService;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
 import com.baeker.baeker.study.form.StudyCreateForm;
@@ -14,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class InitDB {
 
@@ -33,6 +35,8 @@ public class InitDB {
         private final MemberService memberService;
         private final StudyService studyService;
         private final MyStudyService myStudyService;
+
+        private final RuleService ruleService;
 
         public void initData() {
 
@@ -63,7 +67,14 @@ public class InitDB {
             // 알파가 "Study Baeker" 가입
             MyStudy myStudy = myStudyService.join(member0, study1).getData();
             myStudyService.accept(myStudy);
-        }
 
+            // rule 목록확인
+            RuleForm ruleForm = new RuleForm("이름", "소개", 3, "백준", "GOLD");
+
+            for (int i = 0; i < 15; i++) {
+                ruleService.create(ruleForm);
+            }
+        }
     }
+
 }

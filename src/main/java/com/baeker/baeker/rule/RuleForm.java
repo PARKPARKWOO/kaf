@@ -19,7 +19,7 @@ public class RuleForm {
     @Size(max = 30)
     private String about;
 
-    @NotBlank
+    @NotEmpty
     private Integer xp;
 
     @Size(min = 2, max = 2)

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/study_rule")
+@RequestMapping("/studyrule")
 public class StudyRuleController {
 
     private StudyRuleService studyRuleService;

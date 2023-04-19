@@ -23,8 +23,8 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest
 @Transactional
 public class ApiSchedulerTests {
-    @SpyBean
-    private ApiScheduler apiScheduler;
+//    @SpyBean
+//    private ApiScheduler apiScheduler;
 
     //-- 스케줄러 관련 test 주석처리했습니다. --//
 //    @Test

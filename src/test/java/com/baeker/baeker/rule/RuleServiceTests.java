@@ -47,10 +47,19 @@ public class RuleServiceTests {
         ruleService.modify(rule1, ruleForm1);
 
         assertThat(rule1.getName()).isEqualTo("wy9295");
+
+
+        //조회 메서드 //
+
+        Rule rs = ruleService.getRule("wy9295").getData();
+        assertThat(rs.getDifficulty()).isEqualTo("GOLD");
+
+
         // 삭제 메서드 //
         Optional<Rule> opDelete = ruleRepository.findById(1L);
         opDelete.ifPresent(value -> ruleService.delete(value));
         assertThat(ruleService.getRule(1L).getData()).isNull();
+
     }
 
 }

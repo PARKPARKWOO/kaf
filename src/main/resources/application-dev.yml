@@ -13,6 +13,4 @@ spring:
     hibernate:
       ddl-auto: create
 
-scheduler:
-  cron:
 
