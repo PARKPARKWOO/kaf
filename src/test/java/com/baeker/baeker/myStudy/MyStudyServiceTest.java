@@ -25,7 +25,7 @@ class MyStudyServiceTest {
     @Autowired StudyService studyService;
 
     private Member create(String username, String name) {
-        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234");
+        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", 1);
         return memberService.join(form).getData();
     }
 

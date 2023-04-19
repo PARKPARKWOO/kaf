@@ -24,7 +24,7 @@ class MemberServiceTest {
     @Autowired private MyStudyService myStudyService;
 
     private Member create(String username, String name) {
-        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234");
+        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", 1);
         return memberService.join(form).getData();
     }
 
@@ -35,7 +35,7 @@ class MemberServiceTest {
 
     @Test
     void 회원가입() {
-        MemberJoinForm form = new MemberJoinForm("username", "name",  "","1234", "1234");
+        MemberJoinForm form = new MemberJoinForm("username", "name",  "","1234", "1234" ,1);
         RsData<Member> memberRs = memberService.join(form);
         Member member = memberRs.getData();
 
