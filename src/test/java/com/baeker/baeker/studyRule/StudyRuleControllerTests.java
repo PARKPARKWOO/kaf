@@ -1,9 +1,12 @@
-package com.baeker.baeker.rule;
+package com.baeker.baeker.studyRule;
 
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.member.form.MemberJoinForm;
-
+import com.baeker.baeker.rule.Rule;
+import com.baeker.baeker.rule.RuleController;
+import com.baeker.baeker.rule.RuleForm;
+import com.baeker.baeker.rule.RuleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +26,31 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-public class RuleControllerTests {
-
+public class StudyRuleControllerTests {
+    @Autowired
+    private StudyRuleController studyRuleController;
     @Autowired
     private MockMvc mvc;
     @Autowired
-    private RuleController ruleController;
+    private StudyRuleService studyRuleService;
+    @Autowired
+    private MemberService memberService;
     @Autowired
     private RuleService ruleService;
 
-    @Autowired
-    private MemberService memberService;
-
     @Test
     @Rollback(value = false)
-    @DisplayName("user10 생성")
+    @DisplayName("user11 생성")
     void create() {
-        MemberJoinForm memberJoinForm = new MemberJoinForm("user10", "user10", "소개", "1234", "1234", 1);
+        MemberJoinForm memberJoinForm = new MemberJoinForm("user11", "user11", "소개", "1234","1234", 1);
         Member member = memberService.join(memberJoinForm).getData();
+
+        RuleForm ruleForm = new RuleForm("name", "about", "1", "provider", "GOLD");
+        Rule rule = ruleService.create(ruleForm).getData();
     }
 
     @Test
@@ -54,94 +59,63 @@ public class RuleControllerTests {
     void notLogin() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
-                .perform(get("/rule/create"))
+                .perform(get("/studyrule/create"))
                 .andDo(print());
 
         // THEN
         resultActions
-                .andExpect(handler().handlerType(RuleController.class))
-                .andExpect(handler().methodName("showCreate"))
+                .andExpect(handler().handlerType(StudyRuleController.class))
+                .andExpect(handler().methodName("create"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/member/login**"));
     }
-
-
     @Test
-    @WithUserDetails("user10")
+    @WithUserDetails("user11")
     @DisplayName("로그인 했을때 create")
     void createTests() throws Exception {
 
 
         // WHEN
         ResultActions resultActions = mvc
-                .perform(get("/rule/create"))
+                .perform(get("/studyrule/create"))
                 .andDo(print());
 
         // THEN
         resultActions
-                .andExpect(handler().handlerType(RuleController.class))
-                .andExpect(handler().methodName("showCreate"))
+                .andExpect(handler().handlerType(StudyRuleController.class))
+                .andExpect(handler().methodName("create"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().string(containsString("""
                         <input type="text" name="name" placeholder="규칙 이름"
                         """.stripIndent().trim())))
                 .andExpect(content().string(containsString("""
                         <input type="text" name="about" placeholder="간단 소개"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="text" name="provider" placeholder="OJ 사이트"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="radio" name="difficulty" value="NONE"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="radio" name="difficulty" value="BRONZE"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="radio" name="difficulty" value="SILVER"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="radio" name="difficulty" value="GOLD"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="radio" name="difficulty" value="PLATINUM"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="radio" name="difficulty" value="DIAMOND"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="radio" name="difficulty" value="RUBY"
                         """.stripIndent().trim())));
-    }
 
+    }
     @Test
     @DisplayName("create Form POST")
-    @WithUserDetails("user10")
+    @WithUserDetails("user11")
     void createForm() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
-                .perform(post("/rule/create")
+                .perform(post("/studyrule/create")
                         .with(csrf()) // CSRF 키 생성
-                        .param("name", "rule")
+                        .param("name", "studyRule")
                         .param("about", "안녕")
-                        .param("xp", "1")
-                        .param("difficulty", "GOLD")
-                        .param("provider", "BJ")
+
                 )
                 .andDo(print());
 
         // THEN
         resultActions
-                .andExpect(handler().handlerType(RuleController.class))
+                .andExpect(handler().handlerType(StudyRuleController.class))
                 .andExpect(handler().methodName("create"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("/study/**"));
 
-        Rule rule = ruleService.getRule("rule").getData();
+        StudyRule studyRule = studyRuleService.getStudyRule("studyRule").getData();
 
-        // StudyRule 추가해야함
-
-        assertThat(rule.getName()).isEqualTo("rule");
+        assertThat(studyRule.getName()).isEqualTo("studyRule");
     }
 }
-

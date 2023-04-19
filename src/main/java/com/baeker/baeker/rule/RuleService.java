@@ -26,9 +26,9 @@ public class RuleService {
         Rule rule = Rule.builder()
                 .name(ruleForm.getName())
                 .about(ruleForm.getAbout())
+                .xp(Integer.parseInt(ruleForm.getXp()))
                 .provider(ruleForm.getProvider())
                 .difficulty(ruleForm.getDifficulty())
-                .xp(ruleForm.getXp())
                 .build();
         ruleRepository.save(rule);
         return RsData.of("S-1", "Rule 생성 완료", rule);

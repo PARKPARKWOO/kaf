@@ -1,7 +1,6 @@
-package com.baeker.baeker.studyRule.solvedApi;
+package com.baeker.baeker.solvedApi;
 
 import com.baeker.baeker.member.Member;
-import com.baeker.baeker.myStudy.MyStudy;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;

@@ -2,7 +2,6 @@ package com.baeker.baeker.studyRule;
 
 import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.study.Study;
-import com.baeker.baeker.studyRule.solvedApi.SolvedApiManager;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

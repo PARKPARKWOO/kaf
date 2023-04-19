@@ -29,8 +29,13 @@
 
         form.xp.value = form.xp.value.trim();
 
-        if (!form.xp.value) {
+        if (form.xp.value.length == 0) {
             toastWarning('경험치 작성해주세요!');
+            form.provider.focus();
+            return;
+        }
+        if (form.xp.value.length > 10) {
+            toastWarning('10글자 이내로 작성해주세요');
             form.provider.focus();
             return;
         }

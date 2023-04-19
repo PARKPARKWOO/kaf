@@ -72,6 +72,12 @@ public class StudyRuleService {
                 .orElseGet(() -> RsData.of("F-1", "StudyRule 조회 실패"));
     }
 
+    public RsData<StudyRule> getStudyRule(String name) {
+        Optional<StudyRule> rs = studyRuleRepository.findByName(name);
+        return rs.map(studyRule -> RsData.of("S-1", "StudyRule 조회", studyRule))
+                .orElseGet(() -> RsData.of("F-1", "StudyRule 조회 실패"));
+    }
+
     public List<StudyRule> getAll() {
         return studyRuleRepository.findAll();
     }

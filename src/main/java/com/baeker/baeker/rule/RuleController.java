@@ -41,7 +41,6 @@ public class RuleController {
     }
 
 
-
     /**
      * 수정
      */
@@ -57,6 +56,7 @@ public class RuleController {
             return rq.historyBack(rsData);
         }
     }
+
     @PostMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
     public String modify(@PathVariable("id") Long id, @Valid RuleForm ruleForm, BindingResult bindingResult) {
@@ -77,7 +77,7 @@ public class RuleController {
         RsData<Rule> rsData = ruleService.getRule(id);
         if (rsData.isSuccess()) {
             ruleService.delete(rsData.getData());
-            return rq.redirectWithMsg("스터디 url", rsData.getMsg());
+            return rq.redirectWithMsg("/rule/ruleList", "삭제 되었습니다.");
         } else {
             return rq.historyBack(rsData.getMsg());
         }
@@ -92,5 +92,15 @@ public class RuleController {
         Page<Rule> paging = ruleService.getList(page);
         model.addAttribute("paging", paging);
         return "rule/ruleList";
+    }
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, Model model) {
+        RsData<Rule> rule = ruleService.getRule(id);
+        if (rule.isFail()) {
+            return rq.historyBack(rule);
+        }
+        model.addAttribute("rule", rule.getData());
+        return "rule/detail";
     }
 }

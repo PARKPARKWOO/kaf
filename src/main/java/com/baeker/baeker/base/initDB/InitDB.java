@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class InitDB {
 
@@ -69,7 +69,7 @@ public class InitDB {
             myStudyService.accept(myStudy);
 
             // rule 목록확인
-            RuleForm ruleForm = new RuleForm("이름", "소개", 3, "백준", "GOLD");
+            RuleForm ruleForm = new RuleForm("이름", "소개",  "1","백준", "GOLD");
 
             for (int i = 0; i < 15; i++) {
                 ruleService.create(ruleForm);

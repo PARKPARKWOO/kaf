@@ -45,4 +45,5 @@ public class Rule {
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
     @Builder.Default
     private List<StudyRule> studyRules = new ArrayList<>();
+
 }

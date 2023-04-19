@@ -3,24 +3,26 @@ package com.baeker.baeker.studyRule;
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.rule.Rule;
-import com.baeker.baeker.studyRule.solvedApi.SolvedApiManager;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/studyrule")
+@RequiredArgsConstructor
 public class StudyRuleController {
 
-    private StudyRuleService studyRuleService;
-    private Rq rq;
+    private final StudyRuleService studyRuleService;
+    private final Rq rq;
 
     @GetMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public String create(StudyRuleForm studyRuleForm) {
+    public String create() {
         return "studyRule/studyRule";
     }
 
@@ -31,8 +33,9 @@ public class StudyRuleController {
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
         }
-        return rq.redirectWithMsg("스터디페이지", rsData.getMsg());
+        return rq.redirectWithMsg("/study/detail", rsData.getMsg());
     }
+
 
 
     @GetMapping("/modify/{id}")

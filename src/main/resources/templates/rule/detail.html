@@ -1,0 +1,16 @@
+<html layout:decorate="~{layout/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head><title>Rule</title></head>
+
+<main layout:fragment="content" class="flex-grow flex items-center justify-center min-h-screen flex flex-col">
+    <div class="max-w-2xl w-full px-4">
+        <h1 class="mb-4">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            Rule
+        </h1>
+
+        <div th:replace="~{rule/fragment/ruledetail :: detail (${rule})}"></div>
+
+    </div>
+
+</main>
+</html>
