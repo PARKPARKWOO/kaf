@@ -51,12 +51,7 @@ public class ApiScheduler {
 //            System.out.println(solvedCount);
 //        }
 //    }
-//
-//    @Scheduled(fixedRate = 1000)
-//    public void solvedCountSchedule() throws IOException, ParseException {
-//        Integer solvedCount = solvedApiService.getSolvedCount();
-//    }
-//
+
     @Scheduled(fixedRate = 1000)
     public void checkStudyRule() throws IOException, ParseException {
         log.info("스케줄러 실행");

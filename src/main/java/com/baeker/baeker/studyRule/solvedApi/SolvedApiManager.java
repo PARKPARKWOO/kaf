@@ -47,9 +47,9 @@ public class SolvedApiManager {
 
 
     //==문제풀이 로직==//
-    public String getSolvedCount(String studyId) throws IOException, ParseException {
+    public String getSolvedCount(Member member) throws IOException, ParseException {
         RestTemplate restTemplate = new RestTemplate();
-        String jsonString = restTemplate.getForObject(getUserInformation(studyId), String.class);
+        String jsonString = restTemplate.getForObject(getUserInformation(member.getStudyId()), String.class);
 
         JSONParser jsonParser = new JSONParser();
         Object jsonObject = jsonParser.parse(jsonString);
@@ -59,9 +59,10 @@ public class SolvedApiManager {
         return jsonBody.get("solvedCount").toString();
     }
 
-    public JSONArray getProblemCount(String studyId) throws IOException, ParseException {
+
+    public JSONArray getProblemCount(Member member) throws IOException, ParseException {
         RestTemplate restTemplate = new RestTemplate();
-        String jsonString = restTemplate.getForObject(getProblemStats(studyId), String.class);
+        String jsonString = restTemplate.getForObject(getProblemStats(member.getStudyId()), String.class);
         JSONParser jsonParser = new JSONParser();
         Object jsonObject = jsonParser.parse(jsonString);
 

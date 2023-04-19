@@ -3,6 +3,7 @@ package com.baeker.baeker.rule;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.member.form.MemberJoinForm;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,7 +140,7 @@ public class RuleControllerTests {
 
         Rule rule = ruleService.getRule("rule").getData();
 
-        // StudyRule 추가
+        // StudyRule 추가해야함
 
         assertThat(rule.getName()).isEqualTo("rule");
     }

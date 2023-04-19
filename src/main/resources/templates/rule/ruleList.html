@@ -37,13 +37,11 @@
         <tbody class="bg-white divide-y divide-gray-200">
         <tr th:each="rule, loop : ${paging}">
 
-            <!-- 게시물 번호 -->
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm text-gray-900"
                      th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></div>
             </td>
 
-            <!-- 게시글  -->
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm text-gray-900">
                     <a th:href="@{|/rule/rule/${rule.id}|}"

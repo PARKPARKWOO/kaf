@@ -29,7 +29,7 @@ public class SolvedApiService {
     private final MemberService memberService;
 
     public RsData<BaekJoon> getSolvedCount(Member member, Integer min, Integer max) throws IOException, ParseException {
-        JSONArray test = this.solvedApiManager.getProblemCount(member.getStudyId());
+        JSONArray test = this.solvedApiManager.getProblemCount(member);
         Integer solvedCount = 0;
         for (Object o : test) {
             JSONObject jsonObject = (JSONObject) o;
@@ -86,7 +86,7 @@ public class SolvedApiService {
 //        return temp;
 //    }
 
-    public Integer getSolvedCount(String studyId) throws IOException, ParseException, UnsupportedEncodingException {
-            return Integer.parseInt(this.solvedApiManager.getSolvedCount(studyId));
+    public Integer getSolvedCount(Member member) throws IOException, ParseException, UnsupportedEncodingException {
+            return Integer.parseInt(this.solvedApiManager.getSolvedCount(member));
         }
 }
