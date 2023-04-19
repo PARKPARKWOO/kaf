@@ -2,6 +2,8 @@ package com.baeker.baeker.studyRule.solvedApi;
 
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.MemberService;
+import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.study.Study;

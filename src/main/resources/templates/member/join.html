@@ -9,12 +9,16 @@
   <div class="max-w-2xl w-full px-4">
     <h1 class="mb-4">
       <i class="fa-solid fa-arrow-right-to-bracket"></i>
-      로그인
+      회원가입
     </h1>
 
-    <form th:replace="~{member/fragment/joinForm :: joinForm(${memberJoinForm})}"></form>
+    <form th:replace="~{member/fragment/joinForm :: joinForm(${memberJoinForm}, ${random})}"></form>
 
   </div>
 
+
+
+
 </main>
 </html>
+

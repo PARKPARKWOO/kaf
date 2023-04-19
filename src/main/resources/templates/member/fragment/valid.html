@@ -69,9 +69,25 @@
             form.password.focus();
             return;
         }
-
+전
 
         //-- 폼 발송 --//
         form.submit();
     }
+
+        function offDisplay() {
+        let on = document.getElementById("onDiv");
+        let none = document.getElementById("noneDiv");
+
+        if (on.style.display != "none"){
+            on.style.display = "none";
+            none.style.display = "block";
+        }
+        else {
+            on.style.display = "block";
+            none.style.display = "none";
+        }
+    }
+
+
 </script>

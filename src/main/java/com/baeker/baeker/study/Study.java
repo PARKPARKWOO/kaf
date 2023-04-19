@@ -1,6 +1,8 @@
 package com.baeker.baeker.study;
 
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.embed.BaekJoon;
+import com.baeker.baeker.member.embed.Programmers;
 import com.baeker.baeker.myStudy.MyStudy;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,13 +32,17 @@ public class Study {
     private String name;
     private String about;
     private String leader;
-    private Integer solvedCount;
     private Integer capacity;
     private Integer xp;
 
     @CreatedDate
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
+
+    @Embedded
+    private BaekJoon baekJoon;
+    @Embedded
+    private Programmers programmers;
 
     @Builder.Default
     @OneToMany(mappedBy = "study")
@@ -51,7 +57,6 @@ public class Study {
                 .leader(member.getName())
                 .capacity(capacity)
                 .xp(0)
-                .solvedCount(member.getSolvedCount())
                 .build();
 
         return MyStudy.createNewStudy(member, study);
@@ -83,8 +88,22 @@ public class Study {
         this.xp += addXp;
     }
 
-    // 해결한 문제수 업데이트 //
-    public void updateSolve(Integer solvedCount) {
-        this.solvedCount += solvedCount;
+    // 해결한 문제 수 생성 //
+    public void createSolve(BaekJoon baekJoon) {
+        this.baekJoon = baekJoon;
+    }
+
+    // 해결한 문제 수 업데이트 //
+    public void updateSolve(BaekJoon addedSolved) {
+        BaekJoon beakJoon = BaekJoon.builder()
+                .bronze(addedSolved.getBronze() + baekJoon.getBronze())
+                .sliver(addedSolved.getSliver() + baekJoon.getSliver())
+                .gold(addedSolved.getGold() + baekJoon.getGold())
+                .platinum(addedSolved.getPlatinum() + baekJoon.getPlatinum())
+                .diamond(addedSolved.getDiamond() + baekJoon.getDiamond())
+                .ruby(addedSolved.getRuby() + baekJoon.getRuby())
+                .build();
+
+        this.baekJoon = beakJoon;
     }
 }

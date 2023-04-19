@@ -1,6 +1,7 @@
 package com.baeker.baeker.member;
 
 import com.baeker.baeker.base.request.RsData;
+import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
@@ -23,7 +24,7 @@ class MemberServiceTest {
     @Autowired private MyStudyService myStudyService;
 
     private Member create(String username, String name) {
-        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234");
+        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", 1);
         return memberService.join(form).getData();
     }
 
@@ -34,7 +35,7 @@ class MemberServiceTest {
 
     @Test
     void 회원가입() {
-        MemberJoinForm form = new MemberJoinForm("username", "name",  "","1234", "1234");
+        MemberJoinForm form = new MemberJoinForm("username", "name",  "","1234", "1234" ,1);
         RsData<Member> memberRs = memberService.join(form);
         Member member = memberRs.getData();
 
@@ -52,27 +53,43 @@ class MemberServiceTest {
         Member member1 = create("user1", "member1");
         Study study = createStudy("study", member1).getData();
 
-        assertThat(member1.getSolvedCount()).isEqualTo(0);
-        assertThat(study.getSolvedCount()).isEqualTo(0);
 
-        // member1 : 해결한 문제수 5 로 업데이트
-        memberService.updateSolve(member1.getId(), 5);
+        assertThat(member1.getBaekJoon()).isNull();
+        assertThat(study.getBaekJoon()).isNull();
 
-        // member 가 속한 study 까지 업데이트 성공
-        assertThat(member1.getSolvedCount()).isEqualTo(5);
-        assertThat(study.getSolvedCount()).isEqualTo(5);
+        BaekJoon baekJoon = BaekJoon.builder()
+                .bronze(4)
+                .sliver(2)
+                .build();
+
+        // member1 : 해결한 문제 백준 브론즈 4문제, 실버 2문제 추가
+        RsData<BaekJoon> baekJoonRs = memberService.solve(member1.getId(), baekJoon);
+        assertThat(baekJoonRs.getResultCode()).isEqualTo("S-1");
+
+        // member1 이 속한 스터디까지 추가 완료
+        assertThat(member1.getBaekJoon().getBronze()).isEqualTo(4);
+        assertThat(member1.getBaekJoon().getSliver()).isEqualTo(2);
+        assertThat(member1.getBaekJoon().totalSolved()).isEqualTo(6);
+        assertThat(study.getBaekJoon().getSliver()).isEqualTo(2);
 
 
-        // member2 : 8문제 해결
+        // member2 : 백준 실버 8문제 해결
         Member member2 = create("user2", "member2");
-        memberService.updateSolve(member2.getId(), 8);
-        assertThat(member2.getSolvedCount()).isEqualTo(8);
+        BaekJoon baekJoon2 = BaekJoon.builder()
+                .sliver(8)
+                .build();
+        RsData<BaekJoon> solve = memberService.solve(member2.getId(), baekJoon2);
+        assertThat(member2.getBaekJoon().getSliver()).isEqualTo(8);
 
         // member2 : study 가입
         MyStudy myStudy = myStudyService.join(member2, study).getData();
-        myStudyService.accept(myStudy);
+        RsData<BaekJoon> addedSolveRs = myStudyService.accept(myStudy);
 
         // 가입이 성공하면 member2 의 해결문제수가 study 에 자동 합산됨
-        assertThat(study.getSolvedCount()).isEqualTo(13);
+        assertThat(addedSolveRs.getResultCode()).isEqualTo("S-1");
+        assertThat(study.getBaekJoon().getSliver()).isEqualTo(10);
+
+        // 반환값으로 추가된 값 반환
+        assertThat(addedSolveRs.getData().getSliver()).isEqualTo(8);
     }
 }
