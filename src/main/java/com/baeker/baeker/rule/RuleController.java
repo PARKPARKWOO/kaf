@@ -4,13 +4,12 @@ import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/rule")
@@ -21,26 +20,31 @@ public class RuleController {
 
     private final Rq rq;
 
+    /**
+     * 생성
+     */
 
-    // 생성 //
     @GetMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public String showCreate(RuleForm ruleForm) {
+    public String showCreate() {
         return "rule/rule";
     }
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public String create(@Valid RuleForm ruleForm, BindingResult bindingResult) {
+    public String create(@Valid RuleForm ruleForm) {
         RsData<Rule> rsData = ruleService.create(ruleForm);
-        if (rsData.isFail() || bindingResult.hasErrors()) {
+        if (rsData.isFail()) {
             return rq.historyBack(rsData);
         }
-        return rq.redirectWithMsg("스터디페이지", rsData.getMsg());
+        return rq.redirectWithMsg("/study/detail", rsData.getMsg());
     }
 
 
-    // 수정 //
+
+    /**
+     * 수정
+     */
     @GetMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showModify(@PathVariable("id") Long id, RuleForm ruleForm) {
@@ -53,8 +57,6 @@ public class RuleController {
             return rq.historyBack(rsData);
         }
     }
-
-
     @PostMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
     public String modify(@PathVariable("id") Long id, @Valid RuleForm ruleForm, BindingResult bindingResult) {
@@ -63,10 +65,12 @@ public class RuleController {
             return rq.historyBack(rsData);
         }
         ruleService.modify(rsData.getData(), ruleForm);
-        return rq.redirectWithMsg("스터디 url", rsData.getMsg());
+        return rq.redirectWithMsg("/study/detail", rsData.getMsg());
     }
 
-    // 삭제 //
+    /**
+     * 삭제
+     */
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable("id") Long id) {
@@ -77,5 +81,16 @@ public class RuleController {
         } else {
             return rq.historyBack(rsData.getMsg());
         }
+    }
+
+    /**
+     * 조회/목록
+     */
+
+    @GetMapping("/list")
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Rule> paging = ruleService.getList(page);
+        model.addAttribute("paging", paging);
+        return "rule/ruleList";
     }
 }

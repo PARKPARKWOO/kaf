@@ -1,13 +1,15 @@
 package com.baeker.baeker.studyRule.solvedApi;
 
 import com.baeker.baeker.base.request.Rq;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@RequiredArgsConstructor
 public class SolvedApiController {
-    private SolvedApiService solvedApiService;
+    private final SolvedApiService solvedApiService;
 
-    private Rq rq;
+    private final Rq rq;
 
 
 

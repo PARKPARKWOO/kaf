@@ -38,7 +38,7 @@ public class RuleServiceTests {
 
         //수정 메서드 //
         RuleForm ruleForm1 = new RuleForm("wy9295", "소개2", 2,"boj2", "GOLD");
-        Optional<Rule> optionalRule = ruleRepository.findById(1L);
+        Optional<Rule> optionalRule = ruleRepository.findByName("aaaa");
         if (optionalRule.isEmpty()) {
             System.out.println("실패 테스트임 !! 값이없다!!!!!!");
         }
@@ -47,10 +47,19 @@ public class RuleServiceTests {
         ruleService.modify(rule1, ruleForm1);
 
         assertThat(rule1.getName()).isEqualTo("wy9295");
+
+
+        //조회 메서드 //
+
+        Rule rs = ruleService.getRule("wy9295").getData();
+        assertThat(rs.getDifficulty()).isEqualTo("GOLD");
+
+
         // 삭제 메서드 //
         Optional<Rule> opDelete = ruleRepository.findById(1L);
         opDelete.ifPresent(value -> ruleService.delete(value));
         assertThat(ruleService.getRule(1L).getData()).isNull();
+
     }
 
 }

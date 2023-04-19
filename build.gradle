@@ -30,7 +30,7 @@ dependencies {
 	implementation 'com.h2database:h2' //h2 인메모리
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.security:spring-security-test'
 
 	//RDBMS
 	runtimeOnly 'com.mysql:mysql-connector-j'

@@ -3,6 +3,9 @@ package com.baeker.baeker.rule;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.studyRule.StudyRule;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,6 +63,16 @@ public class RuleService {
         Optional<Rule> rs = ruleRepository.findById(id);
         return rs.map(rule -> RsData.of("S-1", "Rule 조회 성공", rule))
                 .orElseGet(() -> RsData.of("F-1", "Rule 조회 실패"));
+    }
+
+    public RsData<Rule> getRule(String name) {
+        Optional<Rule> rs = ruleRepository.findByName(name);
+        return rs.map(rule -> RsData.of("S-1", "Rule 조회 성공" ,rule))
+                .orElseGet(() -> RsData.of("F-1", "Rule 조회 실패"));
+    }
+
+    public Page<Rule> getList(int page) {
+        return ruleRepository.findAll(PageRequest.of(page, 10));
     }
 
     /**

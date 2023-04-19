@@ -7,14 +7,22 @@
         <label class="label">
             <span class="label-text">규칙 명</span>
         </label>
-        <input type="text" th:field="*{name}" name="name" placeholder="규칙 이름" class="input input-bordered" autofocus/>
+        <input type="text" name="name" placeholder="규칙 이름" class="input input-bordered" autofocus/>
     </div>
 
     <div class="form-control">
         <label class="label">
             <span class="label-text">Rule 소개</span>
         </label>
-        <input type="text" th:field="*{about}" name="username" placeholder="간단 소개" class="input input-bordered"
+        <input type="text" name="about" placeholder="간단 소개" class="input input-bordered"
+               autofocus/>
+    </div>
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">경험치</span>
+        </label>
+        <input type="text" name="xp" placeholder="경험치" class="input input-bordered"
                autofocus/>
     </div>
 
@@ -22,11 +30,11 @@
         <label class="label">
             <span class="label-text">사용하는 OJ</span>
         </label>
-        <input type="text" th:field="*{provider}" name="username" placeholder="OJ 사이트" class="input input-bordered"
+        <input type="text" name="provider" placeholder="OJ 사이트" class="input input-bordered"
                autofocus/>
     </div>
 
-    <!--    난이도-->
+    <!--  난이도  -->
     <section class="flex">
         <label class="label">
             <span class="label-text">난이도</span>
@@ -75,7 +83,7 @@
         </label>
     </section>
 
-    <!--    난이도 끝 -->
+    <!--  난이도 끝  -->
     <button class="btn btn-block btn-primary gap-1">
         <i class="fa-solid fa-arrow-right-to-bracket"></i>
         <span>생성</span>

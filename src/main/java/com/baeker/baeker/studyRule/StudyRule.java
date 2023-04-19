@@ -1,6 +1,5 @@
 package com.baeker.baeker.studyRule;
 
-import com.baeker.baeker.goal.Goal;
 import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.studyRule.solvedApi.SolvedApiManager;
@@ -42,9 +41,6 @@ public class StudyRule {
     @JoinColumn(name = "rule_id")
     private Rule rule;
 
-    @OneToMany(mappedBy = "studyRule")
-    @Builder.Default
-    private List<Goal> goals = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_study")
