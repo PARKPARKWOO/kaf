@@ -43,6 +43,7 @@ public class RuleService {
                 .name(ruleForm.getName())
                 .about(ruleForm.getAbout())
                 .provider(ruleForm.getProvider())
+                .xp(Integer.parseInt(ruleForm.getXp()))
                 .difficulty(ruleForm.getDifficulty())
                 .build();
         ruleRepository.save(rule1);

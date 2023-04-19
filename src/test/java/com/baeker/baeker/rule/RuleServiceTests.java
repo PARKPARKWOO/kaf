@@ -33,7 +33,7 @@ public class RuleServiceTests {
         RsData<Rule> rsData = ruleService.create(ruleForm);
         Rule rule = rsData.getData();
         assertThat(rule.getName()).isEqualTo("aaaa");
-        System.out.println(rsData.getMsg());
+
 
 
         //수정 메서드 //

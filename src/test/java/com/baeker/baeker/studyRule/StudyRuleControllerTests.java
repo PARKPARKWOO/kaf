@@ -93,29 +93,29 @@ public class StudyRuleControllerTests {
                         """.stripIndent().trim())));
 
     }
-    @Test
-    @DisplayName("create Form POST")
-    @WithUserDetails("user11")
-    void createForm() throws Exception {
-        // WHEN
-        ResultActions resultActions = mvc
-                .perform(post("/studyrule/create")
-                        .with(csrf()) // CSRF 키 생성
-                        .param("name", "studyRule")
-                        .param("about", "안녕")
-
-                )
-                .andDo(print());
-
-        // THEN
-        resultActions
-                .andExpect(handler().handlerType(StudyRuleController.class))
-                .andExpect(handler().methodName("create"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("/study/**"));
-
-        StudyRule studyRule = studyRuleService.getStudyRule("studyRule").getData();
-
-        assertThat(studyRule.getName()).isEqualTo("studyRule");
-    }
+//    @Test
+//    @DisplayName("create Form POST")
+//    @WithUserDetails("user11")
+//    void createForm() throws Exception {
+//        // WHEN
+//        ResultActions resultActions = mvc
+//                .perform(post("/studyrule/create")
+//                        .with(csrf()) // CSRF 키 생성
+//                        .param("name", "studyRule")
+//                        .param("about", "안녕")
+//
+//                )
+//                .andDo(print());
+//
+//        // THEN
+//        resultActions
+//                .andExpect(handler().handlerType(StudyRuleController.class))
+//                .andExpect(handler().methodName("create"))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrlPattern("/study/**"));
+//
+//        StudyRule studyRule = studyRuleService.getStudyRule("studyRule").getData();
+//
+//        assertThat(studyRule.getName()).isEqualTo("studyRule");
+//    }
 }

@@ -92,7 +92,7 @@ public class RuleControllerTests {
                         <input type="text" name="provider" placeholder="OJ 사이트"
                         """.stripIndent().trim())))
                 .andExpect(content().string(containsString("""
-                        <input type="radio" name="difficulty" value="NONE"
+                        <input type="radio" name="difficulty" value="ALL"
                         """.stripIndent().trim())))
                 .andExpect(content().string(containsString("""
                         <input type="radio" name="difficulty" value="BRONZE"
