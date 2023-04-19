@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -57,27 +58,22 @@ public class ApiScheduler {
         log.info("스케줄러 실행");
         RsData<List<Member>> memberList = memberService.getAll();
         for (Member member : memberList.getData()) {
-
             log.info("tier");
-            BaekJoon baekJoon = solvedApiService.getSolvedCount(member, 1, 6).getData();
-            //goal 에 저장
+            Integer Bronze = solvedApiService.getSolvedCount(member, 1, 6);
+
+            Integer Silver = solvedApiService.getSolvedCount(member, 6, 11);
+
+            Integer Gold = solvedApiService.getSolvedCount(member, 11, 16);
+
+            Integer Platinum = solvedApiService.getSolvedCount(member, 16, 21);
+
+            Integer Diamond = solvedApiService.getSolvedCount(member, 21, 26);
+
+            Integer Ruby = solvedApiService.getSolvedCount(member, 26, 31);
+
+            BaekJoon baekJoon = member.getBaekJoon().toBuilder().bronze(Bronze).sliver(Silver).gold(Gold).platinum(Platinum)
+                    .diamond(Diamond).ruby(Ruby).build();
             memberService.solve(member.getId(), baekJoon);
-            //
-            BaekJoon baekJoon1 = solvedApiService.getSolvedCount(member, 6, 11).getData();
-            memberService.solve(member.getId(), baekJoon1);
-
-            BaekJoon baekJoon2 = solvedApiService.getSolvedCount(member, 11, 16).getData();
-            memberService.solve(member.getId(), baekJoon2);
-
-            BaekJoon baekJoon3 = solvedApiService.getSolvedCount(member, 16, 21).getData();
-            memberService.solve(member.getId(), baekJoon3);
-
-            BaekJoon baekJoon4 = solvedApiService.getSolvedCount(member, 21, 26).getData();
-            memberService.solve(member.getId(), baekJoon4);
-
-            BaekJoon baekJoon5 = solvedApiService.getSolvedCount(member, 26, 31).getData();
-            memberService.solve(member.getId(), baekJoon5);
-
         }
     }
 }

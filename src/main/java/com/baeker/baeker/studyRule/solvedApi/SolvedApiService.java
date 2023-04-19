@@ -28,7 +28,7 @@ public class SolvedApiService {
 
     private final MemberService memberService;
 
-    public RsData<BaekJoon> getSolvedCount(Member member, Integer min, Integer max) throws IOException, ParseException {
+    public Integer getSolvedCount(Member member, Integer min, Integer max) throws IOException, ParseException {
         JSONArray test = this.solvedApiManager.getProblemCount(member);
         Integer solvedCount = 0;
         for (Object o : test) {
@@ -38,7 +38,7 @@ public class SolvedApiService {
             }
         }
 
-        return RsData.of("S-1", "SolvedCount", member.getBaekJoon());
+        return solvedCount;
     }
 
 
