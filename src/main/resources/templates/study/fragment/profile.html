@@ -27,7 +27,7 @@
                 </span>
 
                 <span th:if="${@rq.login}">
-                    <button th:if="${study.leader eq @rq.member.name}"
+                    <button th:if="${study.leader eq @rq.member.getNickName}"
                             class="btn btn-primary">정보 수정
                     </button>
                 </span>

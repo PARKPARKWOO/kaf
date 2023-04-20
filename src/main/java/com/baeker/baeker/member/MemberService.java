@@ -69,7 +69,7 @@ public class MemberService {
         if (!form.getPassword().equals(form.getPassword2()))
             return RsData.of("F-1", "비밀번호가 일치하지 않습니다.");
 
-        return join("Baeker", form.getUsername(), form.getName(), form.getAbout(), form.getPassword(), form.getProfileImg());
+        return join("Baeker", form.getUsername(), form.getNickName(), form.getAbout(), form.getPassword(), form.getProfileImg());
     }
 
     //-- Social Join, Login --//
@@ -122,16 +122,15 @@ public class MemberService {
     }
 
 
-    //-- name, about, img 변경 --//
     @Transactional
     public RsData<Member> modify(Member member, MemberModifyForm form) {
 
-        Optional<Member> byName = memberRepository.findByName(form.getName());
+        Optional<Member> byName = memberRepository.findByNickName(form.getNickName());
 
-        if (!byName.isPresent())
-            return RsData.of("F-1", form.getName() + "은 존재하지 않는 이름입니다..");
+        if (byName.isPresent())
+            return RsData.of("F-1", form.getNickName() + "(은)는 이미 존재하는 이름입니다.");
 
-        Member modifyMember = member.modifyMember(form.getName(), form.getAbout(), form.getProfileImg());
+        Member modifyMember = member.modifyMember(form.getNickName(), form.getAbout(), form.getProfileImg());
         Member saveMember = memberRepository.save(modifyMember);
 
         return RsData.of("S-1", "수정이 완료되었습니다.", saveMember);

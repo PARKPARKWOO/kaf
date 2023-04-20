@@ -14,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Slf4j
 @Controller
@@ -54,7 +52,7 @@ public class MemberController {
     @PostMapping("/join")
     @PreAuthorize("isAnonymous()")
     public String join(@Valid MemberJoinForm form) {
-        log.info("회원가입 처리 요청 확인 username = {}, name = {}", form.getUsername(), form.getName());
+        log.info("회원가입 처리 요청 확인 username = {}, name = {}", form.getUsername(), form.getNickName());
 
         RsData<Member> memberRs = memberService.join(form);
 
@@ -94,12 +92,12 @@ public class MemberController {
         // 자기 자신의 프로필일 경우 리다이렉트
         Member member = memberRs.getData();
         if (rq.isLogin())
-            if (member.getName().equals(rq.getMember().getName()))
+            if (member.getNickName().equals(rq.getMember().getNickName()))
                 return "redirect:/member/profile";
 
         model.addAttribute("member", member);
 
-        log.info("member 조회 성공 member name = {}", member.getName());
+        log.info("member 조회 성공 member name = {}", member.getNickName());
         return "member/member";
     }
 
@@ -127,7 +125,7 @@ public class MemberController {
         Member member = rq.getMember();
         log.info("프로필 수정폼 요청 확인 member id = {}", member.getId());
 
-        form.setName(member.getName());
+        form.setNickName(member.getNickName());
 
         if (member.getAbout() != null)
             form.setAbout(member.getAbout());

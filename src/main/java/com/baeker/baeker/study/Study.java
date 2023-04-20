@@ -54,7 +54,7 @@ public class Study {
         Study study = builder()
                 .name(name)
                 .about(about)
-                .leader(member.getName())
+                .leader(member.getNickName())
                 .capacity(capacity)
                 .xp(0)
                 .build();

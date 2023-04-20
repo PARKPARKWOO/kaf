@@ -2,10 +2,8 @@ package com.baeker.baeker.study;
 
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
-import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyRepository;
-import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
 import lombok.RequiredArgsConstructor;
@@ -103,7 +101,7 @@ public class StudyService {
         if (studyRs.isFail()) return studyRs;
         Study study = studyRs.getData();
 
-        Study modifyLeader = study.modifyLeader(member.getName());
+        Study modifyLeader = study.modifyLeader(member.getNickName());
         studyRepository.save(modifyLeader);
         return RsData.of("S-1", "리더가 변경되었습니다.", modifyLeader);
     }

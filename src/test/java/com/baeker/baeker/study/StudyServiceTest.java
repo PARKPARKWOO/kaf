@@ -51,7 +51,7 @@ class StudyServiceTest {
 
         MyStudy myStudy = study.getMyStudies().get(0);
 
-        assertThat(study.getLeader()).isEqualTo(myStudy.getMember().getName());
+        assertThat(study.getLeader()).isEqualTo(myStudy.getMember().getNickName());
         assertThat(myStudy.getStatus()).isSameAs(StudyStatus.MEMBER);
         assertThat(myStudy.getMember()).isSameAs(member);
         assertThat(member.getMyStudies().get(0)).isSameAs(myStudy);
@@ -90,7 +90,7 @@ class StudyServiceTest {
         RsData<Study> studyRs = createStudy("study1", "hi", 8, memberA);
         Study study = studyRs.getData();
 
-        assertThat(study.getLeader()).isEqualTo(memberA.getName());
+        assertThat(study.getLeader()).isEqualTo(memberA.getNickName());
 
         RsData<Study> modifyRs = studyService.modifyLeader(memberB, study.getId());
 

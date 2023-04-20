@@ -8,7 +8,6 @@ import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
 import com.baeker.baeker.study.form.StudyCreateForm;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,9 +46,9 @@ class MyStudyServiceTest {
         MyStudy myStudy = myStudyRs.getData();
 
         assertThat(myStudy.getStatus()).isSameAs(StudyStatus.PENDING);
-        assertThat(myStudy.getMember().getName()).isEqualTo("member1");
+        assertThat(myStudy.getMember().getNickName()).isEqualTo("member1");
         assertThat(myStudy.getStudy().getName()).isEqualTo("study");
-        assertThat(myStudy.getStudy().getLeader()).isEqualTo(leader.getName());
+        assertThat(myStudy.getStudy().getLeader()).isEqualTo(leader.getNickName());
 
         // 중복 가입 금지
         RsData<MyStudy> joinDuplicate = myStudyService.join(member1, study);
@@ -76,7 +75,7 @@ class MyStudyServiceTest {
 
         assertThat(myStudy.getStatus()).isSameAs(StudyStatus.INVITING);
         assertThat(myStudy.getStudy().getName()).isEqualTo("study");
-        assertThat(myStudy.getMember().getName()).isEqualTo("member1");
+        assertThat(myStudy.getMember().getNickName()).isEqualTo("member1");
 
         // 중복 초대 금지
         RsData<MyStudy> inviteDuplicate = myStudyService.invite(leader, member1, study);
@@ -108,7 +107,7 @@ class MyStudyServiceTest {
         RsData<BaekJoon> accept1 = myStudyService.accept(myStudyRs1.getData());
         assertThat(accept1.getResultCode()).isEqualTo("S-1");
         assertThat(myStudyRs1.getData().getStatus()).isEqualTo(StudyStatus.MEMBER);
-        assertThat(myStudyRs1.getData().getMember().getName()).isEqualTo("member1");
+        assertThat(myStudyRs1.getData().getMember().getNickName()).isEqualTo("member1");
 
         // member1 : 스터디로 member2 초대
         // member2 : INVITING
@@ -120,6 +119,6 @@ class MyStudyServiceTest {
         RsData<BaekJoon> accept2 = myStudyService.accept(invite2.getData());
         assertThat(accept2.getResultCode()).isEqualTo("S-1");
         assertThat(invite2.getData().getStatus()).isEqualTo(StudyStatus.MEMBER);
-        assertThat(invite2.getData().getMember().getName()).isEqualTo("member2");
+        assertThat(invite2.getData().getMember().getNickName()).isEqualTo("member2");
     }
 }
