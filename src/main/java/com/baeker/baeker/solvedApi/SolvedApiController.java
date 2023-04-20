@@ -1,4 +1,4 @@
-package com.baeker.baeker.studyRule.solvedApi;
+package com.baeker.baeker.solvedApi;
 
 import com.baeker.baeker.base.request.Rq;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,5 @@ public class SolvedApiController {
     private final SolvedApiService solvedApiService;
 
     private final Rq rq;
-
-
 
 }

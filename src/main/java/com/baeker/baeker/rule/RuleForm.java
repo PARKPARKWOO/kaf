@@ -19,8 +19,9 @@ public class RuleForm {
     @Size(max = 30)
     private String about;
 
-//    @NotEmpty
-    private Integer xp;
+    @NotEmpty
+    @Size(min = 1, max = 10)
+    private String xp;
 
     @Size(min = 2, max = 2)
     @NotBlank

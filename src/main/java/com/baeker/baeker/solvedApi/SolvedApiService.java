@@ -1,18 +1,11 @@
-package com.baeker.baeker.studyRule.solvedApi;
+package com.baeker.baeker.solvedApi;
 
-import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
-import com.baeker.baeker.member.embed.BaekJoon;
-import com.baeker.baeker.myStudy.MyStudy;
-import com.baeker.baeker.member.MemberService;
-import com.baeker.baeker.rule.Rule;
-import com.baeker.baeker.rule.RuleRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

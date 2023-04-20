@@ -10,6 +10,7 @@ import com.baeker.baeker.rule.RuleService;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
 import com.baeker.baeker.study.form.StudyCreateForm;
+import com.baeker.baeker.studyRule.StudyRuleService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,7 @@ public class InitDB {
         private final MyStudyService myStudyService;
 
         private final RuleService ruleService;
+        private final StudyRuleService studyRuleService;
 
         public void initData() {
 
@@ -69,11 +71,13 @@ public class InitDB {
             myStudyService.accept(myStudy);
 
             // rule 목록확인
-            RuleForm ruleForm = new RuleForm("이름", "소개", 3, "백준", "GOLD");
+            RuleForm ruleForm = new RuleForm("이름", "소개",  "1","백준", "GOLD");
 
             for (int i = 0; i < 15; i++) {
                 ruleService.create(ruleForm);
             }
+
+
         }
     }
 

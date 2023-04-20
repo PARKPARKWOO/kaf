@@ -29,15 +29,15 @@ public class RuleServiceTests {
     @DisplayName(value = "단순 CRUD 테스트")
     void createTests() {
         //생성 메서드 //
-        RuleForm ruleForm = new RuleForm("aaaa", "소개", 1,"bj", "BRONZE");
+        RuleForm ruleForm = new RuleForm("aaaa", "소개", "1","bj", "BRONZE");
         RsData<Rule> rsData = ruleService.create(ruleForm);
         Rule rule = rsData.getData();
         assertThat(rule.getName()).isEqualTo("aaaa");
-        System.out.println(rsData.getMsg());
+
 
 
         //수정 메서드 //
-        RuleForm ruleForm1 = new RuleForm("wy9295", "소개2", 2,"boj2", "GOLD");
+        RuleForm ruleForm1 = new RuleForm("wy9295", "소개2", "2","boj2", "GOLD");
         Optional<Rule> optionalRule = ruleRepository.findByName("aaaa");
         if (optionalRule.isEmpty()) {
             System.out.println("실패 테스트임 !! 값이없다!!!!!!");
@@ -46,7 +46,7 @@ public class RuleServiceTests {
         Rule rule1 = optionalRule.get();
         ruleService.modify(rule1, ruleForm1);
 
-        assertThat(rule1.getName()).isEqualTo("wy9295");
+        assertThat(rule1.getXp()).isEqualTo(2);
 
 
         //조회 메서드 //

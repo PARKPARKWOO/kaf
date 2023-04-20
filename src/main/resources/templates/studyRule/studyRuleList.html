@@ -1,18 +1,18 @@
 <html layout:decorate="~{layout/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<head><title>Rule 목록</title></head>
+<head><title>STUDYRULE 목록</title></head>
 
 
 <main layout:fragment="content" class="flex-grow flex items-center justify-center min-h-screen flex flex-col">
 
-        <h5 th:text="${rule}?: 'Rule'"
-            class="text-lg font-semibold mb-4"></h5>
+    <h5 th:text="${studyRule}?: 'STUDYRULE'"
+        class="text-lg font-semibold mb-4"></h5>
 
-        <a href="/rule/create"
-           class="bg-blue-500 text-white py-2 px-4
+    <a href="/rule/create"
+       class="bg-blue-500 text-white py-2 px-4
                rounded-md hover:bg-blue-600 transition
                duration-200 ease-in-out cursor-pointer">
-            규칙 등록
-        </a>
+        스터디 룰
+    </a>
 
     <table class="max-w-fit divide-y divide-gray-400">
         <thead class="bg-gray-50">
@@ -33,7 +33,7 @@
         </thead>
 
         <tbody class="bg-white divide-y divide-gray-200">
-        <tr th:each="rule, loop : ${paging}">
+        <tr th:each="studyRule, loop : ${paging}">
 
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm text-gray-900"
@@ -42,14 +42,14 @@
 
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm text-gray-900">
-                    <a th:href="@{|/rule/detail/${rule.id}|}"
-                       th:text="${rule.name}"
+                    <a th:href="@{|/studyRule/detail/${studyRule.id}|}"
+                       th:text="${studyRule.name}"
                        class="text-indigo-600 hover:text-indigo-900"></a>
                 </div>
             </td>
             <!-- 작성일 -->
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <div th:text="${#temporals.format(rule.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                <div th:text="${#temporals.format(studyRule.selectDate, 'yyyy-MM-dd HH:mm')}"></div>
             </td>
         </tr>
         </tbody>
