@@ -59,13 +59,13 @@ public class StudyRuleControllerTests {
     void notLogin() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
-                .perform(get("/studyrule/create"))
+                .perform(get("/studyRule/create/1"))
                 .andDo(print());
 
         // THEN
         resultActions
                 .andExpect(handler().handlerType(StudyRuleController.class))
-                .andExpect(handler().methodName("create"))
+                .andExpect(handler().methodName("showForm"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/member/login**"));
     }
@@ -77,13 +77,13 @@ public class StudyRuleControllerTests {
 
         // WHEN
         ResultActions resultActions = mvc
-                .perform(get("/studyrule/create"))
+                .perform(get("/studyRule/create/1"))
                 .andDo(print());
 
         // THEN
         resultActions
                 .andExpect(handler().handlerType(StudyRuleController.class))
-                .andExpect(handler().methodName("create"))
+                .andExpect(handler().methodName("showForm"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().string(containsString("""
                         <input type="text" name="name" placeholder="규칙 이름"

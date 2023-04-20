@@ -2,7 +2,7 @@ spring:
   profiles:
     default: dev
   mvc:
-    hiddenmethod:
+    hidden-method:
       filter:
         enabled: true
   datasource:

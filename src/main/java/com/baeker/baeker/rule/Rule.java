@@ -24,6 +24,7 @@ public class Rule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "rule_id")
     private Long id;
 
     private String name;

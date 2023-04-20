@@ -36,18 +36,25 @@
                 </form>
             </div>
             <div class="p-1">
-                <form th:action="@{'/rule/delete/'+${rule.id}}" th:method="delete">
-                    <button class="btn btn-primary" onclick="delete (this)">삭제</button>
+                <form th:action="@{|/rule/delete/${rule.id}|}" th:method="DELETE">
+                    <button class="btn btn-primary"  onsubmit="Delete__confirm(); return false;">삭제</button>
                 </form>
             </div>
             <div class="p-1">
 
                 <!--      <a th:href="@{|/rule/modify/${rule.id}|}" class="text-blue-500"> / 게시물 수정</a>-->
-                <form th:action="@{'/rule/modify/'+${rule.id}}" th:method="post">
-                    <button class="btn btn-primary">수정</button>
+                <form th:action="@{|/rule/modify/${rule.id}|}" method="get">
+                    <button class="btn btn-primary" onclick="confirm()">수정</button>
+                </form>
+            </div>
+            <div class="p-1">
+                <!--      <a th:href="@{|/rule/modify/${rule.id}|}" class="text-blue-500"> / 게시물 수정</a>-->
+                <form th:action="@{|/studyRule/create/${rule.id}|}" method="get">
+                    <button class="btn btn-primary" onclick="confirm()">룰 선택</button>
                 </form>
             </div>
         </div>
     </div>
 
 </div>
+

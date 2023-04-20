@@ -2,7 +2,7 @@
 <head><title>Rule</title></head>
 
 <main layout:fragment="content" class="flex-grow flex items-center justify-center min-h-screen flex flex-col">
-    <script th:replace="~{rule/fragment/valid :: rule}"></script>
+    <script th:replace="~{studyRule/fragment/valid :: studyRule}"></script>
 
     <div class="max-w-2xl w-full px-4">
         <h1 class="mb-4">
@@ -10,7 +10,7 @@
             Rule
         </h1>
 
-        <div th:replace="~{rule/fragment/ruledetail :: detail (${rule})}"></div>
+        <div th:replace="~{studyRule/fragment/studyRuledetail :: detail (${studyRule})}"></div>
 
     </div>
 

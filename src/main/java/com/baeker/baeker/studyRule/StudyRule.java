@@ -42,6 +42,6 @@ public class StudyRule {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_study")
+    @JoinColumn(name = "study_id")
     private Study study;
 }

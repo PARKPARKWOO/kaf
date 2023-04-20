@@ -46,6 +46,8 @@ public class RuleControllerTests {
     void create() {
         MemberJoinForm memberJoinForm = new MemberJoinForm("user10", "user10", "소개", "1234", "1234", 1);
         Member member = memberService.join(memberJoinForm).getData();
+
+        RuleForm ruleForm = new RuleForm("name", "about", "2", "provider", "GOLD");
     }
 
     @Test
@@ -115,9 +117,12 @@ public class RuleControllerTests {
     }
 
     @Test
-    @DisplayName("create Form POST")
+    @DisplayName("create Form POST AND Modify")
     @WithUserDetails("user10")
     void createForm() throws Exception {
+        /**
+         * CREATE
+         */
         // WHEN
         ResultActions resultActions = mvc
                 .perform(post("/rule/create")
@@ -135,13 +140,85 @@ public class RuleControllerTests {
                 .andExpect(handler().handlerType(RuleController.class))
                 .andExpect(handler().methodName("create"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("/study/**"));
+                .andExpect(redirectedUrlPattern("/rule/list**"));
 
         Rule rule = ruleService.getRule("rule").getData();
 
         // StudyRule 추가해야함
 
         assertThat(rule.getName()).isEqualTo("rule");
+
+
+        /**
+         * Modify
+         */
+
+//        System.out.println("입력값 : " + rule.getId().toString());
+//        // GET
+//        ResultActions resultActions1 = mvc
+//                .perform(get("rule/modify/2")
+//                        .with(csrf())
+//                )
+//                .andDo(print());
+//
+//        resultActions1
+//                .andExpect(handler().handlerType(RuleController.class))
+//                .andExpect(handler().methodName("showModify"))
+//                .andExpect(status().is2xxSuccessful())
+//                .andExpect(content().string(containsString("""
+//                        <input type="text" name="name" placeholder="규칙 이름"
+//                        """.stripIndent().trim())))
+//                .andExpect(content().string(containsString("""
+//                        <input type="text" name="about" placeholder="간단 소개"
+//                        """.stripIndent().trim())))
+//                .andExpect(content().string(containsString("""
+//                        <input type="text" name="provider" placeholder="OJ 사이트"
+//                        """.stripIndent().trim())))
+//                .andExpect(content().string(containsString("""
+//                        <input type="radio" name="difficulty" value="ALL"
+//                        """.stripIndent().trim())))
+//                .andExpect(content().string(containsString("""
+//                        <input type="radio" name="difficulty" value="BRONZE"
+//                        """.stripIndent().trim())))
+//                .andExpect(content().string(containsString("""
+//                        <input type="radio" name="difficulty" value="SILVER"
+//                        """.stripIndent().trim())))
+//                .andExpect(content().string(containsString("""
+//                        <input type="radio" name="difficulty" value="GOLD"
+//                        """.stripIndent().trim())))
+//                .andExpect(content().string(containsString("""
+//                        <input type="radio" name="difficulty" value="PLATINUM"
+//                        """.stripIndent().trim())))
+//                .andExpect(content().string(containsString("""
+//                        <input type="radio" name="difficulty" value="DIAMOND"
+//                        """.stripIndent().trim())))
+//                .andExpect(content().string(containsString("""
+//                        <input type="radio" name="difficulty" value="RUBY"
+//                        """.stripIndent().trim())));
+//
+//
+//
+//        //POST
+//
+//        ResultActions resultActions2 = mvc
+//                .perform(post("rule/modify/1")
+//                        .with(csrf())
+//                        .param("id", String.valueOf(rule.getId()))
+//                        .param("name", "rule2")
+//                        .param("about", "hello")
+//                        .param("xp", "2")
+//                        .param("difficulty", "GOLD")
+//                        .param("provider", "PM")
+//                )
+//                .andDo(print());
+//        resultActions2
+//                .andExpect(handler().handlerType(RuleController.class))
+//                .andExpect(handler().methodName("modify"))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrlPattern("/rule/list**"));
+//        Rule rule2 = ruleService.getRule("rule2").getData();
+//        assertThat(rule2.getName()).isEqualTo("rule2");
     }
+
 }
 
