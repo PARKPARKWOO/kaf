@@ -45,7 +45,7 @@ public class MemberController {
         List<Integer> random = new ArrayList<>();
 
         for (int i = 0; i < 10; i++)
-            random.add((int) (Math.random() * 99) + 1);
+            random.add((int) (Math.random() * 999) + 1);
 
         model.addAttribute("random", random);
         log.info("회원가입 폼 응답 완료");
