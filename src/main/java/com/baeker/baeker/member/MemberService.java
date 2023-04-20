@@ -120,4 +120,15 @@ public class MemberService {
         return RsData.of("S-1", "회원가입이 완료되었습니다. \n로그인 해주세요.", member);
     }
 
+    //-- 1~999 랜덤숫자 생성 --//
+    public List<Integer> random() {
+
+        List<Integer> random = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++)
+            random.add((int) (Math.random() * 999) + 1);
+
+        return random;
+    }
+
 }

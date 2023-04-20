@@ -4,6 +4,7 @@ import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberLoginForm;
+import com.baeker.baeker.member.form.MemberModifyForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,10 +43,7 @@ public class MemberController {
     public String joinForm(MemberJoinForm form, Model model) {
         log.info("회원가입 폼 요청 확인");
 
-        List<Integer> random = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++)
-            random.add((int) (Math.random() * 999) + 1);
+        List<Integer> random = memberService.random();
 
         model.addAttribute("random", random);
         log.info("회원가입 폼 응답 완료");
@@ -117,5 +115,31 @@ public class MemberController {
         model.addAttribute("paging", paging);
         log.info("member list 응답 완료");
         return "member/list";
+    }
+
+    //-- name, about, img 수정 폼 --//
+    @GetMapping("/modify")
+    @PreAuthorize("isAuthenticated()")
+    public String modifyForm(
+            MemberModifyForm form,
+            Model model
+    ) {
+        Member member = rq.getMember();
+        log.info("프로필 수정폼 요청 확인 member id = {}", member.getId());
+
+        form.setName(member.getName());
+
+        if (member.getAbout() != null)
+            form.setAbout(member.getAbout());
+
+        if (member.getProfileImg() != null)
+            form.setProfileImg(member.getProfileImg());
+
+        List<Integer> random = memberService.random();
+        random.remove(0);
+
+        model.addAttribute("random", random);
+        log.info("프로필 수정폼 응답 완료");
+        return "member/modify";
     }
 }
