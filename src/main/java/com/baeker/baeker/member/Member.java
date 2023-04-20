@@ -69,6 +69,17 @@ public class Member {
 
     //-- business logic --//
 
+    // name, about, profileImg 수정 //
+    protected Member modifyMember(String name, String about, Integer img) {
+        return this.toBuilder()
+                .name(name)
+                .about(about)
+                .profileImg(img)
+                .modifyDate(LocalDateTime.now())
+                .build();
+    }
+
+
     // BaekJoon 생성 //
     protected BaekJoon createSolve(BaekJoon baekJoon) {
         this.baekJoon = baekJoon;

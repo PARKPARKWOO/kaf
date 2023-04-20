@@ -142,4 +142,21 @@ public class MemberController {
         log.info("프로필 수정폼 응답 완료");
         return "member/modify";
     }
+
+    //-- 프로필 수정 처리 --//
+    @PostMapping("/modify")
+    @PreAuthorize("isAuthenticated()")
+    public String modify(MemberModifyForm form) {
+        log.info("프로필 수정 처리 요청 확인 form = {}", form);
+
+        RsData<Member> memberRs = memberService.modify(rq.getMember(), form);
+
+        if (memberRs.isFail()) {
+            log.info("프로필 수정 실패 msg = {}", memberRs.getMsg());
+            return rq.historyBack(memberRs.getMsg());
+        }
+
+        log.info("프로필 수정 완료");
+        return rq.redirectWithMsg("/member/profile", memberRs.getMsg());
+    }
 }
