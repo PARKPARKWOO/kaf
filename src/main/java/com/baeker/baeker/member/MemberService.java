@@ -4,6 +4,9 @@ import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
+import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.study.Study;
+import com.baeker.baeker.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +28,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder encoder;
+    private final StudyService studyService;
 
 
     //-- find by username --//
@@ -59,6 +63,18 @@ public class MemberService {
 
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return memberRepository.findAll(pageable);
+    }
+
+    //-- find Member 가 리더인 MyStudy 리스트 조회 --//
+    public List<MyStudy> getMyStudyOnlyLeader(Member member) {
+        List<MyStudy> onlyLeader = new ArrayList<>();
+        List<MyStudy> myStudies = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudies)
+            if (member.getNickName().equals(myStudy.getStudy().getLeader()))
+                onlyLeader.add(myStudy);
+
+        return onlyLeader;
     }
 
 
@@ -122,6 +138,7 @@ public class MemberService {
     }
 
 
+    //-- nick name, about, img 수정 --//
     @Transactional
     public RsData<Member> modify(Member member, MemberModifyForm form) {
 
@@ -131,10 +148,29 @@ public class MemberService {
             if (byName.isPresent())
                 return RsData.of("F-1", form.getNickName() + "(은)는 이미 존재하는 이름입니다.");
 
+        List<MyStudy> myStudies = this.getMyStudyOnlyLeader(member);
+
         Member modifyMember = member.modifyMember(form.getNickName(), form.getAbout(), form.getProfileImg());
         Member saveMember = memberRepository.save(modifyMember);
 
-        return RsData.of("S-1", "수정이 완료되었습니다.", saveMember);
+        return this.modifyLeader(saveMember, myStudies);
+    }
+
+
+    //-- 스터디 리더의 이름이 변경될경우 스터디 리더 변경 --//
+    private RsData<Member> modifyLeader(Member member, List<MyStudy> myStudies) {
+
+        if (myStudies.size() == 0 )
+            return RsData.of("S-1", "수정이 완료되었습니다.", member);
+
+        for (MyStudy myStudy : myStudies) {
+            RsData<Study> studyRs = studyService.modifyLeader(member, myStudy.getStudy().getId());
+
+            if (studyRs.isFail())
+                return RsData.of("F-2", studyRs.getMsg());
+        }
+
+        return RsData.of("S-1", "수정이 완료되었습니다.", member);
     }
 
 
