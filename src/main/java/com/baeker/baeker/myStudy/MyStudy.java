@@ -27,6 +27,8 @@ public class MyStudy {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    private String msg;
+
     @Enumerated(EnumType.STRING)
     private StudyStatus status;
 
@@ -55,9 +57,10 @@ public class MyStudy {
     }
 
     // 스터디 가입할 때 //
-    protected static MyStudy joinStudy(Member member, Study study) {
+    protected static MyStudy joinStudy(Member member, Study study, String msg) {
         MyStudy myStudy = create(member, study);
         myStudy.status = StudyStatus.PENDING;
+        myStudy.msg = msg;
 
         member.getMyStudies().add(myStudy);
         study.getMyStudies().add(myStudy);
@@ -66,9 +69,10 @@ public class MyStudy {
     }
 
     // 스터디로 초대할 때 //
-    protected static MyStudy inviteStudy(Member member, Study study) {
+    protected static MyStudy inviteStudy(Member member, Study study, String msg) {
         MyStudy myStudy = create(member, study);
         myStudy.status = StudyStatus.INVITING;
+        myStudy.msg = msg;
 
         member.getMyStudies().add(myStudy);
         study.getMyStudies().add(myStudy);
@@ -95,6 +99,7 @@ public class MyStudy {
             this.study.updateSolve(baekJoon);
 
         this.status = StudyStatus.MEMBER;
+        this.msg = null;
         return baekJoon;
     }
 }

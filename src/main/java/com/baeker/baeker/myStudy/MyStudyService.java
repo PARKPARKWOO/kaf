@@ -20,20 +20,23 @@ public class MyStudyService {
 
     //-- 스터디 가입 신청 --//
     @Transactional
-    public RsData<MyStudy> join(Member member, Study study) {
+    public RsData<MyStudy> join(Member member, Study study, String msg) {
 
         // 가입한 사람이 이미 스터디 맴버인지 검증
         RsData<MyStudy> isDuplicate = duplicationCheck(member, study);
         if (isDuplicate.isFail()) return isDuplicate;
 
-        MyStudy myStudy = MyStudy.joinStudy(member, study);
+        if (study.getMyStudies().size() == study.getCapacity())
+            return RsData.of("F-2", "최대 인원에 도달하여 더 이상 인원을 받지 않습니다.");
+
+        MyStudy myStudy = MyStudy.joinStudy(member, study, msg);
         MyStudy save = myStudyRepository.save(myStudy);
         return RsData.of("S-1", study.getName() + "에 가입신청이 완료되었습니다.", save);
     }
 
     //-- 맴버 스터디에 초대 --//
     @Transactional
-    public RsData<MyStudy> invite(Member inviter, Member invitee,  Study study) {
+    public RsData<MyStudy> invite(Member inviter, Member invitee,  Study study, String msg) {
 
         // 초대를 한 사람이 스터디원인지 검증
         RsData<MyStudy> isStudyMember = getMyStudy(inviter, study);
@@ -49,7 +52,10 @@ public class MyStudyService {
         if (isDuplicate.isFail())
             return isDuplicate;
 
-        MyStudy myStudy = MyStudy.inviteStudy(invitee, study);
+        if (study.getMyStudies().size() == study.getCapacity())
+            return RsData.of("F-2", "최대 인원에 도달해 더이상 초대할 수 없습니다.");
+
+        MyStudy myStudy = MyStudy.inviteStudy(invitee, study, msg);
         MyStudy save = myStudyRepository.save(myStudy);
         return RsData.of("S-1", inviter.getNickName() + "님을 스터디에 초대했습니다.", save);
     }
@@ -60,6 +66,10 @@ public class MyStudyService {
 
         if (myStudy.getStudy().equals(StudyStatus.MEMBER))
             return RsData.of("F-1", "이미 정식 스터디 맴버입니다.");
+
+        Study study = myStudy.getStudy();
+        if (study.getMyStudies().size() == study.getCapacity())
+            return RsData.of("F-2", "이미 최대 인원에 도달했습니다.");
 
         BaekJoon addedSolved = myStudy.accept();
         return RsData.of("S-1", "정식 회원으로 가입이 완료되었습니다.", addedSolved);

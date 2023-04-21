@@ -85,7 +85,7 @@ class MemberServiceTest {
         assertThat(member2.getBaekJoon().getSliver()).isEqualTo(8);
 
         // member2 : study 가입
-        MyStudy myStudy = myStudyService.join(member2, study).getData();
+        MyStudy myStudy = myStudyService.join(member2, study, "hi").getData();
         RsData<BaekJoon> addedSolveRs = myStudyService.accept(myStudy);
 
         // 가입이 성공하면 member2 의 해결문제수가 study 에 자동 합산됨
