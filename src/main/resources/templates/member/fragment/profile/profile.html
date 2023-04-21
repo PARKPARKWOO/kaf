@@ -3,10 +3,9 @@
 
 
     <div class="card-body items-center text-center pt-10">
-        <figure class="w-32">
-            <img th:src="@{https://avatars.dicebear.com/api/avataaars/__${@rq.member.profileImg}__.svg}"
-                 alt="profile image" class="rounded-xl"/>
-        </figure>
+
+        <img th:src="@{https://avatars.dicebear.com/api/avataaars/__${@rq.member.profileImg}__.svg}"
+             alt="profile image" class="rounded-xl px-10 pt-10"/>
 
         <h2 class="card-title"
             th:text="${@rq.member.getNickName}">
