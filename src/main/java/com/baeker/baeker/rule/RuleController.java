@@ -32,9 +32,9 @@ public class RuleController {
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public String create(@Valid RuleForm ruleForm) {
+    public String create(@Valid RuleForm ruleForm, BindingResult bindingResult) {
         RsData<Rule> rsData = ruleService.create(ruleForm);
-        if (rsData.isFail()) {
+        if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
         }
         return rq.redirectWithMsg("/rule/list", rsData.getMsg());

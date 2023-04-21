@@ -75,6 +75,10 @@ public class RuleService {
                 .orElseGet(() -> RsData.of("F-1", "Rule 조회 실패"));
     }
 
+    public List<Rule> getRuleList() {
+        return ruleRepository.findAll();
+    }
+
     public Page<Rule> getList(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));

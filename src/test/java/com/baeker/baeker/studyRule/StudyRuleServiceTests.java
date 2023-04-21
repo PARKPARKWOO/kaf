@@ -1,9 +1,15 @@
 package com.baeker.baeker.studyRule;
 
 import com.baeker.baeker.base.request.RsData;
+import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.MemberService;
+import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.rule.RuleForm;
 import com.baeker.baeker.rule.RuleService;
+import com.baeker.baeker.study.Study;
+import com.baeker.baeker.study.StudyService;
+import com.baeker.baeker.study.form.StudyCreateForm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +34,40 @@ public class StudyRuleServiceTests {
 
     @Autowired
     private RuleService ruleService;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private StudyService studyService;
+
+    private Member create(String username, String name) {
+        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", 1);
+        return memberService.join(form).getData();
+    }
+
+    private RsData<Study> createStudy(String name, String about, Integer capacity, Member member) {
+        StudyCreateForm form = new StudyCreateForm(name, about, capacity);
+        return studyService.create(form, member);
+    }
 
     @Test
     @DisplayName(value = "단순 CRUD 테스트")
     void createTests() {
-        //생성 메서드 //
-        StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개");
+        //
         RuleForm ruleForm = new RuleForm("name", "about", "1","provider", "gold");
+        Member member =  create("wy9295", "wy9295");
+        Study study = createStudy("study", "study", 1, member).getData();
+        StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
+
+        //생성 메서드 //
         Rule rule = ruleService.create(ruleForm).getData();
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule);
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, study);
         StudyRule studyRule = rsData.getData();
         assertThat(studyRule.getName()).isEqualTo("aaaa");
         System.out.println(rsData.getMsg());
 
 
         //수정 메서드 //
-        StudyRuleForm ruleForm1 = new StudyRuleForm("wy9295", "소개2");
+        StudyRuleForm ruleForm1 = new StudyRuleForm("wy9295", "소개2", study.getId());
         Optional<StudyRule> optionalRule = studyRuleRepository.findById(1L);
         if (optionalRule.isEmpty()) {
             System.out.println("실패 테스트임 !! 값이없다!!!!!!");
@@ -55,7 +79,7 @@ public class StudyRuleServiceTests {
         assertThat(studyRule1.getName()).isEqualTo("wy9295");
         // 삭제 메서드 //
         Optional<StudyRule> opDelete = studyRuleRepository.findById(1L);
-        opDelete.ifPresent(value -> studyRuleService.delete(value));
+        opDelete.ifPresent(value -> studyRuleService.delete(value, "wy9295", "wy9295"));
         assertThat(studyRuleService.getStudyRule(1L).getData()).isNull();
     }
 }
