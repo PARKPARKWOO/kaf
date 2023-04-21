@@ -14,10 +14,12 @@ import com.baeker.baeker.studyRule.StudyRuleService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Configuration
+@Profile("dev")
+@Configuration
 @RequiredArgsConstructor
 public class InitDB {
 
@@ -43,7 +45,7 @@ public class InitDB {
         public void initData() {
 
             // 맴버 "알파" 생성
-            MemberJoinForm memberForm0 = new MemberJoinForm("user1", "알파", "안녕하세요 알파입니다.", "1234", "1234", 0);
+            MemberJoinForm memberForm0 = new MemberJoinForm("user1", "알파", "안녕하세요 알파입니다.", "1234", "1234", 100);
             Member member0 = memberService.join(memberForm0).getData();
 
             // 알파가 스터디 "Baeker lover" 생성
@@ -52,14 +54,14 @@ public class InitDB {
 
             // init 맴버 8명 생성후 "Baeker lover" 에 가입
             for (int i = 2; i < 10; i++) {
-                Member memberA = memberService.join(new MemberJoinForm("user" + i, "member" + i, "hello" + i, "1234", "1234", 0)).getData();
+                Member memberA = memberService.join(new MemberJoinForm("user" + i, "member" + i, "hello" + i, "1234", "1234", i * 5)).getData();
                 MyStudy myStudy = myStudyService.join(memberA, study0).getData();
                 myStudyService.accept(myStudy);
             }
 
 
             // 맴버 "베타" 생성
-            MemberJoinForm memberForm1 = new MemberJoinForm("user11", "베타", "안녕하세요 베타입니다.", "1234", "1234", 0);
+            MemberJoinForm memberForm1 = new MemberJoinForm("user11", "베타", "안녕하세요 베타입니다.", "1234", "1234", 200);
             Member member1 = memberService.join(memberForm1).getData();
 
             // 베타가 스터디 "Study Baeker" 생성

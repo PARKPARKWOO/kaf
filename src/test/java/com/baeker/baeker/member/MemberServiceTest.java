@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -22,6 +24,7 @@ class MemberServiceTest {
     @Autowired private MemberService memberService;
     @Autowired private StudyService studyService;
     @Autowired private MyStudyService myStudyService;
+    @Autowired private MemberRepository memberRepository;
 
     private Member create(String username, String name) {
         MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", 1);
@@ -43,7 +46,7 @@ class MemberServiceTest {
 
         assertThat(memberRs.getResultCode()).isEqualTo("S-1");
         assertThat(member).isSameAs(findMember);
-        assertThat(member.getName()).isEqualTo(findMember.getName());
+        assertThat(member.getNickName()).isEqualTo(findMember.getNickName());
     }
 
     @Test
@@ -91,5 +94,19 @@ class MemberServiceTest {
 
         // 반환값으로 추가된 값 반환
         assertThat(addedSolveRs.getData().getSliver()).isEqualTo(8);
+    }
+
+    @Test
+    void 프로필_변경() {
+        Member member = create("user1", "member1");
+
+        assertThat(member.getNickName()).isEqualTo("member1");
+
+        Optional<Member> findMember = memberRepository.findByNickName("member1");
+
+        assertThat(findMember.isPresent()).isTrue();
+
+        String nickName = findMember.get().getNickName();
+        System.out.println(nickName);
     }
 }

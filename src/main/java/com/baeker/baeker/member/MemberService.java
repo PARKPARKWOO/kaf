@@ -3,6 +3,7 @@ package com.baeker.baeker.member;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.form.MemberJoinForm;
+import com.baeker.baeker.member.form.MemberModifyForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,7 +69,7 @@ public class MemberService {
         if (!form.getPassword().equals(form.getPassword2()))
             return RsData.of("F-1", "비밀번호가 일치하지 않습니다.");
 
-        return join("Baeker", form.getUsername(), form.getName(), form.getAbout(), form.getPassword(), form.getProfileImg());
+        return join("Baeker", form.getUsername(), form.getNickName(), form.getAbout(), form.getPassword(), form.getProfileImg());
     }
 
     //-- Social Join, Login --//
@@ -118,6 +119,33 @@ public class MemberService {
         Member member = Member.createMember(provider, username, name, about, password, profileImg);
         memberRepository.save(member);
         return RsData.of("S-1", "회원가입이 완료되었습니다. \n로그인 해주세요.", member);
+    }
+
+
+    @Transactional
+    public RsData<Member> modify(Member member, MemberModifyForm form) {
+
+        Optional<Member> byName = memberRepository.findByNickName(form.getNickName());
+
+        if (byName.isPresent())
+            return RsData.of("F-1", form.getNickName() + "(은)는 이미 존재하는 이름입니다.");
+
+        Member modifyMember = member.modifyMember(form.getNickName(), form.getAbout(), form.getProfileImg());
+        Member saveMember = memberRepository.save(modifyMember);
+
+        return RsData.of("S-1", "수정이 완료되었습니다.", saveMember);
+    }
+
+
+    //-- 1~999 랜덤숫자 생성 --//
+    public List<Integer> random() {
+
+        List<Integer> random = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++)
+            random.add((int) (Math.random() * 999) + 1);
+
+        return random;
     }
 
 }

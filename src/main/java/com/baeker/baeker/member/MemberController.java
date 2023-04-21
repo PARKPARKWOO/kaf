@@ -4,6 +4,7 @@ import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberLoginForm;
+import com.baeker.baeker.member.form.MemberModifyForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Slf4j
 @Controller
@@ -42,10 +41,7 @@ public class MemberController {
     public String joinForm(MemberJoinForm form, Model model) {
         log.info("회원가입 폼 요청 확인");
 
-        List<Integer> random = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++)
-            random.add((int) (Math.random() * 99) + 1);
+        List<Integer> random = memberService.random();
 
         model.addAttribute("random", random);
         log.info("회원가입 폼 응답 완료");
@@ -56,7 +52,7 @@ public class MemberController {
     @PostMapping("/join")
     @PreAuthorize("isAnonymous()")
     public String join(@Valid MemberJoinForm form) {
-        log.info("회원가입 처리 요청 확인 username = {}, name = {}", form.getUsername(), form.getName());
+        log.info("회원가입 처리 요청 확인 username = {}, name = {}", form.getUsername(), form.getNickName());
 
         RsData<Member> memberRs = memberService.join(form);
 
@@ -96,12 +92,12 @@ public class MemberController {
         // 자기 자신의 프로필일 경우 리다이렉트
         Member member = memberRs.getData();
         if (rq.isLogin())
-            if (member.getName().equals(rq.getMember().getName()))
+            if (member.getNickName().equals(rq.getMember().getNickName()))
                 return "redirect:/member/profile";
 
         model.addAttribute("member", member);
 
-        log.info("member 조회 성공 member name = {}", member.getName());
+        log.info("member 조회 성공 member name = {}", member.getNickName());
         return "member/member";
     }
 
@@ -117,5 +113,48 @@ public class MemberController {
         model.addAttribute("paging", paging);
         log.info("member list 응답 완료");
         return "member/list";
+    }
+
+    //-- name, about, img 수정 폼 --//
+    @GetMapping("/modify")
+    @PreAuthorize("isAuthenticated()")
+    public String modifyForm(
+            MemberModifyForm form,
+            Model model
+    ) {
+        Member member = rq.getMember();
+        log.info("프로필 수정폼 요청 확인 member id = {}", member.getId());
+
+        form.setNickName(member.getNickName());
+
+        if (member.getAbout() != null)
+            form.setAbout(member.getAbout());
+
+        if (member.getProfileImg() != null)
+            form.setProfileImg(member.getProfileImg());
+
+        List<Integer> random = memberService.random();
+        random.remove(0);
+
+        model.addAttribute("random", random);
+        log.info("프로필 수정폼 응답 완료");
+        return "member/modify";
+    }
+
+    //-- 프로필 수정 처리 --//
+    @PostMapping("/modify")
+    @PreAuthorize("isAuthenticated()")
+    public String modify(MemberModifyForm form) {
+        log.info("프로필 수정 처리 요청 확인 form = {}", form);
+
+        RsData<Member> memberRs = memberService.modify(rq.getMember(), form);
+
+        if (memberRs.isFail()) {
+            log.info("프로필 수정 실패 msg = {}", memberRs.getMsg());
+            return rq.historyBack(memberRs.getMsg());
+        }
+
+        log.info("프로필 수정 완료");
+        return rq.redirectWithMsg("/member/profile", memberRs.getMsg());
     }
 }

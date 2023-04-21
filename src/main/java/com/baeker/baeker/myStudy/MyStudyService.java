@@ -51,7 +51,7 @@ public class MyStudyService {
 
         MyStudy myStudy = MyStudy.inviteStudy(invitee, study);
         MyStudy save = myStudyRepository.save(myStudy);
-        return RsData.of("S-1", inviter.getName() + "님을 스터디에 초대했습니다.", save);
+        return RsData.of("S-1", inviter.getNickName() + "님을 스터디에 초대했습니다.", save);
     }
 
     //-- 가입, 초대신청 승인 --//

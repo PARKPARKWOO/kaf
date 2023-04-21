@@ -33,7 +33,7 @@ public class Member {
     private String username;
     @Column(unique = true)
     private String studyId;
-    private String name;
+    private String nickName;
     private String about;
     private Integer profileImg;
     private String password;
@@ -60,7 +60,7 @@ public class Member {
         return builder()
                 .provider(provider)
                 .username(username)
-                .name(name)
+                .nickName(name)
                 .about(about)
                 .password(password)
                 .profileImg(profileImg)
@@ -68,6 +68,17 @@ public class Member {
     }
 
     //-- business logic --//
+
+    // name, about, profileImg 수정 //
+    protected Member modifyMember(String name, String about, Integer img) {
+        return this.toBuilder()
+                .nickName(name)
+                .about(about)
+                .profileImg(img)
+                .modifyDate(LocalDateTime.now())
+                .build();
+    }
+
 
     // BaekJoon 생성 //
     protected BaekJoon createSolve(BaekJoon baekJoon) {

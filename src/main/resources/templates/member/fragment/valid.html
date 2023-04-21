@@ -17,17 +17,17 @@
         }
 
         //-- name 검증 --//
-        form.name.value = form.name.value.trim();
+        form.nickName.value = form.nickName.value.trim();
 
-        if (form.name.value.length == 0) {
+        if (form.nickName.value.length == 0) {
             toastWarning('이름을 입력해주세요.');
-            form.name.focus();
+            form.nickName.focus();
             return;
         }
 
-        if (form.name.value.length < 2) {
+        if (form.nickName.value.length < 2) {
             toastWarning('이름을 2자 이상 입력해주세요.');
-            form.name.focus();
+            form.nickName.focus();
             return;
         }
 

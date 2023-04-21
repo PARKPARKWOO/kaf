@@ -1,0 +1,30 @@
+<form th:fragment="modifyForm (memberModifyForm, random)"
+      th:action th:object="${memberModifyForm}" method="post"
+      class="flex flex-col gap-6"
+      onsubmit="JoinForm__submit(this); return false;">
+
+
+    <label class="label">프로필 이미지</label>
+    <div th:replace="~{member/fragment/modify/slide :: slide (${memberModifyForm}, ${random})}"></div>
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">닉네임</span>
+        </label>
+        <input type="text" th:field="*{nickName}" placeholder="이름" class="input input-bordered" autofocus/>
+    </div>
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">한줄 소개</span>
+        </label>
+        <input type="text" th:field="*{about}" placeholder="소개" class="input input-bordered" autofocus/>
+    </div>
+
+
+    <button class="btn btn-block btn-primary gap-1 mt-8">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        <span>수정하기</span>
+    </button>
+
+</form>

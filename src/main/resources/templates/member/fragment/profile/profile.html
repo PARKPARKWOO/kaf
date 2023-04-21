@@ -1,20 +1,21 @@
 <div th:fragment="profile"
-     class="card w-96 bg-base-100 shadow-xl">
+     class="card w-60 bg-base-100 shadow-xl flex">
 
-    <figure class="px-10 pt-10">
-        <img src="https://picsum.photos/200" alt="profile image" class="rounded-xl" />
-    </figure>
 
-    <div class="card-body items-center text-center">
+    <div class="card-body items-center text-center pt-10">
+        <figure class="w-32">
+            <img th:src="@{https://avatars.dicebear.com/api/avataaars/__${@rq.member.profileImg}__.svg}"
+                 alt="profile image" class="rounded-xl"/>
+        </figure>
 
         <h2 class="card-title"
-            th:text="${@rq.member.name}">
+            th:text="${@rq.member.getNickName}">
         </h2>
 
         <p th:text="${@rq.member.about}"></p>
 
         <div class="card-actions mt-5">
-            <button class="btn btn-primary">프로필 수정</button>
+            <a href="/member/modify" class="btn btn-primary">프로필 수정</a>
         </div>
 
     </div>
