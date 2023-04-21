@@ -100,6 +100,9 @@ public class StudyService {
         if (studyRs.isFail()) return studyRs;
         Study study = studyRs.getData();
 
+        if (study.getMyStudies().size() > form.getCapacity())
+            return RsData.of("F-2", "최대 인원이 현재 스터디 인원보다 적습니다.");
+
         Study modifyStudy = study.modifyStudy(form.getName(), form.getAbout(), form.getCapacity());
         studyRepository.save(modifyStudy);
         return RsData.of("S-1", "수정이 완료되었습니다.", modifyStudy);

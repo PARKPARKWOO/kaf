@@ -1,5 +1,6 @@
 <form th:fragment="modifyForm (studyModifyForm)"
-      th:action th:object="${studyModifyForm}" method="post"
+      th:action="@{/study/modify/{id}(id=${studyModifyForm.id})}"
+      th:object="${studyModifyForm}" method="post"
       class="flex flex-col gap-6"
       onsubmit="JoinForm__submit(this); return false;">
 

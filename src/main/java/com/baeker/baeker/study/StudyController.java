@@ -86,7 +86,7 @@ public class StudyController {
     //-- 스터디 수정 폼 : 스터디명, 스터디 소개, 총 인원 --//
     @GetMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String modify(
+    public String modifyForm(
             @PathVariable Long id,
             StudyModifyForm form
     ) {
@@ -97,6 +97,9 @@ public class StudyController {
             return rq.historyBack(studyRs.getMsg());
 
         Study study = studyRs.getData();
+
+        if (!study.getLeader().equals(rq.getMember().getNickName()))
+            return rq.historyBack("수정 권한이 없습니다.");
 
         if (!study.getAbout().isEmpty())
             form.setAbout(study.getAbout());
@@ -110,6 +113,32 @@ public class StudyController {
     }
 
     //-- 스터디 수정 처리 --//
+    @PostMapping("/modify/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String modify(
+            @PathVariable Long id,
+            StudyModifyForm form
+    ) {
+        log.info("스터디 수정 처리 요청 확인 id = {}", form.getId());
+        RsData<Study> studyRs = studyService.getStudy(id);
+
+        if (studyRs.isFail()){
+            log.info("존재하지 않는 id 입니다. id = {}", id);
+            return rq.historyBack(studyRs.getMsg());
+        }
+
+        Study study = studyRs.getData();
+        if (!study.getLeader().equals(rq.getMember().getNickName()))
+            return rq.historyBack("수정 권한이 없습니다.");
+
+        RsData<Study> modifyStudyRs = studyService.modify(form, id);
+
+        if (modifyStudyRs.isFail())
+            return rq.historyBack(modifyStudyRs.getMsg());
+
+        log.info("스터디 수정 처리 완료");
+        return rq.redirectWithMsg("/study/detail/" + modifyStudyRs.getData().getId(), "수정이 완료되었습니다.");
+    }
 }
 
 
