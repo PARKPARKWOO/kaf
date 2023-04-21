@@ -11,6 +11,9 @@ import org.hibernate.validator.constraints.Range;
 @AllArgsConstructor
 public class StudyModifyForm {
 
+    @NotNull
+    private Long id;
+
     @NotBlank
     @Size(min = 2, max = 15)
     private String name;

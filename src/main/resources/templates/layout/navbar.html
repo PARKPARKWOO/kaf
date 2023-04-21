@@ -33,12 +33,11 @@
                 </a>
             </li>
 
-            <li th:if="${@rq.login}">
-                <a href="javascript:;" onclick="$(this).next().submit();"
-                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
-                    로그아웃
+            <li th:if="${@rq.login}" class="">
+                <a href="/study/create"
+                   class="text-white hover:text-gray-200 px-6 py-2 rounded ">
+                    스터디 만들기
                 </a>
-                <form th:action="|/member/logout|" method="post"  hidden></form>
             </li>
 
             <li th:if="${@rq.login}" class="">
@@ -47,6 +46,15 @@
                    class="text-white hover:text-gray-200 px-6 py-2 rounded ">
                 </a>
             </li>
+
+            <li th:if="${@rq.login}">
+                <a href="javascript:;" onclick="$(this).next().submit();"
+                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
+                    로그아웃
+                </a>
+                <form th:action="|/member/logout|" method="post"  hidden></form>
+            </li>
+
 
         </ul>
     </div>

@@ -6,19 +6,30 @@
 
         <div>
             <h1 th:text="${study.name}"
-                class="text-5xl font-bold"></h1>
+                class="text-5xl font-bold">
+            </h1>
 
             <p th:text="${study.about}"
-               class="py-6"></p>
+               class="py-6">
+            </p>
 
+            <div class="flex gap-5">
                 <span th:if="${@rq.login}">
                     <a th:href="@{/studyRule/create/{id}(id=${study.id})}"
                        th:if="${study.leader eq @rq.member.getNickName}"
-                            class="btn btn-primary">스터디 규칙 만들기
+                       class="btn btn-primary">규칙 만들기
+                    </a>
+                </span>
+
+                <span th:if="${@rq.login}">
+                    <a th:href="@{/study/modify/{id}(id=${study.id})}"
+                       th:if="${study.leader eq @rq.member.getNickName}"
+                       class="btn btn-primary">스터디 수정하기
                     </a>
                 </span>
             </div>
-
         </div>
+
     </div>
+</div>
 </div>
