@@ -1,23 +1,25 @@
 <div th:fragment="profile(member)"
-     class="card w-96 bg-base-100 shadow-xl">
+     class="card w-60 bg-base-100 shadow-xl flex">
 
-    <figure class="px-10 pt-10">
-        <img src="https://picsum.photos/200" alt="profile image" class="rounded-xl" />
-    </figure>
+    <div class="card-body items-center text-center pt-10">
+        <figure class="px-10 pt-10">
+            <img th:src="@{https://avatars.dicebear.com/api/avataaars/__${member.profileImg}__.svg}"
+                 alt="profile image" class="rounded-xl"/>
+        </figure>
 
-    <div class="card-body items-center text-center">
 
-        <h2 class="card-title"
-            th:text="${member.name}">
-        </h2>
+            <h2 class="card-title"
+                th:text="${member.nickName}">
+            </h2>
 
-        <p th:text="${member.about}"></p>
+            <p th:text="${member.about}"></p>
 
-        <div th:if="${@rq.login}"
-             class="card-actions mt-5">
-            <button th:if="${member.myStudies.size gt 0}"
-                    class="btn btn-primary">스터디로 초대하기</button>
-        </div>
+            <div th:if="${@rq.login}"
+                 class="card-actions mt-5">
+                <a th:if="${member.myStudies.size gt 0}"
+                        class="btn btn-primary">스터디로 초대하기
+                </a>
+            </div>
 
     </div>
 </div>
