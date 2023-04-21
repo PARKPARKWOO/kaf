@@ -27,9 +27,10 @@
                 </span>
 
                 <span th:if="${@rq.login}">
-                    <button th:if="${study.leader eq @rq.member.getNickName}"
-                            class="btn btn-primary">정보 수정
-                    </button>
+                    <a th:href="@{/studyRule/create/{id}(id=${study.id})}"
+                       th:if="${study.leader eq @rq.member.getNickName}"
+                            class="btn btn-primary">스터디 규칙 만들기
+                    </a>
                 </span>
             </div>
 
