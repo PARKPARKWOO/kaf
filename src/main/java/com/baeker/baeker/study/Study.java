@@ -4,6 +4,7 @@ import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.embed.Programmers;
 import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.studyRule.StudyRule;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

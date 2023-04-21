@@ -27,7 +27,7 @@ public class RuleController {
     @GetMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String showCreate() {
-        return "rule/rule";
+        return "rule/create";
     }
 
     @PostMapping("/create")
@@ -37,9 +37,8 @@ public class RuleController {
         if (rsData.isFail()) {
             return rq.historyBack(rsData);
         }
-        return rq.redirectWithMsg("/study/detail", rsData.getMsg());
+        return rq.redirectWithMsg("/rule/list", rsData.getMsg());
     }
-
 
 
     /**
@@ -49,14 +48,14 @@ public class RuleController {
     @PreAuthorize("isAuthenticated()")
     public String showModify(@PathVariable("id") Long id, RuleForm ruleForm) {
         RsData<Rule> rsData = this.ruleService.getRule(id);
-        if (rsData.isSuccess()) {
-            Rule rule = rsData.getData();
-            ruleService.setModify(rule, ruleForm);
-            return "rule/rule";
-        } else {
+        if (rsData.isFail()) {
             return rq.historyBack(rsData);
         }
+        Rule rule = rsData.getData();
+        ruleService.setModify(rule, ruleForm);
+        return "rule/create";
     }
+
     @PostMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
     public String modify(@PathVariable("id") Long id, @Valid RuleForm ruleForm, BindingResult bindingResult) {
@@ -65,7 +64,7 @@ public class RuleController {
             return rq.historyBack(rsData);
         }
         ruleService.modify(rsData.getData(), ruleForm);
-        return rq.redirectWithMsg("/study/detail", rsData.getMsg());
+        return rq.redirectWithMsg(String.format("/rule/detail/%s", id), "규칙이 수정되었습니다");
     }
 
     /**
@@ -77,7 +76,7 @@ public class RuleController {
         RsData<Rule> rsData = ruleService.getRule(id);
         if (rsData.isSuccess()) {
             ruleService.delete(rsData.getData());
-            return rq.redirectWithMsg("스터디 url", rsData.getMsg());
+            return rq.redirectWithMsg("/rule/list", "삭제 되었습니다.");
         } else {
             return rq.historyBack(rsData.getMsg());
         }
@@ -93,4 +92,15 @@ public class RuleController {
         model.addAttribute("paging", paging);
         return "rule/ruleList";
     }
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, Model model) {
+        RsData<Rule> rule = ruleService.getRule(id);
+        if (rule.isFail()) {
+            return rq.historyBack(rule);
+        }
+        model.addAttribute("rule", rule.getData());
+        return "rule/detail";
+    }
+
 }

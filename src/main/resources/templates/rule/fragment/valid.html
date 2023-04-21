@@ -29,8 +29,13 @@
 
         form.xp.value = form.xp.value.trim();
 
-        if (!form.xp.value) {
+        if (form.xp.value.length == 0) {
             toastWarning('경험치 작성해주세요!');
+            form.provider.focus();
+            return;
+        }
+        if (form.xp.value.length > 10) {
+            toastWarning('10글자 이내로 작성해주세요');
             form.provider.focus();
             return;
         }
@@ -63,5 +68,21 @@
 
         //-- 폼 발송 --//
         form.submit();
+    }
+
+    function Delete__confirm() {
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function Modify__confirm() {
+        if (confirm("수정 하시겠습니까??")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 </script>

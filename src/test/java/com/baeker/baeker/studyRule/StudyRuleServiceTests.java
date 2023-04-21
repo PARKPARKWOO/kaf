@@ -34,7 +34,7 @@ public class StudyRuleServiceTests {
     void createTests() {
         //생성 메서드 //
         StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개");
-        RuleForm ruleForm = new RuleForm("name", "about", 1,"provider", "gold");
+        RuleForm ruleForm = new RuleForm("name", "about", "1","provider", "gold");
         Rule rule = ruleService.create(ruleForm).getData();
         RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule);
         StudyRule studyRule = rsData.getData();

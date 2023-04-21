@@ -3,6 +3,7 @@
       class="flex flex-col gap-6"
       onsubmit="RuleForm__submit(this); return false;">
 
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <div class="form-control">
         <label class="label">
             <span class="label-text">규칙 명</span>
@@ -40,8 +41,8 @@
             <span class="label-text">난이도</span>
             <div class="form-control">
                 <label class="label cursor-pointer">
-                    <span class="peer-checked:text-[red] label-text">NONE</span>
-                    <input type="radio" name="difficulty" value="NONE" class="peer radio focus:bg-red-100">
+                    <span class="peer-checked:text-[red] label-text">ALL</span>
+                    <input type="radio" name="difficulty" value="ALL" class="peer radio focus:bg-red-100">
                 </label>
             </div>
             <div class="form-control">

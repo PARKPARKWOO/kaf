@@ -1,7 +1,10 @@
 spring:
   profiles:
     default: dev
-
+  mvc:
+    hidden-method:
+      filter:
+        enabled: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ENC(luN+bf0w1R9g5anC4KUI2g==)

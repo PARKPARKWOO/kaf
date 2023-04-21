@@ -24,6 +24,7 @@ public class Rule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "rule_id")
     private Long id;
 
     private String name;
@@ -45,4 +46,5 @@ public class Rule {
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
     @Builder.Default
     private List<StudyRule> studyRules = new ArrayList<>();
+
 }

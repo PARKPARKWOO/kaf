@@ -6,9 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,9 +29,9 @@ public class RuleService {
         Rule rule = Rule.builder()
                 .name(ruleForm.getName())
                 .about(ruleForm.getAbout())
+                .xp(Integer.parseInt(ruleForm.getXp()))
                 .provider(ruleForm.getProvider())
                 .difficulty(ruleForm.getDifficulty())
-                .xp(ruleForm.getXp())
                 .build();
         ruleRepository.save(rule);
         return RsData.of("S-1", "Rule 생성 완료", rule);
@@ -43,6 +46,7 @@ public class RuleService {
                 .name(ruleForm.getName())
                 .about(ruleForm.getAbout())
                 .provider(ruleForm.getProvider())
+                .xp(Integer.parseInt(ruleForm.getXp()))
                 .difficulty(ruleForm.getDifficulty())
                 .build();
         ruleRepository.save(rule1);
@@ -72,7 +76,10 @@ public class RuleService {
     }
 
     public Page<Rule> getList(int page) {
-        return ruleRepository.findAll(PageRequest.of(page, 10));
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return ruleRepository.findAll(pageable);
     }
 
     /**
@@ -82,5 +89,6 @@ public class RuleService {
         this.ruleRepository.delete(rule);
         RsData.of("S-1", "규칙이 삭제 되었습니다.");
     }
+
 
 }
