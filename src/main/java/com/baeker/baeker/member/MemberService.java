@@ -127,8 +127,9 @@ public class MemberService {
 
         Optional<Member> byName = memberRepository.findByNickName(form.getNickName());
 
-        if (byName.isPresent())
-            return RsData.of("F-1", form.getNickName() + "(은)는 이미 존재하는 이름입니다.");
+        if (!member.getNickName().equals(form.getNickName()))
+            if (byName.isPresent())
+                return RsData.of("F-1", form.getNickName() + "(은)는 이미 존재하는 이름입니다.");
 
         Member modifyMember = member.modifyMember(form.getNickName(), form.getAbout(), form.getProfileImg());
         Member saveMember = memberRepository.save(modifyMember);

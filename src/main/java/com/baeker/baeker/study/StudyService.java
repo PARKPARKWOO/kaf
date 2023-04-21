@@ -7,6 +7,9 @@ import com.baeker.baeker.myStudy.MyStudyRepository;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +61,15 @@ public class StudyService {
             return RsData.successOf(byName.get());
 
         return RsData.of("F-1", "존재 하지않는 name");
+    }
+
+    //-- find all + page --//
+    public Page<Study> getAll(int page) {
+        ArrayList<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("xp"));
+
+        PageRequest pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return studyRepository.findAll(pageable);
     }
 
     //-- find all member --//

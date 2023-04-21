@@ -7,13 +7,11 @@ import com.baeker.baeker.study.form.StudyCreateForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.h2.engine.Mode;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -41,7 +39,7 @@ public class StudyController {
 
         RsData<Study> studyRs = studyService.create(form, member);
 
-        if (studyRs.isFail()){
+        if (studyRs.isFail()) {
             log.info("중복검사 실패 study name = {}", form.getName());
             return rq.historyBack(studyRs);
         }
@@ -60,7 +58,7 @@ public class StudyController {
         log.info("스터디 상세페이지 요청 확인 study id = {}", id);
         RsData<Study> studyRs = studyService.getStudy(id);
 
-        if (studyRs.isFail()){
+        if (studyRs.isFail()) {
             log.info("존재하지 않는 id = {}", id);
             return rq.historyBack(studyRs);
         }
@@ -69,4 +67,24 @@ public class StudyController {
         log.info("상세페이지 응답 완료");
         return "/study/detail";
     }
+
+    //-- 스터디 리스트 --//
+    @GetMapping("/list")
+    public String list(
+            @RequestParam(defaultValue = "0") int page,
+            Model model
+    ) {
+        log.info("study list 요청 확인");
+        Page<Study> paging = studyService.getAll(page);
+
+        model.addAttribute("paging", paging);
+        log.info("study list 응답 완료");
+        return "study/list";
+    }
 }
+
+
+
+
+
+

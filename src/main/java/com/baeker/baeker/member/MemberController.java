@@ -157,4 +157,5 @@ public class MemberController {
         log.info("프로필 수정 완료");
         return rq.redirectWithMsg("/member/profile", memberRs.getMsg());
     }
+
 }
