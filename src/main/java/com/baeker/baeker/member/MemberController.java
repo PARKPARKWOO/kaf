@@ -79,8 +79,6 @@ public class MemberController {
         return "member/profile";
     }
 
-    private final MyStudyService myStudyService;
-    private final StudyService studyService;
 
     //-- member profile --//
     @GetMapping("/member/{id}")
