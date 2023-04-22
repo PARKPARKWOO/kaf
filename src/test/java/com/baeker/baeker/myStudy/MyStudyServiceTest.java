@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -30,7 +32,9 @@ class MyStudyServiceTest {
 
     private Study createStudy(String name, Member member) {
         StudyCreateForm form = new StudyCreateForm(name, "about", 7);
-        return studyService.create(form, member).getData();
+        Study study = studyService.create(form, member).getData();
+        myStudyService.create(member, study);
+        return study;
     }
 
     @Test

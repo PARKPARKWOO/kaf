@@ -11,9 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -44,7 +47,7 @@ public class MyStudyController {
             return rq.historyBack(inviteeRs.getMsg());
         }
 
-        RsData<Study> studyRs = studyService.getStudy(form.getStudyId());
+        RsData<Study> studyRs = studyService.getStudy(form.getId());
         if (studyRs.isFail()) {
             log.info("study 조회 실패 error = {}", studyRs.getMsg());
             return rq.historyBack(studyRs.getMsg());
@@ -58,6 +61,7 @@ public class MyStudyController {
             return rq.historyBack(inviteRs.getMsg());
         }
 
+        log.info("초대 성공 초대 메시지 = {}", form.getMsg());
         return rq.redirectWithMsg("/study/detail/" + studyRs.getData().getId(), inviteRs.getMsg());
     }
 }

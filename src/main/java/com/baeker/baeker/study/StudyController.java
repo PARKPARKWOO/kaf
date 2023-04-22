@@ -3,6 +3,8 @@ package com.baeker.baeker.study;
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class StudyController {
 
     private final StudyService studyService;
+    private final MyStudyService myStudyService;
     private final Rq rq;
 
     //-- 스터디 생성 폼 --//
@@ -46,6 +49,8 @@ public class StudyController {
         }
 
         Study study = studyRs.getData();
+        myStudyService.create(member, study);
+
         log.info("스터디 생성 완료 study name = {}", study.getName());
         return rq.redirectWithMsg("/study/detail/" + study.getId(), "스터디 개설 완료!");
     }

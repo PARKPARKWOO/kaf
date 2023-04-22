@@ -23,7 +23,6 @@ import java.util.Optional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
-    private final MyStudyRepository myStudyRepository;
 
 
     //-- create --//
@@ -33,12 +32,11 @@ public class StudyService {
         // 스터디 이름 중복검사
         RsData<Study> studyRs = this.getStudy(form.getName());
         if (studyRs.isSuccess())
-            return RsData.of("F-1", "는 이미 사용 보중입니다.");
+            return RsData.of("F-1", "는 이미 사용 중입니다.");
 
-        MyStudy myStudy = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
+        Study study = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
+        Study saveStudy = studyRepository.save(study);
 
-        myStudyRepository.save(myStudy);
-        Study saveStudy = studyRepository.save(myStudy.getStudy());
         return RsData.of("S-1", "새로운 스터디가 개설되었습니다!", saveStudy);
     }
 

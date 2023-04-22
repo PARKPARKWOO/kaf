@@ -9,7 +9,7 @@ import lombok.Data;
 public class MyStudyInviteForm {
 
 
-    private Long studyId;
+    private Long id;
 
     @Size(max = 40)
     private String msg;

@@ -14,11 +14,16 @@
 
         <p th:text="${member.about}"></p>
 
-        <div th:if="${@rq.login}"
-             class="card-actions mt-5">
-            <a th:if="${member.myStudies.size gt 0}"
+        <div th:if="${@rq.login}" class="card-actions mt-5">
+
+
+            <a href="#my-modal-2"
+               th:if="${member.myStudies.size gt 0}"
                class="btn btn-primary">스터디로 초대하기
             </a>
+
+            <div th:replace="~{member/fragment/member/invite :: invite(${member}, ${myStudyInviteForm}, ${myStudies})}"></div>
+
         </div>
 
     </div>

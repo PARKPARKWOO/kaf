@@ -31,9 +31,11 @@ class MemberServiceTest {
         return memberService.join(form).getData();
     }
 
-    private RsData<Study> createStudy(String name, Member member) {
+    private Study createStudy(String name, Member member) {
         StudyCreateForm form = new StudyCreateForm(name, "about", 10);
-        return studyService.create(form, member);
+        Study study = studyService.create(form, member).getData();
+        myStudyService.create(member, study);
+        return study;
     }
 
     @Test
@@ -54,7 +56,7 @@ class MemberServiceTest {
 
         // member1 : study 생성
         Member member1 = create("user1", "member1");
-        Study study = createStudy("study", member1).getData();
+        Study study = createStudy("study", member1);
 
 
         assertThat(member1.getBaekJoon()).isNull();

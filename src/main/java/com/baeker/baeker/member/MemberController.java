@@ -6,6 +6,8 @@ import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberLoginForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
 import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.myStudy.MyStudyService;
+import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
 import jakarta.validation.Valid;
@@ -77,10 +79,14 @@ public class MemberController {
         return "member/profile";
     }
 
+    private final MyStudyService myStudyService;
+    private final StudyService studyService;
+
     //-- member profile --//
     @GetMapping("/member/{id}")
     public String profile(
             @PathVariable Long id,
+            MyStudyInviteForm form,
             Model model
     ) {
         log.info("맴버 프로필 요청 확인 member id = {}", id);
@@ -98,6 +104,8 @@ public class MemberController {
             if (member.getNickName().equals(rq.getMember().getNickName()))
                 return "redirect:/member/profile";
 
+        List<MyStudy> myStudies = memberService.getMyStudyOnlyLeader(member);
+        model.addAttribute("myStudies", myStudies);
         model.addAttribute("member", member);
 
         log.info("member 조회 성공 member name = {}", member.getNickName());

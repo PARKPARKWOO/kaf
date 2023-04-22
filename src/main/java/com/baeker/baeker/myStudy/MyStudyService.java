@@ -18,6 +18,15 @@ public class MyStudyService {
 
     private final MyStudyRepository myStudyRepository;
 
+    //-- 새로운 스터디 개설 --//
+    @Transactional
+    public MyStudy create(Member member, Study study) {
+        MyStudy newStudy = MyStudy.createNewStudy(member, study);
+        MyStudy myStudy = myStudyRepository.save(newStudy);
+
+        return myStudy;
+    }
+
     //-- 스터디 가입 신청 --//
     @Transactional
     public RsData<MyStudy> join(Member member, Study study, String msg) {
