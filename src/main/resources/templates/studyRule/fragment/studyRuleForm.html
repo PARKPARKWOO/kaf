@@ -3,19 +3,39 @@
       class="flex flex-col gap-6"
       onsubmit="StudyRuleForm__submit(this); return false;">
 
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Rule 선택</span>
+        </label>
+        <select name="rule" class="input input-bordered">
+            <option th:each="rule : ${ruleList}"
+                    th:value="${rule.id}"
+                    th:text="${rule.name}" />
+        </select>
+
+    </div>
+
     <div class="form-control">
         <label class="label">
             <span class="label-text">name</span>
         </label>
-        <input type="text" name="name" placeholder="규칙 이름" class="input input-bordered" autofocus/>
+        <input type="text" th:field="*{name}" placeholder="규칙 이름" class="input input-bordered" autofocus/>
     </div>
 
     <div class="form-control">
         <label class="label">
             <span class="label-text">Rule 소개</span>
         </label>
-        <input type="text" name="about" placeholder="간단 소개" class="input input-bordered" autofocus/>
+        <input type="text" th:field="*{about}" placeholder="간단 소개" class="input input-bordered" autofocus/>
     </div>
+
+<!--        <div class="form-control" hidden="hidden">-->
+<!--            <label class="label">-->
+<!--                <span class="label-text">안되면 주석 해제</span>-->
+<!--            </label>-->
+<!--            <input type="text" th:field="*{studyId}">-->
+<!--        </div>-->
 
 
     <button class="btn btn-block btn-primary gap-1">

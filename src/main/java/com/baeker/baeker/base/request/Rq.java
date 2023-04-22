@@ -2,6 +2,8 @@ package com.baeker.baeker.base.request;
 
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
+import com.baeker.baeker.study.Study;
+import com.baeker.baeker.study.StudyService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.Date;
+import java.util.List;
 
 @Component
 @RequestScope

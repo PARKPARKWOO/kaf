@@ -15,4 +15,5 @@ public class StudyRuleForm {
     @Size(max = 30)
     private String about;
 
+    private Long studyId;
 }

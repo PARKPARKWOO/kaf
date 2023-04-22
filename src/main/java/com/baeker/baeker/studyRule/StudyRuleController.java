@@ -2,7 +2,12 @@ package com.baeker.baeker.studyRule;
 
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
+import com.baeker.baeker.member.Member;
+import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.rule.RuleService;
+import com.baeker.baeker.study.Study;
+import com.baeker.baeker.study.StudyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/studyRule")
@@ -21,23 +28,36 @@ public class StudyRuleController {
     private final Rq rq;
     private final RuleService ruleService;
 
+    private final StudyService studyService;
+
     /**
      * 생성
      */
     @GetMapping("/create/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String showForm(){
+    public String showForm(Model model, @PathVariable Long id, StudyRuleForm studyRuleForm) {
+        List<Rule> ruleList = ruleService.getRuleList();
+        model.addAttribute("studyId", id);
+        model.addAttribute("ruleList", ruleList);
         return "studyRule/create";
     }
 
     @PostMapping("/create/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String create(@PathVariable("id") Long id,@Valid StudyRuleForm studyRuleForm, BindingResult bindingResult) {
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, ruleService.getRule(id).getData());
+    public String create(@PathVariable("id") Long id,@RequestParam("rule") Rule rule,
+                         @Valid StudyRuleForm studyRuleForm, BindingResult bindingResult) {
+
+        RsData<Study> exist = studyRuleService.isExist(rq, id);
+        if (exist.isFail()) {
+            return rq.historyBack("스터디 리더가 아닙니다.");
+        }
+
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, exist.getData());
+
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
         }
-        return rq.redirectWithMsg("/studyRule/studyRuleList", rsData.getMsg());
+        return rq.redirectWithMsg("/studyRule/list", rsData.getMsg());
     }
 
     /**
@@ -46,9 +66,11 @@ public class StudyRuleController {
 
     @GetMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String showModify(@PathVariable("id") Long id, StudyRuleForm studyRuleForm) {
+    public String showModify(Model model,@PathVariable("id") Long id, StudyRuleForm studyRuleForm) {
+        List<Rule> ruleList = ruleService.getRuleList();
         RsData<StudyRule> rsData = studyRuleService.getStudyRule(id);
         if (rsData.isSuccess()) {
+            model.addAttribute("ruleList", ruleList);
             StudyRule studyRule = rsData.getData();
             studyRuleService.setModify(studyRule, studyRuleForm);
             return "studyRule/create";
@@ -65,7 +87,7 @@ public class StudyRuleController {
             return rq.historyBack(rsData);
         }
         studyRuleService.modify(rsData.getData(), studyRuleForm);
-        return rq.redirectWithMsg("스터디 url", rsData.getMsg());
+        return rq.redirectWithMsg(String.format("/studyRule/detail/%s", id), "규칙이 수정되었습니다");
     }
 
     /**
@@ -75,9 +97,8 @@ public class StudyRuleController {
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable("id") Long id) {
         RsData<StudyRule> rsData = studyRuleService.getStudyRule(id);
-        if (rsData.isSuccess()) {
-            studyRuleService.delete(rsData.getData());
-            return rq.redirectWithMsg("스터디 url", rsData);
+        if (studyRuleService.delete(rsData.getData(), rsData.getData().getStudy().getLeader(), rq.getMember().getNickName()).isSuccess()) {
+            return rq.redirectWithMsg("/studyRule/list", "삭제 되었습니다.");
         }
         return rq.historyBack(rsData);
     }
