@@ -1,27 +1,61 @@
 <div th:fragment="member (myStudies)"
-     class="overflow-x-auto">
-  <table class="table table-zebra w-full">
+     class="overflow-x-auto w-[70%] mb-5">
 
-    <thead>
+    <table class="table w-full">
+        <!-- head -->
+        <thead>
+        <tr>
+            <th></th>
+            <th>이름</th>
+            <th>랭킹</th>
+            <th class="flex justify-center">가입한 스터디</th>
+        </tr>
+        </thead>
+        <tbody>
 
-    <tr>
-      <th></th>
-      <th>이름</th>
-      <th>백준 티어</th>
-      <th>프로그래머스 레벨</th>
-    </tr>
+        <!-- row -->
+        <tr class="hover"
+            th:each="myStudy , loop : ${myStudies}">
 
-    </thead>
+            <th th:text="${loop.count}"></th>
 
-    <tbody>
+            <td>
+                <a th:href="@{/member/member/{id}(id=${myStudy.member.id})}">
+                    <div class="flex items-center space-x-3">
+                        <div class="avatar">
+                            <div class="mask mask-squircle w-12 h-12">
+                                <img th:src="@{https://avatars.dicebear.com/api/avataaars/__${myStudy.member.profileImg}__.svg}"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div th:text="${myStudy.member.nickName}"
+                                 class="font-bold">
+                            </div>
+                            <div th:text="${myStudy.member.about}"
+                                 class="text-sm opacity-50">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </td>
 
-    <tr th:each="myStudy, loop : ${myStudies}" th:object="${myStudy.member}">
-      <th th:text="${loop.count}"></th>
-      <td th:text="*{nickName}"></td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
+            <td>
+                <a class="flex justify-center"
+                   th:href="@{/member/member/{id}(id=${myStudy.member.id})}">
+                    <span th:text="|0|"></span>
+                    <br/>
+                </a>
+            </td>
 
-    </tbody>
-  </table>
+            <td>
+                <a class="flex justify-center"
+                   th:href="@{/member/member/{id}(id=${myStudy.member.id})}">
+                    <span th:text="${myStudy.member.myStudies.size}"></span>
+                </a>
+            </td>
+        </tr>
+
+        </tbody>
+
+    </table>
 </div>

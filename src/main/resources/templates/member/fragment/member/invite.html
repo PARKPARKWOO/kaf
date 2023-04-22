@@ -1,0 +1,37 @@
+<div th:fragment="invite(member, myStudyInviteForm, myStudies)"
+     class="modal" id="my-modal-2">
+
+    <div class="modal-box">
+
+
+        <h3 th:text="|${member.nickName} 님 초대하기|"
+            class="font-bold text-lg"></h3>
+
+        <form th:action="@{/my_study/invite/{id}(id=${member.id})}"
+              method="post" class="mt-5 mb-5 flex flex-col">
+
+            <select th:field="${myStudyInviteForm.id}"
+                    class="select select-ghost w-full max-w-xs">
+
+                <option value=""
+                        disabled selected>스터디 선택</option>
+
+                <option th:each="myStudy : ${myStudies}"
+                        th:value="${myStudy.study.id}"
+                        th:text="${myStudy.study.name}">Svelte</option>
+            </select>
+
+            <textarea th:field="${myStudyInviteForm.msg}" placeholder="초대 메시지 작성"
+                      class="textarea textarea-ghost mb-5 mt-5 w-full"></textarea>
+
+
+            <button class="btn btn-primary">초대하기</button>
+
+        </form>
+
+        <div class="modal-action flex gab-6">
+            <a href="#" class="btn">취소</a>
+        </div>
+
+    </div>
+</div>

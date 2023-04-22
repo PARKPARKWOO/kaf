@@ -1,22 +1,29 @@
-<div th:fragment="profile(member)"
-     class="card w-96 bg-base-100 shadow-xl">
+<div th:fragment="profile(member, myStudies)"
+     class="card w-60 bg-base-100 shadow-xl flex">
 
-    <figure class="px-10 pt-10">
-        <img src="https://picsum.photos/200" alt="profile image" class="rounded-xl" />
-    </figure>
+    <div class="card-body items-center text-center pt-10">
 
-    <div class="card-body items-center text-center">
+
+        <img th:src="@{https://avatars.dicebear.com/api/avataaars/__${member.profileImg}__.svg}"
+             alt="profile image" class="rounded-xl px-10 pt-10"/>
+
 
         <h2 class="card-title"
-            th:text="${member.name}">
+            th:text="${member.nickName}">
         </h2>
 
         <p th:text="${member.about}"></p>
 
-        <div th:if="${@rq.login}"
-             class="card-actions mt-5">
-            <button th:if="${member.myStudies.size gt 0}"
-                    class="btn btn-primary">스터디로 초대하기</button>
+        <div th:if="${@rq.login}" class="card-actions mt-5">
+
+
+            <a href="#my-modal-2"
+               th:if="${myStudies.size > 0}"
+               class="btn btn-primary">스터디로 초대하기
+            </a>
+
+            <div th:replace="~{member/fragment/member/invite :: invite(${member}, ${myStudyInviteForm}, ${myStudies})}"></div>
+
         </div>
 
     </div>

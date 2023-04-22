@@ -2,12 +2,14 @@
 
 <head><title>스터디</title></head>
 
-<main layout:fragment="content" class="flex-grow flex min-h-screen flex flex-col">
+<main layout:fragment="content" class="min-h-screen flex flex-col">
 
-    <div class="flex-column">
+    <div class="flex flex-col justify-center">
         <div th:replace="~{study/fragment/profile :: profile(${study})}"></div>
 
-        <div th:replace="~{study/fragment/member :: member(${study.myStudies})}"></div>
+        <div class="w-full flex justify-center mt-12">
+            <div th:replace="~{study/fragment/member :: member(${study.myStudies})}"></div>
+        </div>
     </div>
 
 </main>

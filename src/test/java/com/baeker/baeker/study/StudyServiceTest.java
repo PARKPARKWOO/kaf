@@ -5,6 +5,7 @@ import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.myStudy.StudyStatus;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
@@ -23,6 +24,7 @@ class StudyServiceTest {
 
     @Autowired private MemberService memberService;
     @Autowired private StudyService studyService;
+    @Autowired private MyStudyService myStudyService;
 
 
     private Member create(String username, String name) {
@@ -32,7 +34,12 @@ class StudyServiceTest {
 
     private RsData<Study> createStudy(String name, String about, Integer capacity, Member member) {
         StudyCreateForm form = new StudyCreateForm(name, about, capacity);
-        return studyService.create(form, member);
+        RsData<Study> studyRsData = studyService.create(form, member);
+
+        Study study = studyRsData.getData();
+
+        myStudyService.create(member, study);
+        return studyRsData;
     }
 
     @Test
@@ -55,6 +62,7 @@ class StudyServiceTest {
         assertThat(myStudy.getStatus()).isSameAs(StudyStatus.MEMBER);
         assertThat(myStudy.getMember()).isSameAs(member);
         assertThat(member.getMyStudies().get(0)).isSameAs(myStudy);
+
     }
 
     @Test
@@ -69,7 +77,7 @@ class StudyServiceTest {
         assertThat(study.getCapacity()).isEqualTo(8);
         assertThat(studies.size()).isEqualTo(1);
 
-        StudyModifyForm form = new StudyModifyForm("study2", "hello", 10);
+        StudyModifyForm form = new StudyModifyForm( "study2", "hello", 10);
         RsData<Study> modifyRs = studyService.modify(form, study.getId());
         studies = studyService.getAll();
 
@@ -101,5 +109,9 @@ class StudyServiceTest {
         assertThat(modifyStudy.getLeader()).isEqualTo("memberB");
     }
 
+    @Test
+    void name() {
 
+
+    }
 }

@@ -5,6 +5,11 @@ import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberLoginForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
+import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.myStudy.MyStudyService;
+import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
+import com.baeker.baeker.study.Study;
+import com.baeker.baeker.study.StudyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -74,10 +79,12 @@ public class MemberController {
         return "member/profile";
     }
 
+
     //-- member profile --//
     @GetMapping("/member/{id}")
     public String profile(
             @PathVariable Long id,
+            MyStudyInviteForm form,
             Model model
     ) {
         log.info("맴버 프로필 요청 확인 member id = {}", id);
@@ -94,6 +101,12 @@ public class MemberController {
         if (rq.isLogin())
             if (member.getNickName().equals(rq.getMember().getNickName()))
                 return "redirect:/member/profile";
+
+        // 로그인일 때만 스터디 리스트 model 에 전달
+        if (rq.isLogin()) {
+            List<MyStudy> myStudies = memberService.getMyStudyOnlyLeader(rq.getMember());
+            model.addAttribute("myStudies", myStudies);
+        }
 
         model.addAttribute("member", member);
 
@@ -157,4 +170,5 @@ public class MemberController {
         log.info("프로필 수정 완료");
         return rq.redirectWithMsg("/member/profile", memberRs.getMsg());
     }
+
 }

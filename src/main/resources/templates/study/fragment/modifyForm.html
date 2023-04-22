@@ -1,0 +1,47 @@
+<form th:fragment="modifyForm (studyModifyForm)"
+      th:action="@{/study/modify/{id}(id=${studyModifyForm.id})}"
+      th:object="${studyModifyForm}" method="post"
+      class="flex flex-col gap-6"
+      onsubmit="JoinForm__submit(this); return false;">
+
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">스터디 이름</span>
+    </label>
+    <input type="text" th:field="*{name}" placeholder="스터디 이름" class="input input-bordered" autofocus />
+  </div>
+
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">스터디 소개</span>
+    </label>
+    <input type="text" th:field="*{about}"  placeholder="소개" class="input input-bordered" autofocus />
+  </div>
+
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">스터디 최대 인원</span>
+      <span th:text="*{capacity}"></span>
+    </label>
+    <input type="range" min="1" max="20" class="range range-xs" step="1"
+           autofocus onchange="$(this).keyup();"
+           onkeyup="$(this).prev().children(':last-child').text(this.value.trim());"
+           onpaste="setTimeoutZero(() => $(this).keyup());"
+           th:field="*{capacity}"/>
+
+    <div class="w-full flex justify-between text-xs px-2 mt-3">
+      <span>1</span><span></span><span></span><span></span>
+      <span>5</span><span></span><span></span><span></span><span></span>
+      <span>10</span><span></span><span></span><span></span><span></span>
+      <span>15</span><span></span><span></span><span></span><span></span>
+      <span>20</span>
+    </div>
+  </div>
+
+
+  <button class="btn btn-block btn-primary gap-1">
+    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+    <span>수정하기</span>
+  </button>
+
+</form>

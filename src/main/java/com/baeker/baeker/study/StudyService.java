@@ -7,6 +7,9 @@ import com.baeker.baeker.myStudy.MyStudyRepository;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +23,6 @@ import java.util.Optional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
-    private final MyStudyRepository myStudyRepository;
 
 
     //-- create --//
@@ -30,12 +32,11 @@ public class StudyService {
         // 스터디 이름 중복검사
         RsData<Study> studyRs = this.getStudy(form.getName());
         if (studyRs.isSuccess())
-            return RsData.of("F-1", "는 이미 사용 보중입니다.");
+            return RsData.of("F-1", "는 이미 사용 중입니다.");
 
-        MyStudy myStudy = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
+        Study study = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
+        Study saveStudy = studyRepository.save(study);
 
-        myStudyRepository.save(myStudy);
-        Study saveStudy = studyRepository.save(myStudy.getStudy());
         return RsData.of("S-1", "새로운 스터디가 개설되었습니다!", saveStudy);
     }
 
@@ -58,6 +59,15 @@ public class StudyService {
             return RsData.successOf(byName.get());
 
         return RsData.of("F-1", "존재 하지않는 name");
+    }
+
+    //-- find all + page --//
+    public Page<Study> getAll(int page) {
+        ArrayList<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("xp"));
+
+        PageRequest pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return studyRepository.findAll(pageable);
     }
 
     //-- find all member --//
@@ -87,6 +97,9 @@ public class StudyService {
 
         if (studyRs.isFail()) return studyRs;
         Study study = studyRs.getData();
+
+        if (study.getMyStudies().size() > form.getCapacity())
+            return RsData.of("F-2", "최대 인원이 현재 스터디 인원보다 적습니다.");
 
         Study modifyStudy = study.modifyStudy(form.getName(), form.getAbout(), form.getCapacity());
         studyRepository.save(modifyStudy);

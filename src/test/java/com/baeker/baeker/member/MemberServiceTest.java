@@ -31,9 +31,11 @@ class MemberServiceTest {
         return memberService.join(form).getData();
     }
 
-    private RsData<Study> createStudy(String name, Member member) {
+    private Study createStudy(String name, Member member) {
         StudyCreateForm form = new StudyCreateForm(name, "about", 10);
-        return studyService.create(form, member);
+        Study study = studyService.create(form, member).getData();
+        myStudyService.create(member, study);
+        return study;
     }
 
     @Test
@@ -54,7 +56,7 @@ class MemberServiceTest {
 
         // member1 : study 생성
         Member member1 = create("user1", "member1");
-        Study study = createStudy("study", member1).getData();
+        Study study = createStudy("study", member1);
 
 
         assertThat(member1.getBaekJoon()).isNull();
@@ -85,7 +87,7 @@ class MemberServiceTest {
         assertThat(member2.getBaekJoon().getSliver()).isEqualTo(8);
 
         // member2 : study 가입
-        MyStudy myStudy = myStudyService.join(member2, study).getData();
+        MyStudy myStudy = myStudyService.join(member2, study, "hi").getData();
         RsData<BaekJoon> addedSolveRs = myStudyService.accept(myStudy);
 
         // 가입이 성공하면 member2 의 해결문제수가 study 에 자동 합산됨

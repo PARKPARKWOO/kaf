@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -30,7 +32,9 @@ class MyStudyServiceTest {
 
     private Study createStudy(String name, Member member) {
         StudyCreateForm form = new StudyCreateForm(name, "about", 7);
-        return studyService.create(form, member).getData();
+        Study study = studyService.create(form, member).getData();
+        myStudyService.create(member, study);
+        return study;
     }
 
     @Test
@@ -39,7 +43,7 @@ class MyStudyServiceTest {
         Study study = createStudy("study", leader);
 
         Member member1 = create("user1", "member1");
-        RsData<MyStudy> myStudyRs = myStudyService.join(member1, study);
+        RsData<MyStudy> myStudyRs = myStudyService.join(member1, study, "hi");
 
         assertThat(myStudyRs.getResultCode()).isEqualTo("S-1");
 
@@ -51,7 +55,7 @@ class MyStudyServiceTest {
         assertThat(myStudy.getStudy().getLeader()).isEqualTo(leader.getNickName());
 
         // 중복 가입 금지
-        RsData<MyStudy> joinDuplicate = myStudyService.join(member1, study);
+        RsData<MyStudy> joinDuplicate = myStudyService.join(member1, study, "hello");
         assertThat(joinDuplicate.getResultCode()).isEqualTo("F-1");
     }
 
@@ -64,11 +68,11 @@ class MyStudyServiceTest {
         Member member2 = create("user2", "member2");
 
         // 스터디 맴버가 아닌데 스터디 맴버 초대 금지
-        RsData<MyStudy> invite = myStudyService.invite(member1, member2, study);
+        RsData<MyStudy> invite = myStudyService.invite(member1, member2, study, "hi");
         assertThat(invite.getResultCode()).isEqualTo("F-1");
 
-        // 정상적인 초대 검증
-        RsData<MyStudy> myStudyRs = myStudyService.invite(leader, member1, study);
+        // 정상적인 초대, 검증
+        RsData<MyStudy> myStudyRs = myStudyService.invite(leader, member1, study, "hi");
         assertThat(myStudyRs.getResultCode()).isEqualTo("S-1");
 
         MyStudy myStudy = myStudyRs.getData();
@@ -78,11 +82,11 @@ class MyStudyServiceTest {
         assertThat(myStudy.getMember().getNickName()).isEqualTo("member1");
 
         // 중복 초대 금지
-        RsData<MyStudy> inviteDuplicate = myStudyService.invite(leader, member1, study);
+        RsData<MyStudy> inviteDuplicate = myStudyService.invite(leader, member1, study, "hi");
         assertThat(inviteDuplicate.getResultCode()).isEqualTo("F-1");
 
         // 스터디 맴버로 승인되기전 초대 금지
-        RsData<MyStudy> inviting = myStudyService.invite(member1, member2, study);
+        RsData<MyStudy> inviting = myStudyService.invite(member1, member2, study, "hi");
         assertThat(inviting.getResultCode()).isEqualTo("F-2");
     }
 
@@ -95,12 +99,12 @@ class MyStudyServiceTest {
         Member member2 = create("user2", "member2");
 
         // member1 : 스터디 가입 신청
-        RsData<MyStudy> myStudyRs1 = myStudyService.join(member1, study);
+        RsData<MyStudy> myStudyRs1 = myStudyService.join(member1, study, "hi");
         assertThat(myStudyRs1.getResultCode()).isEqualTo("S-1");
         assertThat(myStudyRs1.getData().getStatus()).isEqualTo(StudyStatus.PENDING);
 
         // member1 : 정식 승인전 member2 초대 -> F-2
-        RsData<MyStudy> invite1 = myStudyService.invite(member1, member2, study);
+        RsData<MyStudy> invite1 = myStudyService.invite(member1, member2, study, "'hi");
         assertThat(invite1.getResultCode()).isEqualTo("F-2");
 
         // member1 : 가입 승인 PENDING -> MEMBER
@@ -111,7 +115,7 @@ class MyStudyServiceTest {
 
         // member1 : 스터디로 member2 초대
         // member2 : INVITING
-        RsData<MyStudy> invite2 = myStudyService.invite(member1, member2, study);
+        RsData<MyStudy> invite2 = myStudyService.invite(member1, member2, study, "hi");
         assertThat(invite2.getResultCode()).isEqualTo("S-1");
         assertThat(invite2.getData().getStatus()).isEqualTo(StudyStatus.INVITING);
         

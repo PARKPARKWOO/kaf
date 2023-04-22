@@ -51,16 +51,14 @@ public class Study {
 
 
     //-- create method --//
-    public static MyStudy createStudy(String name, String about, Integer capacity, Member member) {
-        Study study = builder()
+    public static Study createStudy(String name, String about, Integer capacity, Member member) {
+        return builder()
                 .name(name)
                 .about(about)
                 .leader(member.getNickName())
                 .capacity(capacity)
                 .xp(0)
                 .build();
-
-        return MyStudy.createNewStudy(member, study);
     }
 
 
