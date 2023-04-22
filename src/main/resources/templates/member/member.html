@@ -9,7 +9,7 @@
   <!-- 프로필 -->
   <div class="flex-grow flex flex-row items-center justify-center">
 
-    <div th:replace="~{member/fragment/member/profile :: profile (${member})}"></div>
+    <div th:replace="~{member/fragment/member/profile :: profile (${member}, ${myStudies})}"></div>
 
     <div th:replace="~{member/fragment/member/status :: status (${member})}"></div>
 

@@ -10,8 +10,12 @@
         <form th:action="@{/my_study/invite/{id}(id=${member.id})}"
               method="post" class="mt-5 mb-5 flex flex-col">
 
-            <select class="select select-ghost w-full max-w-xs">
-                <option disabled selected>스터디 선택</option>
+            <select th:field="${myStudyInviteForm.id}"
+                    class="select select-ghost w-full max-w-xs">
+
+                <option value=""
+                        disabled selected>스터디 선택</option>
+
                 <option th:each="myStudy : ${myStudies}"
                         th:value="${myStudy.study.id}"
                         th:text="${myStudy.study.name}">Svelte</option>

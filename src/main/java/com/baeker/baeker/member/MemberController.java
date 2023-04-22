@@ -104,8 +104,12 @@ public class MemberController {
             if (member.getNickName().equals(rq.getMember().getNickName()))
                 return "redirect:/member/profile";
 
-        List<MyStudy> myStudies = memberService.getMyStudyOnlyLeader(member);
-        model.addAttribute("myStudies", myStudies);
+        // 로그인일 때만 스터디 리스트 model 에 전달
+        if (rq.isLogin()) {
+            List<MyStudy> myStudies = memberService.getMyStudyOnlyLeader(rq.getMember());
+            model.addAttribute("myStudies", myStudies);
+        }
+
         model.addAttribute("member", member);
 
         log.info("member 조회 성공 member name = {}", member.getNickName());

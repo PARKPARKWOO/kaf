@@ -1,4 +1,4 @@
-<div th:fragment="profile(member)"
+<div th:fragment="profile(member, myStudies)"
      class="card w-60 bg-base-100 shadow-xl flex">
 
     <div class="card-body items-center text-center pt-10">
@@ -18,7 +18,7 @@
 
 
             <a href="#my-modal-2"
-               th:if="${member.myStudies.size gt 0}"
+               th:if="${myStudies.size > 0}"
                class="btn btn-primary">스터디로 초대하기
             </a>
 
