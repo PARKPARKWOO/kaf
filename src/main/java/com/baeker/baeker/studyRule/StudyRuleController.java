@@ -37,7 +37,6 @@ public class StudyRuleController {
     @PreAuthorize("isAuthenticated()")
     public String showForm(Model model, @PathVariable Long id, StudyRuleForm studyRuleForm) {
         List<Rule> ruleList = ruleService.getRuleList();
-        model.addAttribute("studyId", id);
         model.addAttribute("ruleList", ruleList);
         return "studyRule/create";
     }
@@ -57,7 +56,7 @@ public class StudyRuleController {
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
         }
-        return rq.redirectWithMsg("/studyRule/list", rsData.getMsg());
+        return rq.redirectWithMsg(String.format("/studyRule/list/%s", id), rsData.getMsg());
     }
 
     /**
@@ -106,10 +105,10 @@ public class StudyRuleController {
     /**
      * 조회
      */
-    @GetMapping("/list")
+    @GetMapping("/list/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String showList(Model model, @RequestParam(defaultValue = "0") int page){
-        Page<StudyRule> paging = studyRuleService.getList(page);
+    public String showList(Model model, @PathVariable("id") Long id, @RequestParam(defaultValue = "0") int page){
+        Page<StudyRule> paging = studyRuleService.getList(page, id);
         model.addAttribute("paging", paging);
         return "studyRule/studyRuleList";
     }

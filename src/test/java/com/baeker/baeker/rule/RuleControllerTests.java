@@ -4,6 +4,8 @@ import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.member.form.MemberJoinForm;
 
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,8 @@ public class RuleControllerTests {
     @Autowired
     private MemberService memberService;
 
-    @Test
     @Rollback(value = false)
+    @Test
     @DisplayName("user10 생성")
     void create() {
         MemberJoinForm memberJoinForm = new MemberJoinForm("user10", "user10", "소개", "1234", "1234", 1);

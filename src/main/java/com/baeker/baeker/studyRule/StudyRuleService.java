@@ -98,11 +98,11 @@ public class StudyRuleService {
         return studyRuleRepository.findAll();
     }
 
-    public Page<StudyRule> getList(int page) {
+    public Page<StudyRule> getList(int page, Long id) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("selectDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return studyRuleRepository.findAll(pageable);
+        return studyRuleRepository.findAllByStudyId(pageable, id);
     }
 
 
