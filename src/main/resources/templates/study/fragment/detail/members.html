@@ -1,4 +1,5 @@
-<table th:fragment="members (myStudies)"
+<table th:fragment="members (myStudies, list)"
+       th:if="${list eq 'member'}"
        class="table w-full">
     <!-- head -->
     <thead>

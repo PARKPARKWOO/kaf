@@ -20,7 +20,9 @@
 
     </div>
 
-    <form th:replace="~{study/fragment/detail/members :: members(${study.myStudies})}"></form>
+    <form th:replace="~{study/fragment/detail/members :: members(${study.myStudies}, ${list})}"></form>
+
+    <form th:replace="~{study/fragment/detail/rules :: rules(${study.studyRules}, ${list})}"></form>
 
 
 </div>
