@@ -46,7 +46,7 @@ public class StudyRuleController {
     public String create(@PathVariable("id") Long id,@RequestParam("rule") Rule rule,
                          @Valid StudyRuleForm studyRuleForm, BindingResult bindingResult) {
 
-        RsData<Study> exist = studyRuleService.isExist(rq, id);
+        RsData<Study> exist = studyRuleService.verificationLeader(rq, id);
         if (exist.isFail()) {
             return rq.historyBack("스터디 리더가 아닙니다.");
         }
@@ -66,6 +66,13 @@ public class StudyRuleController {
     @GetMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showModify(Model model,@PathVariable("id") Long id, StudyRuleForm studyRuleForm) {
+        Long studyId = studyRuleService.getStudyId(id);
+
+        RsData<Study> exist = studyRuleService.verificationLeader(rq, studyId);
+        if (exist.isFail()) {
+            return rq.historyBack("스터디 리더가 아닙니다.");
+        }
+
         List<Rule> ruleList = ruleService.getRuleList();
         RsData<StudyRule> rsData = studyRuleService.getStudyRule(id);
         if (rsData.isSuccess()) {
@@ -81,6 +88,13 @@ public class StudyRuleController {
     @PostMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
     public String modify(@PathVariable("id") Long id, @Valid StudyRuleForm studyRuleForm, BindingResult bindingResult) {
+        Long studyId = studyRuleService.getStudyId(id);
+
+        RsData<Study> exist = studyRuleService.verificationLeader(rq, studyId);
+        if (exist.isFail()) {
+            return rq.historyBack("스터디 리더가 아닙니다.");
+        }
+
         RsData<StudyRule> rsData = studyRuleService.getStudyRule(id);
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
@@ -95,6 +109,13 @@ public class StudyRuleController {
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable("id") Long id) {
+        Long studyId = studyRuleService.getStudyId(id);
+
+        RsData<Study> exist = studyRuleService.verificationLeader(rq, studyId);
+        if (exist.isFail()) {
+            return rq.historyBack("스터디 리더가 아닙니다.");
+        }
+
         RsData<StudyRule> rsData = studyRuleService.getStudyRule(id);
         if (studyRuleService.delete(rsData.getData(), rsData.getData().getStudy().getLeader(), rq.getMember().getNickName()).isSuccess()) {
             return rq.redirectWithMsg("/studyRule/list", "삭제 되었습니다.");

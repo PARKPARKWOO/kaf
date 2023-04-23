@@ -21,31 +21,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApiScheduler {
 
-    private final SolvedApiManager solvedApiManager;
-
     private final SolvedApiService solvedApiService;
-
-    private final StudyRuleService studyRuleService;
-
-    private final StudyService studyService;
 
     private final MemberService memberService;
 
     /**
      * 티어 체크 후 Study
      */
-//    @Scheduled(fixedRate = 1000)
-//    public void tierSchedule() throws IOException, ParseException {
-//        List<StudyRule> all = studyRuleService.getAll();
-//        for (StudyRule studyRule : all) {
-//            log.info("티어별 실행");
-//            Integer solvedCount = solvedApiService.getSolvedCount(studyRule.getRule().getDifficulty().toUpperCase());
-//            // solvedCount 값을 저장해 줄 곳 필요
-////            studyRule.getGoal().getMyStudy().setGoal(solvedCount);
-//            //
-//            System.out.println(solvedCount);
-//        }
-//    }
 
     @Scheduled(fixedRate = 1000)
     public void checkStudyRule() throws IOException, ParseException {
