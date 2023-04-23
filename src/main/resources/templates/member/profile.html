@@ -15,32 +15,11 @@
 
     </div>
 
-    <!-- 스터디 리스트 -->
     <div class="w-full flex  justify-center">
-        <div class="lex-grow flex flex-col justify-center w-[70%]">
 
-            <div class="tabs ml-8">
-                <label class="flex gap-2 items-center cursor-pointer">
-                    <input type="radio"
-                           class="peer hidden"
-                           value="solved"
-                           name="info">
-                    <span class="tab tab-lifted peer-checked:border-4 peer-checked:text-gray-300">해결한 문제</span>
-                </label>
+        <div th:replace="~{member/fragment/profile/list :: list(${list})}"></div>
 
-                <label class="flex gap-2 items-center cursor-pointer">
-                    <input type="radio"
-                           class="peer hidden"
-                           value="study"
-                           name="info" checked>
-                    <span class="tab tab-lifted peer-checked:border-4 peer-checked:text-gray-300">스터디 정보</span>
-                </label>
 
-            </div>
-
-            <div th:replace="~{member/fragment/profile/study :: study}"></div>
-
-        </div>
     </div>
 
     <div class="m-12"></div>

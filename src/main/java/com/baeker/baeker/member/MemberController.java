@@ -71,11 +71,17 @@ public class MemberController {
     }
 
     //-- my profile --//
-    @GetMapping("/profile")
+    @GetMapping("/profile/{list}")
     @PreAuthorize("isAuthenticated()")
-    public String myProfile() {
+    public String myProfile(
+            @PathVariable String list,
+            Model model
+    ) {
         Member member = rq.getMember();
         log.info("내 프로필 요청 확인 member = {}", member.toString());
+
+        model.addAttribute("list", list);
+        log.info("내 프로필 응답 완료");
         return "member/profile";
     }
 
@@ -100,7 +106,7 @@ public class MemberController {
         Member member = memberRs.getData();
         if (rq.isLogin())
             if (member.getNickName().equals(rq.getMember().getNickName()))
-                return "redirect:/member/profile";
+                return "redirect:/member/profile/rank";
 
         // 로그인일 때만 스터디 리스트 model 에 전달
         if (rq.isLogin()) {

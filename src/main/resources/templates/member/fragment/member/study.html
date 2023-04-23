@@ -19,28 +19,28 @@
 
             <th>
                 <a th:text="${loop.count}"
-                   th:href="@{/study/detail/{id}(id=*{id})}"></a>
+                   th:href="@{/study/detail/{list}/{id}(list='rule', id=*{id})}"></a>
             </th>
             <td>
                 <a th:text="*{name}"
-                   th:href="@{/study/detail/{id}(id=*{id})}"></a>
+                   th:href="@{/study/detail/{list}/{id}(list='rule', id=*{id})}"></a>
             </td>
             <td>
                 <a th:text="*{about}"
-                   th:href="@{/study/detail/{id}(id=*{id})}"></a>
+                   th:href="@{/study/detail/{list}/{id}(list='rule', id=*{id})}"></a>
             </td>
             <td>
                 <a class="badge  mt-2.5"
                    th:text="|*{myStudies.size} / *{capacity}|"
-                   th:href="@{/study/detail/{id}(id=*{id})}"></a>
+                   th:href="@{/study/detail/{list}/{id}(list='rule', id=*{id})}"></a>
             </td>
             <td>
                 <a th:text="*{leader}"
-                   th:href="@{/study/detail/{id}(id=*{id})}"></a>
+                   th:href="@{/study/detail/{list}/{id}(list='rule', id=*{id})}"></a>
             </td>
             <td>
                 <a th:text="|0|"
-                   th:href="@{/study/detail/{id}(id=*{id})}"></a>
+                   th:href="@{/study/detail/{list}/{id}(list='rule', id=*{id})}"></a>
             </td>
         </tr>
 

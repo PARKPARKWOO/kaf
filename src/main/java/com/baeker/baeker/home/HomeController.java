@@ -26,7 +26,7 @@ public class HomeController {
 
         if (rq.isLogin()) {
             log.info("로그인 회원 입장 user id = {}", rq.getMember().getUsername());
-            return "redirect:/member/profile";
+            return "redirect:/member/profile/rank";
         }
 
         log.info("로그아웃 회원 입장");

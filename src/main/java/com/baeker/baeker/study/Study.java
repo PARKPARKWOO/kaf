@@ -49,6 +49,10 @@ public class Study {
     @OneToMany(mappedBy = "study")
     private List<MyStudy> myStudies = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "study")
+    private List<StudyRule> studyRules = new ArrayList<>();
+
 
     //-- create method --//
     public static Study createStudy(String name, String about, Integer capacity, Member member) {
