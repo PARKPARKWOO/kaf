@@ -94,23 +94,31 @@ public class StudyRuleService {
                 .orElseGet(() -> RsData.of("F-1", "StudyRule 조회 실패"));
     }
 
+    // StudyRuleId -> StudyId
+    public Long getStudyId(Long id) {
+        return getStudyRule(id).getData().getStudy().getId();
+    }
+
     public List<StudyRule> getAll() {
         return studyRuleRepository.findAll();
     }
 
-    public Page<StudyRule> getList(int page) {
+    public Page<StudyRule> getList(int page, Long id) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("selectDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return studyRuleRepository.findAll(pageable);
+        return studyRuleRepository.findAllByStudyId(pageable, id);
     }
+
+
+
 
 
     /**
      * 검증
      */
 
-    public RsData<Study> isExist(Rq rq, Long id) {
+    public RsData<Study> verificationLeader(Rq rq, Long id) {
         RsData<Study> rsData = studyService.getStudy(id);
         if (rsData.isSuccess()) {
             if (rsData.getData().getLeader().equals(rq.getMember().getNickName())) {
@@ -119,4 +127,6 @@ public class StudyRuleService {
         }
         return RsData.of("F-1" , "리더가 아닙니다.");
     }
+
+//    public Boolean
 }

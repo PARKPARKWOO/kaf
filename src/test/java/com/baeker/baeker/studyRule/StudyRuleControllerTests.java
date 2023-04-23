@@ -7,6 +7,7 @@ import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.rule.RuleController;
 import com.baeker.baeker.rule.RuleForm;
 import com.baeker.baeker.rule.RuleService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
