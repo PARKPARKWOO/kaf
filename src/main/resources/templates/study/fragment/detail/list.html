@@ -4,15 +4,15 @@
     <div class="tabs flex justify-center mb-7">
 
         <div class="tabs">
-            <a th:href="@{/study/detail/rule/{id}(id=*{study.id})}"
+            <a th:href="@{/study/detail/rule/{id}#list(id=*{study.id})}"
                class="tab tab-bordered"
                th:classappend="${list == 'rule'} ? 'tab-active' : ''">스터디 규칙</a>
 
-            <a th:href="@{/study/detail/member/{id}(id=*{study.id})}"
+            <a th:href="@{/study/detail/member/{id}#list(id=*{study.id})}"
                class="tab tab-bordered"
                th:classappend="${list == 'member'} ? 'tab-active' : ''">맴버</a>
 
-            <a th:href="@{/study/detail/req/{id}(id=*{study.id})}"
+            <a th:href="@{/study/detail/req/{id}#list(id=*{study.id})}"
                class="tab tab-bordered"
                th:classappend="${list == 'req'} ? 'tab-active' : ''">가입 요청</a>
         </div>
