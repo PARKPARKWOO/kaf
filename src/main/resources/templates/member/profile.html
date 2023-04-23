@@ -15,10 +15,10 @@
 
     </div>
 
-    <!-- 스터디 리스트 -->
     <div class="w-full flex  justify-center">
 
-        <div th:replace="~{member/fragment/profile/study :: study}"></div>
+        <div th:replace="~{member/fragment/profile/list :: list(${list})}"></div>
+
 
     </div>
 
