@@ -5,10 +5,11 @@
 <main layout:fragment="content" class="min-h-screen flex flex-col">
 
     <div class="flex flex-col justify-center">
-        <div th:replace="~{study/fragment/profile :: profile(${study})}"></div>
+        <div th:replace="~{study/fragment/detail/profile :: profile(${study})}"></div>
 
         <div class="w-full flex justify-center mt-12">
-            <div th:replace="~{study/fragment/member :: member(${study.myStudies})}"></div>
+
+            <div th:replace="~{study/fragment/detail/list :: list(${study}, ${list})}"></div>
         </div>
     </div>
 

@@ -56,8 +56,9 @@ public class StudyController {
     }
 
     //-- 스터디 상세 페이지 --//
-    @GetMapping("/detail/{id}")
+    @GetMapping("/detail/{list}/{id}")
     public String detail(
+            @PathVariable String list,
             @PathVariable Long id,
             Model model
     ) {
@@ -69,6 +70,7 @@ public class StudyController {
             return rq.historyBack(studyRs);
         }
 
+        model.addAttribute("list", list);
         model.addAttribute("study", studyRs.getData());
         log.info("상세페이지 응답 완료");
         return "/study/detail";
