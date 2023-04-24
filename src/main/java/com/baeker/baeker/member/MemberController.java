@@ -8,6 +8,8 @@ import com.baeker.baeker.member.form.MemberModifyForm;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
+import com.baeker.baeker.myStudy.form.MyStudyJoinForm;
+import com.baeker.baeker.myStudy.form.MyStudyModfyMsgForm;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
 import jakarta.validation.Valid;
@@ -28,6 +30,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MyStudyService myStudyService;
     private final Rq rq;
 
 
@@ -75,11 +78,17 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     public String myProfile(
             @PathVariable String list,
+            MyStudyModfyMsgForm form,
             Model model
     ) {
         Member member = rq.getMember();
         log.info("내 프로필 요청 확인 member = {}", member.toString());
 
+        List<MyStudy> myStudies = myStudyService.statusMember(member);
+        List<MyStudy> pending = myStudyService.statusNotMember(member);
+
+        model.addAttribute("myStudies", myStudies);
+        model.addAttribute("pending", pending);
         model.addAttribute("list", list);
         log.info("내 프로필 응답 완료");
         return "member/profile";

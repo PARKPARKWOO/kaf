@@ -1,5 +1,5 @@
-<table th:fragment="study(list, myStudies)"
-       th:if="${list eq 'study'}"
+<table th:fragment="join(list, pending)"
+       th:if="${list eq 'join'}"
        class="table w-full">
     <!-- head -->
     <thead>
@@ -9,12 +9,12 @@
         <th class="flex-grow">소개</th>
         <th>인원</th>
         <th>스터디장</th>
-        <th>랭킹</th>
+        <th>상태</th>
     </tr>
     </thead>
     <tbody>
     <tr class="hover"
-        th:each="myStudy , loop : ${myStudies}"
+        th:each="myStudy , loop : ${pending}"
         th:object="${myStudy.study}">
 
         <th>
@@ -39,8 +39,12 @@
                th:href="@{/study/detail/{list}/{id}(list='rule', id=*{id})}"></a>
         </td>
         <td>
-            <a th:text="|0|"
-               th:href="@{/study/detail/{list}/{id}(list='rule', id=*{id})}"></a>
+            <a class="link link-primary"
+               th:text="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING}? '가입' : '초대'"
+               th:href="@{#my-modal-{id}(id=${myStudy.id})}">
+            </a>
+
+            <div th:replace="~{member/fragment/profile/pending :: pending(${myStudy})}"></div>
         </td>
     </tr>
 

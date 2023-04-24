@@ -102,4 +102,11 @@ public class MyStudy {
         this.msg = null;
         return baekJoon;
     }
+
+    // 초대, 가입 요청 메시지 변경 //
+    protected MyStudy modifyMsg(String msg) {
+        return this.toBuilder()
+                .msg(msg)
+                .build();
+    }
 }

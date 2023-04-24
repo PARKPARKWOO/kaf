@@ -1,0 +1,37 @@
+<div th:fragment="accept(myStudy)"
+     th:id="'my-modal-' + ${myStudy.id}"
+     class="modal">
+
+  <div class="modal-box">
+
+    <h3 th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING}"
+        th:text="|${myStudy.member.nickName} 님의 가입 신청|"
+        class="font-bold text-lg mb-5"></h3>
+
+    <h3 th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).INVITING}"
+        th:text="|${myStudy.member.nickName} 님 초대중|"
+        class="font-bold text-lg"></h3>
+
+    <form th:action="@{/my_study/modify/msg/{id}(id=${myStudy.id})}"
+          method="post" class="mt-5 mb-5 flex flex-col">
+
+
+      <textarea th:text="${myStudy.msg}" name="msg" placeholder="메시지 수정"
+                th:disabled="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING} ? 'disabled'"
+                class="textarea textarea-ghost mb-5 mt-5 w-full"></textarea>
+
+
+      <button th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).INVITING}"
+              class="btn btn-primary">메시지 수정하기</button>
+
+    </form>
+
+    <form th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING}"
+          th:action="@{/my_study/study/accept/{id}(id=${myStudy.id})}" method="post">
+      <button class="btn btn-primary mt-4 w-full" type="submit">초대 수락</button>
+    </form>
+
+    <a href="#" class="btn w-full">확인</a>
+
+  </div>
+</div>

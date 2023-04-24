@@ -1,0 +1,24 @@
+<div th:fragment="join(study, myStudyJoinForm)"
+     class="modal" id="my-modal-2">
+
+  <div class="modal-box">
+
+
+    <h3 th:text="|${study.name}에 가입하기|"
+        class="font-bold text-lg"></h3>
+
+    <form th:action="@{/my_study/join/{id}(id=${study.id})}"
+          method="post" class="mt-5 mb-5 flex flex-col">
+
+
+      <textarea th:field="${myStudyJoinForm.msg}" placeholder="가입 요청 메시지"
+                class="textarea textarea-ghost mb-5 mt-5 w-full"></textarea>
+
+
+      <button class="btn btn-primary">가입하기</button>
+
+      <a href="#" class="btn mt-4">취소</a>
+
+    </form>
+  </div>
+</div>

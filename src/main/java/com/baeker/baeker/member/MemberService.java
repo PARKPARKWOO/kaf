@@ -173,6 +173,17 @@ public class MemberService {
         return RsData.of("S-1", "수정이 완료되었습니다.", member);
     }
 
+    //-- 스터디 가입 여부 확인 --//
+    public boolean isMyStudy(Member member, Study study) {
+        List<MyStudy> myStudies = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudies)
+            if (!myStudy.getStudy().equals(study))
+                return false;
+
+        return true;
+    }
+
 
     //-- 1~999 랜덤숫자 생성 --//
     public List<Integer> random() {
