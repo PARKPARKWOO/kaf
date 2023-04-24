@@ -110,6 +110,6 @@ public class MyStudyController {
 
         MyStudy myStudy = myStudyRs.getData();
         MyStudy modifyMyStudy = myStudyService.modifyMsg(myStudy, msg);
-        return rq.redirectWithMsg("/member/profile/join", "메시지 변경 완료");
+        return rq.historyBack("메시지 변경 완료");
     }
 }

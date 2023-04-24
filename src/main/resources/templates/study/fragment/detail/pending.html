@@ -1,0 +1,61 @@
+<table th:fragment="pending (pending, list)"
+       th:if="${list eq 'pending'}"
+       class="table w-full">
+  <!-- head -->
+  <thead>
+  <tr>
+    <th></th>
+    <th>이름</th>
+    <th>랭킹</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <!-- row -->
+  <tr class="hover"
+      th:each="myStudy , loop : ${pending}">
+
+    <th th:text="${loop.count}"></th>
+
+    <td>
+      <a th:href="@{/member/member/{id}(id=${myStudy.member.id})}">
+        <div class="flex items-center space-x-3">
+          <div class="avatar">
+            <div class="mask mask-squircle w-12 h-12">
+              <img th:src="@{https://avatars.dicebear.com/api/avataaars/__${myStudy.member.profileImg}__.svg}"/>
+            </div>
+          </div>
+          <div>
+            <div th:text="${myStudy.member.nickName}"
+                 class="font-bold">
+            </div>
+            <div th:text="${myStudy.member.about}"
+                 class="text-sm opacity-50">
+            </div>
+          </div>
+        </div>
+      </a>
+    </td>
+
+    <td>
+      <a class="flex justify-center"
+         th:href="@{/member/member/{id}(id=${myStudy.member.id})}">
+        <span th:text="|0|"></span>
+        <br/>
+      </a>
+    </td>
+
+    <td>
+      <a class="link link-primary"
+         href="#my-modal-23">
+        상태
+      </a>
+
+      <div th:replace="~{study/fragment/detail/accept :: accept(${myStudy})}"></div>
+    </td>
+  </tr>
+
+  </tbody>
+
+</table>

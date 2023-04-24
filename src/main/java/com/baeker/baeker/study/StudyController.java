@@ -18,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/study")
@@ -81,6 +83,11 @@ public class StudyController {
             isMyStudy = memberService.isMyStudy(member, studyRs.getData());
         }
 
+        List<MyStudy> myStudies = myStudyService.statusMember(studyRs.getData());
+        List<MyStudy> pending = myStudyService.statusNotMember(studyRs.getData());
+
+        model.addAttribute("myStudies", myStudies);
+        model.addAttribute("pending", pending);
         model.addAttribute("isMyStudy", isMyStudy);
         model.addAttribute("list", list);
         model.addAttribute("study", studyRs.getData());
