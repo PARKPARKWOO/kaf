@@ -177,6 +177,6 @@ public class MyStudyController {
         }
 
         log.info("정식 스터디 원으로 승인 완료");
-        return rq.redirectWithMsg("/study/detaile/member/" + myStudy.getStudy().getId(), acceptRs.getMsg());
+        return rq.redirectWithMsg("/study/detail/member/" + myStudy.getStudy().getId(), acceptRs.getMsg());
     }
 }

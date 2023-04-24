@@ -24,8 +24,14 @@
       <button th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).INVITING}"
               class="btn btn-primary">메시지 수정하기</button>
 
-      <a href="#" class="btn mt-4">확인</a>
-
     </form>
+
+    <form th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING}"
+          th:action="@{/my_study/study/accept/{id}(id=${myStudy.id})}" method="post">
+      <button class="btn btn-primary mt-4 w-full" type="submit">초대 수락</button>
+    </form>
+
+    <a href="#" class="btn w-full">확인</a>
+
   </div>
 </div>
