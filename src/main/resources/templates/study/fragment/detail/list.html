@@ -13,6 +13,7 @@
                th:classappend="${list == 'member'} ? 'tab-active' : ''">맴버</a>
 
             <a th:href="@{/study/detail/pending/{id}#list(id=*{study.id})}"
+               th:if="${@rq.member.nickName eq study.leader}"
                class="tab tab-bordered"
                th:classappend="${list == 'pending'} ? 'tab-active' : ''">가입 요청</a>
         </div>
@@ -24,5 +25,5 @@
 
     <form th:replace="~{study/fragment/detail/members :: members(${myStudies}, ${list})}"></form>
 
-    <form th:replace="~{study/fragment/detail/pending :: pending(${pending}, ${list})}"></form>
+    <form th:replace="~{study/fragment/detail/pending :: pending(${study}, ${pending}, ${list})}"></form>
 </div>

@@ -9,7 +9,7 @@
         <th class="flex-grow">소개</th>
         <th>인원</th>
         <th>스터디장</th>
-        <th></th>
+        <th>상태</th>
     </tr>
     </thead>
     <tbody>
@@ -40,8 +40,8 @@
         </td>
         <td>
             <a class="link link-primary"
-               href="#my-modal-2">
-                상태
+               th:text="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING}? '가입' : '초대'"
+               th:href="@{#my-modal-{id}(id=${myStudy.id})}">
             </a>
 
             <div th:replace="~{member/fragment/profile/pending :: pending(${myStudy})}"></div>

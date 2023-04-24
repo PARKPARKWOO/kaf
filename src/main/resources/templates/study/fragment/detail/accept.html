@@ -1,35 +1,28 @@
 <div th:fragment="accept(myStudy)"
-     class="modal" id="my-modal-23">
+     th:id="'my-modal-' + ${myStudy.id}"
+     class="modal">
 
   <div class="modal-box">
 
-    <!-- 가입요청 경우 활성화 -->
     <h3 th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING}"
         th:text="|${myStudy.member.nickName} 님의 가입 신청|"
         class="font-bold text-lg mb-5"></h3>
 
-    <p th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING}"
-       th:text="${myStudy.msg}"></p>
-
-    <a th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING}"
-       href="#" class="btn mt-4">확인</a>
-
-
-    <!-- 초대한 경우 활성화 -->
     <h3 th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).INVITING}"
         th:text="|${myStudy.member.nickName} 님 초대중|"
         class="font-bold text-lg"></h3>
 
     <form th:action="@{/my_study/modify/msg/{id}(id=${myStudy.id})}"
-          th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).INVITING}"
           method="post" class="mt-5 mb-5 flex flex-col">
 
 
       <textarea th:text="${myStudy.msg}" name="msg" placeholder="메시지 수정"
+                th:disabled="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).PENDING} ? 'disabled'"
                 class="textarea textarea-ghost mb-5 mt-5 w-full"></textarea>
 
 
-      <button class="btn btn-primary">메시지 수정하기</button>
+      <button th:if="${myStudy.status eq T(com.baeker.baeker.myStudy.StudyStatus).INVITING}"
+              class="btn btn-primary">메시지 수정하기</button>
 
       <a href="#" class="btn mt-4">확인</a>
 

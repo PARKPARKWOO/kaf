@@ -4,6 +4,7 @@ import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
+import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
 import com.baeker.baeker.myStudy.form.MyStudyJoinForm;
 import com.baeker.baeker.study.Study;
@@ -111,5 +112,71 @@ public class MyStudyController {
         MyStudy myStudy = myStudyRs.getData();
         MyStudy modifyMyStudy = myStudyService.modifyMsg(myStudy, msg);
         return rq.historyBack("메시지 변경 완료");
+    }
+
+    //-- 초대 승인 --//
+    @PostMapping("/me/accept/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String acceptInvite(
+            @PathVariable Long id
+    ) {
+        log.info("스터디 맴버로 승인 요청 확인 my study id = {}", id);
+        RsData<MyStudy> myStudyRs = myStudyService.getMyStudy(id);
+
+        if (myStudyRs.isFail()) {
+            log.info("my study 조회 실패 error = {}", myStudyRs.getMsg());
+            return rq.historyBack(myStudyRs.getMsg());
+        }
+
+        MyStudy myStudy = myStudyRs.getData();
+        Member member = rq.getMember();
+
+        if (!myStudy.getMember().getNickName().equals(member.getNickName())){
+            log.info("승인 요청자가 본인이 아님 my nickname = {}, 요청자 name = {}", member.getNickName(), myStudy.getMember().getNickName());
+            return rq.historyBack("권한이 없습니다.");
+        }
+
+        RsData<BaekJoon> acceptRs = myStudyService.accept(myStudy);
+
+        if (acceptRs.isFail()) {
+            log.info("승인 실패 error = {}", acceptRs.getMsg());
+            return rq.historyBack(acceptRs.getMsg());
+        }
+
+        log.info("정식 스터디 원으로 승인 완료");
+        return rq.redirectWithMsg("/member/profile/study#list", acceptRs.getMsg());
+    }
+
+    //-- 가입 승인 --//
+    @PostMapping("/study/accept/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String acceptJoin(
+            @PathVariable Long id
+    ) {
+        log.info("스터디 맴버로 승인 요청 확인 my study id = {}", id);
+        RsData<MyStudy> myStudyRs = myStudyService.getMyStudy(id);
+
+        if (myStudyRs.isFail()) {
+            log.info("my study 조회 실패 error = {}", myStudyRs.getMsg());
+            return rq.historyBack(myStudyRs.getMsg());
+        }
+
+        MyStudy myStudy = myStudyRs.getData();
+        Member member = rq.getMember();
+
+        if (!myStudy.getStudy().getLeader().equals(member.getNickName())){
+            log.info("승인 요청자가 스터디 리더가 아님 nick name = {}, leader = {}", member.getNickName(), myStudy.getStudy().getLeader());
+            return rq.historyBack("권한이 없습니다.");
+        }
+
+        RsData<BaekJoon> acceptRs = myStudyService.accept(myStudy);
+
+        if (acceptRs.isFail()) {
+            log.info("승인 실패 error = {}", acceptRs.getMsg());
+            return rq.historyBack(acceptRs.getMsg());
+        }
+
+        log.info("정식 스터디 원으로 승인 완료");
+        return rq.redirectWithMsg("/study/detaile/member/" + myStudy.getStudy().getId(), acceptRs.getMsg());
     }
 }
