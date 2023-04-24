@@ -5,6 +5,7 @@ import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
+import com.baeker.baeker.myStudy.form.MyStudyJoinForm;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,32 @@ public class MyStudyController {
     private final Rq rq;
 
     //-- 가입 신청하기 --//
+    @PostMapping("join/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String join(
+            @PathVariable Long id,
+            MyStudyJoinForm form
+    ){
+        log.info("스터디 가입 요청 확인 study id = {}", id);
+
+        Member member = rq.getMember();
+        RsData<Study> studyRs = studyService.getStudy(id);
+
+        if (studyRs.isFail()) {
+            log.info("study 조회 실패 error = {}", studyRs.getMsg());
+            return rq.historyBack(studyRs.getMsg());
+        }
+
+        RsData<MyStudy> joinRs = myStudyService.join(member, studyRs.getData(), form.getMsg());
+
+        if (joinRs.isFail()) {
+            log.info("스터디 가입 요청 실패 error = {}", joinRs.getMsg());
+            return rq.historyBack(joinRs.getMsg());
+        }
+
+        log.info("스터디 가입 성공 가입 메시지 = {}", joinRs.getData().getMsg());
+        return rq.redirectWithMsg("/study/detail/req/" + studyRs.getData().getId(), joinRs.getMsg());
+    }
 
     //-- 스터디로 초대하기 --//
     @PostMapping("invite/{id}")
@@ -62,6 +89,6 @@ public class MyStudyController {
         }
 
         log.info("초대 성공 초대 메시지 = {}", form.getMsg());
-        return rq.redirectWithMsg("/study/detail/" + studyRs.getData().getId(), inviteRs.getMsg());
+        return rq.redirectWithMsg("/study/detail/req/" + studyRs.getData().getId(), inviteRs.getMsg());
     }
 }

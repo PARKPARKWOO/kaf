@@ -1,4 +1,4 @@
-<div th:fragment="profile (study)"
+<div th:fragment="profile (study, isMyStudy, myStudyJoinForm)"
      class="hero h-80 bg-base-200 flex justify-start">
     <div class="hero-content flex-col lg:flex-row ml-8">
 
@@ -13,19 +13,26 @@
                class="py-6">
             </p>
 
-            <div class="flex gap-5">
-                <span th:if="${@rq.login}">
+            <div th:if="${@rq.login}" class="flex gap-5">
+
+                <span th:if="${study.leader eq @rq.member.getNickName}">
                     <a th:href="@{/studyRule/create/{id}(id=${study.id})}"
-                       th:if="${study.leader eq @rq.member.getNickName}"
                        class="btn btn-primary">규칙 만들기
                     </a>
                 </span>
 
-                <span th:if="${@rq.login}">
+                <span th:if="${study.leader eq @rq.member.getNickName}">
                     <a th:href="@{/study/modify/{id}(id=${study.id})}"
-                       th:if="${study.leader eq @rq.member.getNickName}"
                        class="btn btn-primary">스터디 수정하기
                     </a>
+                </span>
+
+                <span th:unless="${isMyStudy}">
+                    <a href="#my-modal-2"
+                       class="btn btn-primary">스터디 가입하기
+                    </a>
+
+                    <div th:replace="~{study/fragment/detail/join :: join(${study}, ${myStudyJoinForm})}"></div>
                 </span>
             </div>
         </div>

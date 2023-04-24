@@ -3,8 +3,10 @@ package com.baeker.baeker.study;
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
+import com.baeker.baeker.myStudy.form.MyStudyJoinForm;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class StudyController {
 
     private final StudyService studyService;
     private final MyStudyService myStudyService;
+    private final MemberService memberService;
     private final Rq rq;
 
     //-- 스터디 생성 폼 --//
@@ -61,16 +64,24 @@ public class StudyController {
     public String detail(
             @PathVariable String list,
             @PathVariable Long id,
+            MyStudyJoinForm form,
             Model model
     ) {
         log.info("스터디 상세페이지 요청 확인 study id = {}", id);
         RsData<Study> studyRs = studyService.getStudy(id);
+        boolean isMyStudy = true;
 
         if (studyRs.isFail()) {
             log.info("존재하지 않는 id = {}", id);
-            return rq.historyBack(studyRs);
+            return rq.historyBack(studyRs.getMsg());
         }
 
+        if (rq.isLogin()) {
+            Member member = rq.getMember();
+            isMyStudy = memberService.isMyStudy(member, studyRs.getData());
+        }
+
+        model.addAttribute("isMyStudy", isMyStudy);
         model.addAttribute("list", list);
         model.addAttribute("study", studyRs.getData());
         log.info("상세페이지 응답 완료");
@@ -130,7 +141,7 @@ public class StudyController {
         log.info("스터디 수정 처리 요청 확인 id = {}", form.getId());
         RsData<Study> studyRs = studyService.getStudy(id);
 
-        if (studyRs.isFail()){
+        if (studyRs.isFail()) {
             log.info("존재하지 않는 id 입니다. id = {}", id);
             return rq.historyBack(studyRs.getMsg());
         }
