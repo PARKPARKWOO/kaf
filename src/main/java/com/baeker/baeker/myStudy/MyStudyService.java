@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,5 +116,37 @@ public class MyStudyService {
                 return RsData.of("F-1", "이미 가입한 스터디입니다.");
         }
         return RsData.of("S-1", "성공");
+    }
+
+    //-- member 등급인 my study 만 조회 --//
+    public List<MyStudy> statusMember(Member member) {
+        List<MyStudy> myStudies = new ArrayList<>();
+        List<MyStudy> myStudyList = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudyList)
+            if (myStudy.getStatus().equals(StudyStatus.MEMBER))
+                myStudies.add(myStudy);
+
+        return myStudies;
+    }
+
+
+    //-- member 등급이 아닌 my study 조회 --//
+    public List<MyStudy> statusNotMember(Member member) {
+        List<MyStudy> pending = new ArrayList<>();
+        List<MyStudy> myStudies = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudies)
+            if (!myStudy.getStatus().equals(StudyStatus.MEMBER))
+                pending.add(myStudy);
+
+        return pending;
+    }
+
+    //-- 초대, 가입 요청 메시지 변경 --//
+    @Transactional
+    public MyStudy modifyMsg(MyStudy myStudy, String msg) {
+        MyStudy modify = myStudy.modifyMsg(msg);
+        return myStudyRepository.save(modify);
     }
 }

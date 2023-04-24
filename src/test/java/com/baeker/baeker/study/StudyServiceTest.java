@@ -77,7 +77,7 @@ class StudyServiceTest {
         assertThat(study.getCapacity()).isEqualTo(8);
         assertThat(studies.size()).isEqualTo(1);
 
-        StudyModifyForm form = new StudyModifyForm( "study2", "hello", 10);
+        StudyModifyForm form = new StudyModifyForm( study.getId(), "study2", "hello", 10);
         RsData<Study> modifyRs = studyService.modify(form, study.getId());
         studies = studyService.getAll();
 

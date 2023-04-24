@@ -125,4 +125,22 @@ class MyStudyServiceTest {
         assertThat(invite2.getData().getStatus()).isEqualTo(StudyStatus.MEMBER);
         assertThat(invite2.getData().getMember().getNickName()).isEqualTo("member2");
     }
+
+    @Test
+    void 요청_메시지_수정() {
+        Member leader = create("user", "leader");
+        Study study = createStudy("study", leader);
+
+        Member member1 = create("user1", "member1");
+        RsData<MyStudy> myStudyRs = myStudyService.join(member1, study, "hi");
+        MyStudy myStudy = myStudyRs.getData();
+
+        assertThat(myStudyRs.getResultCode()).isEqualTo("S-1");
+        assertThat(myStudy.getMsg()).isEqualTo("hi");
+
+        // 메시지 수정
+        MyStudy modifyMsg = myStudyService.modifyMsg(myStudy, "hello");
+
+        assertThat(myStudy.getMsg()).isEqualTo("hello");
+    }
 }

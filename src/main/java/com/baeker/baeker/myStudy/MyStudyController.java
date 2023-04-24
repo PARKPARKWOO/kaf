@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class MyStudyController {
     public String join(
             @PathVariable Long id,
             MyStudyJoinForm form
-    ){
+    ) {
         log.info("스터디 가입 요청 확인 study id = {}", id);
 
         Member member = rq.getMember();
@@ -55,7 +56,7 @@ public class MyStudyController {
         }
 
         log.info("스터디 가입 성공 가입 메시지 = {}", joinRs.getData().getMsg());
-        return rq.redirectWithMsg("/study/detail/req/" + studyRs.getData().getId(), joinRs.getMsg());
+        return rq.redirectWithMsg("/member/profile/join", joinRs.getMsg());
     }
 
     //-- 스터디로 초대하기 --//
@@ -90,5 +91,25 @@ public class MyStudyController {
 
         log.info("초대 성공 초대 메시지 = {}", form.getMsg());
         return rq.redirectWithMsg("/study/detail/req/" + studyRs.getData().getId(), inviteRs.getMsg());
+    }
+
+    //-- 초대, 가입 요청 매시지 수정 --//
+    @PostMapping("/modify/msg/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String modifyMsg(
+            @PathVariable Long id,
+            @RequestParam String msg
+    ) {
+        log.info("메시지 수정 요청 확인 my study id = {}", id);
+        RsData<MyStudy> myStudyRs = myStudyService.getMyStudy(id);
+
+        if (myStudyRs.isFail()) {
+            log.info("스터디 조회 실패 error = {}", myStudyRs.getMsg());
+            return rq.historyBack(myStudyRs.getMsg());
+        }
+
+        MyStudy myStudy = myStudyRs.getData();
+        MyStudy modifyMyStudy = myStudyService.modifyMsg(myStudy, msg);
+        return rq.redirectWithMsg("/member/profile/join", "메시지 변경 완료");
     }
 }
