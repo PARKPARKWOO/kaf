@@ -20,8 +20,21 @@
     <div class="form-control">
         <label class="label">
             <span class="label-text">스터디 최대 인원</span>
+            <span th:text="*{capacity}"></span>
         </label>
-        <input type="text" th:field="*{capacity}" placeholder="인원" class="input input-bordered" autofocus />
+        <input type="range" min="1" max="20" class="range range-xs" step="1"
+               autofocus onchange="$(this).keyup();"
+               onkeyup="$(this).prev().children(':last-child').text(this.value.trim());"
+               onpaste="setTimeoutZero(() => $(this).keyup());"
+               th:field="*{capacity}"/>
+
+        <div class="w-full flex justify-between text-xs px-2 mt-3">
+            <span>1</span><span></span><span></span><span></span>
+            <span>5</span><span></span><span></span><span></span><span></span>
+            <span>10</span><span></span><span></span><span></span><span></span>
+            <span>15</span><span></span><span></span><span></span><span></span>
+            <span>20</span>
+        </div>
     </div>
 
 

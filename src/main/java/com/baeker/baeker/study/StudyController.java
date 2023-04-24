@@ -31,6 +31,7 @@ public class StudyController {
     @PreAuthorize("isAuthenticated()")
     public String createForm(StudyCreateForm form) {
         log.info("스터디 생성폼 요청 확인");
+        form.setCapacity(10);
         return "/study/create";
     }
 
@@ -52,7 +53,7 @@ public class StudyController {
         myStudyService.create(member, study);
 
         log.info("스터디 생성 완료 study name = {}", study.getName());
-        return rq.redirectWithMsg("/study/detail/" + study.getId(), "스터디 개설 완료!");
+        return rq.redirectWithMsg("/study/detail/rule/" + study.getId(), "스터디 개설 완료!");
     }
 
     //-- 스터디 상세 페이지 --//

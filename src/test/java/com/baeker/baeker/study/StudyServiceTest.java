@@ -108,10 +108,4 @@ class StudyServiceTest {
 
         assertThat(modifyStudy.getLeader()).isEqualTo("memberB");
     }
-
-    @Test
-    void name() {
-
-
-    }
 }
