@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class RuleService {
 
     private final RuleRepository ruleRepository;
@@ -24,6 +24,7 @@ public class RuleService {
     /**
      * 생성
      */
+    @Transactional
     public RsData<Rule> create(RuleForm ruleForm) {
         Rule rule = Rule.builder()
                 .name(ruleForm.getName())
@@ -40,6 +41,7 @@ public class RuleService {
      * 수정
      */
 
+    @Transactional
     public void modify(Rule rule, RuleForm ruleForm) {
         Rule rule1 = rule.toBuilder()
                 .name(ruleForm.getName())
@@ -51,6 +53,7 @@ public class RuleService {
         ruleRepository.save(rule1);
         RsData.of("S-1", "규칙이 수정 되었습니다.", rule1);
     }
+    @Transactional
     public void setModify(Rule rule, RuleForm ruleForm) {
         ruleForm.setName(rule.getName());
         ruleForm.setAbout(rule.getAbout());
@@ -95,6 +98,7 @@ public class RuleService {
     /**
      * 삭제
      */
+    @Transactional
     public void delete(Rule rule) {
         this.ruleRepository.delete(rule);
         RsData.of("S-1", "규칙이 삭제 되었습니다.");
