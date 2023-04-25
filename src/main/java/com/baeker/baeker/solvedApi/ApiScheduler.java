@@ -26,7 +26,7 @@ public class ApiScheduler {
     private final MemberService memberService;
 
     /**
-     * 티어 체크 후 Study
+     * 티어 별 check
      */
 
     @Scheduled(fixedRate = 1000)

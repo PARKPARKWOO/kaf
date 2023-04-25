@@ -5,11 +5,14 @@ import com.baeker.baeker.base.request.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/rule")
@@ -83,12 +86,20 @@ public class RuleController {
     }
 
     /**
-     * 조회/목록
+     * 조회/목록/검색
      */
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<Rule> paging = ruleService.getList(page);
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0")
+                       int page, String keyword) {
+
+        Page<Rule> paging;
+        if (keyword != null) {
+            paging = ruleService.getList(keyword, page);
+        } else {
+            paging = ruleService.getList(page);
+        }
+
         model.addAttribute("paging", paging);
         return "rule/ruleList";
     }

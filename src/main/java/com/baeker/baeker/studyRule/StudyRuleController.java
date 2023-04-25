@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.relation.Role;
 import java.util.List;
 
 @Controller
@@ -56,7 +57,7 @@ public class StudyRuleController {
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
         }
-        return rq.redirectWithMsg(String.format("/studyRule/list/%s", id), rsData.getMsg());
+        return rq.redirectWithMsg(String.format("/study/detail/rule/%s", id), rsData.getMsg());
     }
 
     /**
@@ -118,7 +119,7 @@ public class StudyRuleController {
 
         RsData<StudyRule> rsData = studyRuleService.getStudyRule(id);
         if (studyRuleService.delete(rsData.getData(), rsData.getData().getStudy().getLeader(), rq.getMember().getNickName()).isSuccess()) {
-            return rq.redirectWithMsg("/studyRule/list", "삭제 되었습니다.");
+            return rq.redirectWithMsg(String.format("/study/list/%s", studyId), "삭제 되었습니다.");
         }
         return rq.historyBack(rsData);
     }
@@ -126,14 +127,6 @@ public class StudyRuleController {
     /**
      * 조회
      */
-    @GetMapping("/list/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String showList(Model model, @PathVariable("id") Long id, @RequestParam(defaultValue = "0") int page){
-        Page<StudyRule> paging = studyRuleService.getList(page, id);
-        model.addAttribute("paging", paging);
-        return "studyRule/studyRuleList";
-    }
-
     @GetMapping("/detail/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showDetail(@PathVariable("id") Long id, Model model){
