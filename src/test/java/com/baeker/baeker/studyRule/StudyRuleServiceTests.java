@@ -50,11 +50,11 @@ public class StudyRuleServiceTests {
     }
 
     @Test
-    @DisplayName(value = "단순 CRUD 테스트")
+    @DisplayName(value = "생성 메서드 테스트")
     void createTests() {
         //
-        RuleForm ruleForm = new RuleForm("name", "about", "1","provider", "gold");
-        Member member =  create("wy9295", "wy9295");
+        RuleForm ruleForm = new RuleForm("name", "about", "1", "provider", "gold");
+        Member member = create("wy9295", "wy9295");
         Study study = createStudy("study", "study", 1, member).getData();
         StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
 
@@ -65,10 +65,32 @@ public class StudyRuleServiceTests {
         assertThat(studyRule.getName()).isEqualTo("aaaa");
         System.out.println(rsData.getMsg());
 
+        // 삭제 메서드 //
+        Optional<StudyRule> opDelete = studyRuleRepository.findById(1L);
+        opDelete.ifPresent(value -> studyRuleService.delete(value, "wy9295", "wy9295"));
+        assertThat(studyRuleService.getStudyRule(1L).getData()).isNull();
+    }
+
+    @Test
+    @DisplayName("수정 메서드")
+    void modifyTests() {
+        //
+        RuleForm ruleForm = new RuleForm("name", "about", "1", "provider", "gold");
+        Member member = create("wy9295", "wy9295");
+        Study study = createStudy("study", "study", 1, member).getData();
+        StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
+
+        //생성 메서드 //
+        Rule rule = ruleService.create(ruleForm).getData();
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, study);
+        StudyRule studyRule = rsData.getData();
+        assertThat(studyRule.getName()).isEqualTo("aaaa");
+
+        String leader = studyRule.getStudy().getLeader();
 
         //수정 메서드 //
         StudyRuleForm ruleForm1 = new StudyRuleForm("wy9295", "소개2", study.getId());
-        Optional<StudyRule> optionalRule = studyRuleRepository.findById(1L);
+        Optional<StudyRule> optionalRule = studyRuleRepository.findByName("aaaa");
         if (optionalRule.isEmpty()) {
             System.out.println("실패 테스트임 !! 값이없다!!!!!!");
         }
@@ -77,6 +99,25 @@ public class StudyRuleServiceTests {
         studyRuleService.modify(studyRule1, ruleForm1);
 
         assertThat(studyRule1.getName()).isEqualTo("wy9295");
+    }
+
+
+    @Test
+    @DisplayName("삭제 메서드 테스트")
+    void deleteTests() {
+        //
+        RuleForm ruleForm = new RuleForm("name", "about", "1", "provider", "gold");
+        Member member = create("wy9295", "wy9295");
+        Study study = createStudy("study", "study", 1, member).getData();
+        StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
+
+        //생성 메서드 //
+        Rule rule = ruleService.create(ruleForm).getData();
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, study);
+        StudyRule studyRule = rsData.getData();
+        assertThat(studyRule.getName()).isEqualTo("aaaa");
+        System.out.println(rsData.getMsg());
+
         // 삭제 메서드 //
         Optional<StudyRule> opDelete = studyRuleRepository.findById(1L);
         opDelete.ifPresent(value -> studyRuleService.delete(value, "wy9295", "wy9295"));

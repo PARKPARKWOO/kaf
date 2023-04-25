@@ -26,18 +26,18 @@
         <div class="content-start" style="display: flex;">
             <!--                <a href="/rule/ruleList" class="text-blue-500">목록으로 돌아가기</a>-->
             <div class="p-1">
-                <form th:action="${'/studyRule/list'}">
+                <form th:action="@{|/study/detail/rule/${studyRule.study.id}|}">
                     <button class="btn btn-primary">목록</button>
                 </form>
             </div>
             <div class="p-1">
-                <form th:action="@{|/studyRule/delete/${studyRule.id}|}" th:method="DELETE">
+                <form th:if="${studyRule.study.leader eq @rq.member.getNickName}" th:action="@{|/studyRule/delete/${studyRule.id}|}" th:method="DELETE">
                     <button class="btn btn-primary" onclick="deleteItem(); return false;">삭제</button>
                 </form>
             </div>
             <div class="p-1">
 
-                <form th:action="@{|/studyRule/modify/${studyRule.id}|}" method="get">
+                <form th:if="${studyRule.study.leader eq @rq.member.getNickName}" th:action="@{|/studyRule/modify/${studyRule.id}|}" method="get">
                     <button class="btn btn-primary" onclick="editItem(); return false;">수정</button>
                 </form>
             </div>

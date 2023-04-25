@@ -36,7 +36,6 @@ public class SolvedApiManager {
     }
 
     private String getProblemStats(String studyId) throws UnsupportedEncodingException{
-        RestTemplate restTemplate = new RestTemplate();
         return BASE_URL +
                 api_problem +
                 api_handle +

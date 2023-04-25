@@ -13,17 +13,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
+
 
 @Entity
 @Builder(toBuilder = true)
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Rule {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "rule_id")
     private Long id;
 
@@ -34,7 +38,6 @@ public class Rule {
     private String provider;
 
     private Integer xp;
-
     private String difficulty;
 
     @CreatedDate
@@ -43,7 +46,7 @@ public class Rule {
     @LastModifiedDate
     private LocalDateTime modifyDate;
 
-    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rule", cascade = ALL)
     @Builder.Default
     private List<StudyRule> studyRules = new ArrayList<>();
 

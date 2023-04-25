@@ -21,7 +21,6 @@ public class RuleService {
 
     private final RuleRepository ruleRepository;
 
-
     /**
      * 생성
      */
@@ -86,6 +85,13 @@ public class RuleService {
         return ruleRepository.findAll(pageable);
     }
 
+    public Page<Rule> getList(String keyword, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return ruleRepository.findByNameContaining(keyword, pageable);
+    }
+
     /**
      * 삭제
      */
@@ -93,6 +99,5 @@ public class RuleService {
         this.ruleRepository.delete(rule);
         RsData.of("S-1", "규칙이 삭제 되었습니다.");
     }
-
 
 }

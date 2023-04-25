@@ -42,6 +42,7 @@ public class StudyRuleService {
                 .study(study)
                 .build();
         studyRule.getRule().getStudyRules().add(studyRule);
+        studyRule.getStudy().getStudyRules().add(studyRule);
         studyRuleRepository.save(studyRule);
         return RsData.of("S-1", "스터디 규칙 생성완료.", studyRule);
     }
@@ -103,14 +104,6 @@ public class StudyRuleService {
         return studyRuleRepository.findAll();
     }
 
-    public Page<StudyRule> getList(int page, Long id) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("selectDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return studyRuleRepository.findAllByStudyId(pageable, id);
-    }
-
-
 
 
 
@@ -128,5 +121,4 @@ public class StudyRuleService {
         return RsData.of("F-1" , "리더가 아닙니다.");
     }
 
-//    public Boolean
 }
