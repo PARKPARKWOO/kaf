@@ -53,7 +53,7 @@ public class RuleService {
         ruleRepository.save(rule1);
         RsData.of("S-1", "규칙이 수정 되었습니다.", rule1);
     }
-    @Transactional
+
     public void setModify(Rule rule, RuleForm ruleForm) {
         ruleForm.setName(rule.getName());
         ruleForm.setAbout(rule.getAbout());

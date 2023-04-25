@@ -29,7 +29,7 @@ public class RuleController {
 
     @GetMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public String showCreate() {
+    public String showCreate(RuleForm ruleForm) {
         return "rule/create";
     }
 

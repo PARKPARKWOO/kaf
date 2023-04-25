@@ -29,8 +29,6 @@ public class StudyRuleController {
     private final Rq rq;
     private final RuleService ruleService;
 
-    private final StudyService studyService;
-
     /**
      * 생성
      */
