@@ -8,32 +8,41 @@
         <label class="label">
             <span class="label-text">규칙 명</span>
         </label>
-        <input type="text" name="name" placeholder="규칙 이름" class="input input-bordered" autofocus/>
+        <input type="text" th:field="*{name}" placeholder="규칙 이름" class="input input-bordered"/>
     </div>
 
     <div class="form-control">
         <label class="label">
             <span class="label-text">Rule 소개</span>
         </label>
-        <input type="text" name="about" placeholder="간단 소개" class="input input-bordered"
-               autofocus/>
+        <input type="text" th:field="*{about}" placeholder="간단 소개" class="input input-bordered"/>
     </div>
 
     <div class="form-control">
         <label class="label">
             <span class="label-text">경험치</span>
         </label>
-        <input type="text" name="xp" placeholder="경험치" class="input input-bordered"
-               autofocus/>
+        <input type="text" th:field="*{xp}" placeholder="경험치" class="input input-bordered"/>
     </div>
 
-    <div class="form-control">
+    <section class="flex flex-col">
         <label class="label">
-            <span class="label-text">사용하는 OJ</span>
+            <span class="label-text">OJ사이트</span>
         </label>
-        <input type="text" name="provider" placeholder="OJ 사이트" class="input input-bordered"
-               autofocus/>
-    </div>
+
+        <div class="form-control flex-content">
+                <label class="label cursor-pointer">
+                    <span class="peer-checked:text-[red] label-text">백준</span>
+                    <input type="radio" th:field="*{provider}" value="BaekJoon" class="peer radio focus:bg-red-100">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="peer-checked:text-[red] label-text">프로그래머스</span>
+                    <input type="radio" th:field="*{provider}" value="Programmers" class="peer radio focus:bg-red-100">
+                </label>
+            </div>
+    </section>
 
     <!--  난이도  -->
     <section class="flex">
@@ -42,43 +51,43 @@
             <div class="form-control">
                 <label class="label cursor-pointer">
                     <span class="peer-checked:text-[red] label-text">ALL</span>
-                    <input type="radio" name="difficulty" value="ALL" class="peer radio focus:bg-red-100">
+                    <input type="radio" th:field="*{difficulty}" value="ALL" class="peer radio focus:bg-red-100">
                 </label>
             </div>
             <div class="form-control">
                 <label class="label cursor-pointer">
                     <span class="peer-checked:text-[red] label-text">BRONZE</span>
-                    <input type="radio" name="difficulty" value="BRONZE" class="peer radio focus:bg-red-100">
+                    <input type="radio" th:field="*{difficulty}" value="BRONZE" class="peer radio focus:bg-red-100">
                 </label>
             </div>
             <div class="form-control">
                 <label class="label cursor-pointer">
                     <span class="peer-checked:text-[red] label-text">SILVER</span>
-                    <input type="radio" name="difficulty" value="SILVER" class="peer radio focus:bg-red-100">
+                    <input type="radio" th:field="*{difficulty}" value="SILVER" class="peer radio focus:bg-red-100">
                 </label>
             </div>
             <div class="form-control">
                 <label class="label cursor-pointer">
                     <span class="peer-checked:text-[red] label-text">GOLD</span>
-                    <input type="radio" name="difficulty" value="GOLD" class="peer radio focus:bg-red-100">
+                    <input type="radio" th:field="*{difficulty}" value="GOLD" class="peer radio focus:bg-red-100">
                 </label>
             </div>
             <div class="form-control">
                 <label class="label cursor-pointer">
                     <span class="peer-checked:text-[red] label-text">PLATINUM</span>
-                    <input type="radio" name="difficulty" value="PLATINUM" class="peer radio focus:bg-red-100">
+                    <input type="radio" th:field="*{difficulty}" value="PLATINUM" class="peer radio focus:bg-red-100">
                 </label>
             </div>
             <div class="form-control">
                 <label class="label cursor-pointer">
                     <span class="peer-checked:text-[red] label-text">DIAMOND</span>
-                    <input type="radio" name="difficulty" value="DIAMOND" class="peer radio focus:bg-red-100">
+                    <input type="radio" th:field="*{difficulty}" value="DIAMOND" class="peer radio focus:bg-red-100">
                 </label>
             </div>
             <div class="form-control">
                 <label class="label cursor-pointer">
                     <span class="peer-checked:text-[red] label-text">RUBY</span>
-                    <input type="radio" name="difficulty" value="RUBY" class="peer radio focus:bg-red-100">
+                    <input type="radio" th:field="*{difficulty}" value="RUBY" class="peer radio focus:bg-red-100">
                 </label>
             </div>
         </label>

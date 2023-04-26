@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class StudyRuleService {
 
     private final StudyRuleRepository studyRuleRepository;
@@ -34,6 +34,7 @@ public class StudyRuleService {
      * 생성
      */
 
+    @Transactional
     public RsData<StudyRule> create(StudyRuleForm studyRuleForm, Rule rule, Study study) {
         StudyRule studyRule = StudyRule.builder()
                 .name(studyRuleForm.getName())
@@ -51,6 +52,7 @@ public class StudyRuleService {
      * 수정
      */
 
+    @Transactional
     public void modify(StudyRule studyRule, StudyRuleForm studyRuleForm) {
         StudyRule modifyRule = studyRule.toBuilder()
                 .name(studyRuleForm.getName())
@@ -69,6 +71,7 @@ public class StudyRuleService {
      * 삭제
      */
 
+    @Transactional
     public RsData<StudyRule> delete(StudyRule studyRule, String leader, String user) {
         if (leader.equals(user)) {
             studyRule.getRule().getStudyRules().remove(studyRule);

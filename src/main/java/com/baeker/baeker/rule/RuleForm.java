@@ -12,18 +12,18 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @Data
 @AllArgsConstructor
 public class RuleForm {
-    @NotBlank(message = "규칙 이름을 정해주세요.")
+    @NotBlank
     @Size(max = 10, min = 1)
     private String name;
 
     @Size(max = 30)
+    @NotBlank
     private String about;
 
     @NotEmpty
     @Size(min = 1, max = 10)
     private String xp;
 
-    @Size(min = 2, max = 2)
     @NotBlank
     private String provider;
 

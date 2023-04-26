@@ -29,8 +29,6 @@ public class StudyRuleController {
     private final Rq rq;
     private final RuleService ruleService;
 
-    private final StudyService studyService;
-
     /**
      * 생성
      */
@@ -119,7 +117,7 @@ public class StudyRuleController {
 
         RsData<StudyRule> rsData = studyRuleService.getStudyRule(id);
         if (studyRuleService.delete(rsData.getData(), rsData.getData().getStudy().getLeader(), rq.getMember().getNickName()).isSuccess()) {
-            return rq.redirectWithMsg(String.format("/study/list/%s", studyId), "삭제 되었습니다.");
+            return rq.redirectWithMsg(String.format("/study/detail/rule/%s", studyId), "삭제 되었습니다.");
         }
         return rq.historyBack(rsData);
     }

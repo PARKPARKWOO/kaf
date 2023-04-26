@@ -17,7 +17,13 @@
         }
 
         //-- 소개 검증 --//
-        form.about.value = form.name.value.trim();
+        form.about.value = form.about.value.trim();
+
+        if (form.about.value.length == 0) {
+            toastWarning('규칙명을 입력해주세요.');
+            form.about.focus();
+            return;
+        }
 
         if (form.about.value.length > 30) {
             toastWarning('30자 이내로 작성해주세요.');
@@ -31,12 +37,12 @@
 
         if (form.xp.value.length == 0) {
             toastWarning('경험치 작성해주세요!');
-            form.provider.focus();
+            form.xp.focus();
             return;
         }
         if (form.xp.value.length > 10) {
             toastWarning('10글자 이내로 작성해주세요');
-            form.provider.focus();
+            form.xp.focus();
             return;
         }
 

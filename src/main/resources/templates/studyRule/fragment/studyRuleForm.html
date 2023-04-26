@@ -1,7 +1,7 @@
 <form th:fragment="studyRuleForm (studyRuleForm)"
       th:action th:object="${studyRuleForm}" method="post"
       class="flex flex-col gap-6"
-      onsubmit="StudyRuleForm__submit(this); return false;">
+      onsubmit="StudyRuleForm__submit(this); return false;" xmlns="http://www.w3.org/1999/html">
 
 
     <div class="form-control">
@@ -27,7 +27,7 @@
         <label class="label">
             <span class="label-text">Rule 소개</span>
         </label>
-        <input type="text" th:field="*{about}" placeholder="간단 소개" class="input input-bordered" >
+        <input type="text" th:field="*{about}" placeholder="간단 소개" class="input input-bordered" />
     </div>
 
 <!--        <div class="form-control" hidden="hidden">-->
