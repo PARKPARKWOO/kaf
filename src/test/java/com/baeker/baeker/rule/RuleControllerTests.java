@@ -70,38 +70,38 @@ public class RuleControllerTests {
     }
 
 
-//    @Test
-//    @WithUserDetails("user10")
-//    @DisplayName("로그인 했을때 create")
-//    void createTests() throws Exception {
-//
-//
-//        // WHEN
-//        ResultActions resultActions = mvc
-//                .perform(get("/rule/create"))
-//                .andDo(print());
-//
-//        // THEN
-//        resultActions
-//                .andExpect(handler().handlerType(RuleController.class))
-//                .andExpect(handler().methodName("showCreate"))
-//                .andExpect(status().is2xxSuccessful())
-//                .andExpect(content().string(containsString("""
-//                        <input type="text" th:field="*{name}"
-//                        """.stripIndent().trim())))
-//                .andExpect(content().string(containsString("""
-//                        <input type="text" th:field="*{about}"
-//                        """.stripIndent().trim())))
-//                .andExpect(content().string(containsString("""
-//                        <input type="radio" th:field="*{provider}" value="BaekJoon"
-//                        """.stripIndent().trim())))
-//                .andExpect(content().string(containsString("""
-//                        <input type="radio" th:field="*{difficulty}" value="ALL"
-//                        """.stripIndent().trim())))
-//                .andExpect(content().string(containsString("""
-//                        <input type="radio" th:field="*{difficulty}" value="BRONZE"
-//                        """.stripIndent().trim())));
-//    }
+    @Test
+    @WithUserDetails("user10")
+    @DisplayName("로그인 했을때 create")
+    void createTests() throws Exception {
+
+
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(get("/rule/create"))
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(handler().handlerType(RuleController.class))
+                .andExpect(handler().methodName("showCreate"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().string(containsString("""
+                        <input type="text" placeholder="규칙 이름"
+                        """.stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                       <input type="text" placeholder="간단 소개"
+                        """.stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                        <input type="radio" value="BaekJoon"
+                        """.stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                       <input type="radio" value="Programmers"
+                        """.stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                       <input type="radio" value="ALL"
+                        """.stripIndent().trim())));
+    }
 
     @Test
     @DisplayName("create Form POST AND Modify")

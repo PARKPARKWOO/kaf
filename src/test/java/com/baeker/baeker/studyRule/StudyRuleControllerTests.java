@@ -7,6 +7,7 @@ import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.rule.RuleController;
 import com.baeker.baeker.rule.RuleForm;
 import com.baeker.baeker.rule.RuleService;
+import com.baeker.baeker.study.Study;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -75,10 +78,9 @@ public class StudyRuleControllerTests {
 //    @DisplayName("로그인 했을때 create")
 //    void createTests() throws Exception {
 //
-//
 //        // WHEN
 //        ResultActions resultActions = mvc
-//                .perform(get("/studyRule/create/").param("id", "1"))
+//                .perform(get("/studyRule/create/" ))
 //                .andDo(print());
 //
 //        // THEN
@@ -87,10 +89,10 @@ public class StudyRuleControllerTests {
 //                .andExpect(handler().methodName("showForm"))
 //                .andExpect(status().is2xxSuccessful())
 //                .andExpect(content().string(containsString("""
-//                        <input type="text" th:field="*{name}" placeholder="규칙 이름" class="input input-bordered" autofocus/>
+//                        <input type="text" placeholder="규칙 이름" class="input input-bordered" autofocus/>
 //                        """.stripIndent().trim())))
 //                .andExpect(content().string(containsString("""
-//                        <input type="text" th:field="*{about}" placeholder="간단 소개" class="input input-bordered" autofocus/>
+//                        <input type="text" placeholder="간단 소개" class="input input-bordered" autofocus/>
 //                        """.stripIndent().trim())));
 //
 //    }

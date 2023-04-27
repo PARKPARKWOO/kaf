@@ -32,4 +32,10 @@ public class HomeController {
         log.info("로그아웃 회원 입장");
         return "member/home";
     }
+
+
+    @GetMapping("/chat")
+    public String chat() {
+        return "layout/chat";
+    }
 }
