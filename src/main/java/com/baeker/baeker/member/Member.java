@@ -40,6 +40,7 @@ public class Member {
     private String provider;
     private String token;
     private String email;
+    private String accessToken;
 
     @CreatedDate
     private LocalDateTime createDate;
@@ -57,7 +58,7 @@ public class Member {
 
 
     //-- crate method --//
-    protected static Member createMember(String provider, String username, String name, String about, String password, Integer profileImg, String email) {
+    protected static Member createMember(String provider, String username, String name, String about, String password, Integer profileImg, String email, String token) {
         return builder()
                 .provider(provider)
                 .username(username)
@@ -66,6 +67,7 @@ public class Member {
                 .password(password)
                 .profileImg(profileImg)
                 .email(email)
+                .accessToken(token)
                 .build();
     }
 

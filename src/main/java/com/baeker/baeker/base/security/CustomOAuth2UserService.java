@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private String nickName;
     private String profileImage;
     private String email;
+    private String token;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) {
@@ -34,11 +36,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         switch (provider) {
             case "NAVER" -> naverPathing(oAuth2User);
-            case "KAKAO" -> kakaoPathing(oAuth2User);
+            case "KAKAO" -> kakaoPathing(oAuth2User, userRequest);
             default -> username = oAuth2User.getName();
         }
 
-        Member member = memberService.whenSocialLogin(provider, username, nickName, email).getData();
+        Member member = memberService.whenSocialLogin(provider, username, nickName, email, token).getData();
         return new CustomOAuth2User(member.getUsername(), member.getPassword(), member.getGrantedAuthorities());
     }
 
@@ -53,12 +55,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     //-- 카카오 Json mapping --//
-    private void kakaoPathing(OAuth2User oAuth2User) {
+    private void kakaoPathing(OAuth2User oAuth2User, OAuth2UserRequest userRequest) {
         Map<String, Object> attributes = oAuth2User.getAttributes();
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
         String nickname = (String) profile.get("nickname");
         String email = (String) kakaoAccount.get("email");
+
+        this.token = userRequest.getAccessToken().getTokenValue();
 
         this.username = oAuth2User.getName();
         this.nickName = nickname;
