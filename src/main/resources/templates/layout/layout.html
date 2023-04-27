@@ -38,7 +38,9 @@
 <!-- nav-bar 끝 -->
 
 <!-- body 시작 -->
+
 <main layout:fragment="content" ></main>
+
 <!-- body 끝 -->
 
 <script th:inline="javascript">
@@ -71,8 +73,14 @@
         }
     });
 
-
+    $(function () {
+        $("#flexSwitchCheckChecked").click(function () {
+            $("#Toggle").toggle();
+        });
+    });
 </script>
-
+<div id="Toggle" th:if="${@rq.login}" class="sticky inset-y-0 right-0" dir="rtl">
+<iframe src="https://service.dongledongle.com/Baeker" frameborder="0" width="30%" class="start-0" height="300"></iframe>
+</div>
 </body>
 </html>
