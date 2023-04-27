@@ -85,18 +85,18 @@ public class MemberService {
         if (!form.getPassword().equals(form.getPassword2()))
             return RsData.of("F-1", "비밀번호가 일치하지 않습니다.");
 
-        return join("Baeker", form.getUsername(), form.getNickName(), form.getAbout(), form.getPassword(), form.getProfileImg());
+        return join("Baeker", form.getUsername(), form.getNickName(), form.getAbout(), form.getPassword(), form.getProfileImg(), "", ""); // !!! 일반 로그인 이메일 항목 추가해야 함!!!
     }
 
     //-- Social Join, Login --//
     @Transactional
-    public RsData<Member> whenSocialLogin(String provider, String username, String name) {
+    public RsData<Member> whenSocialLogin(String provider, String username, String name, String email, String token) {
         Optional<Member> opMember = getMember(username);
 
         if (opMember.isPresent())
             return RsData.of("S-2", "로그인 되었습니다.", opMember.get());
 
-        return join(provider, username, name, "", "", null);
+        return join(provider, username, name, "", "", null, email, token);
     }
 
 
@@ -122,7 +122,7 @@ public class MemberService {
 
 
     //-- Join : Social + Security 실질적인 처리 --//
-    private RsData<Member> join(String provider, String username, String name, String about, String password, Integer profileImg) {
+    private RsData<Member> join(String provider, String username, String name, String about, String password, Integer profileImg, String email, String token) {
 
         if (this.getMember(username).isPresent()) {
             return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(username));
@@ -132,7 +132,7 @@ public class MemberService {
             password = encoder.encode(password);
         }
 
-        Member member = Member.createMember(provider, username, name, about, password, profileImg);
+        Member member = Member.createMember(provider, username, name, about, password, profileImg, email, token);
         memberRepository.save(member);
         return RsData.of("S-1", "회원가입이 완료되었습니다. \n로그인 해주세요.", member);
     }
