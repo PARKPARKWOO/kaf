@@ -1,5 +1,4 @@
 FROM openjdk:17
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
-COPY entrypoint.sh entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} ${JAVA_ACTIVE} -jar /app.jar"]
