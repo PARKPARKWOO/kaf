@@ -45,12 +45,12 @@ public class StudyRuleController {
     public String create(@PathVariable("id") Long id,@RequestParam("rule") Rule rule,
                          @Valid StudyRuleForm studyRuleForm, BindingResult bindingResult) {
 
-        RsData<Study> exist = studyRuleService.verificationLeader(rq, id);
-        if (exist.isFail()) {
+        RsData<Study> checkLeader = studyRuleService.verificationLeader(rq, id);
+        if (checkLeader.isFail()) {
             return rq.historyBack("스터디 리더가 아닙니다.");
         }
 
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, exist.getData());
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, checkLeader.getData());
 
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
@@ -67,8 +67,8 @@ public class StudyRuleController {
     public String showModify(Model model,@PathVariable("id") Long id, StudyRuleForm studyRuleForm) {
         Long studyId = studyRuleService.getStudyId(id);
 
-        RsData<Study> exist = studyRuleService.verificationLeader(rq, studyId);
-        if (exist.isFail()) {
+        RsData<Study> checkLeader = studyRuleService.verificationLeader(rq, studyId);
+        if (checkLeader.isFail()) {
             return rq.historyBack("스터디 리더가 아닙니다.");
         }
 
@@ -89,8 +89,8 @@ public class StudyRuleController {
     public String modify(@PathVariable("id") Long id, @Valid StudyRuleForm studyRuleForm, BindingResult bindingResult) {
         Long studyId = studyRuleService.getStudyId(id);
 
-        RsData<Study> exist = studyRuleService.verificationLeader(rq, studyId);
-        if (exist.isFail()) {
+        RsData<Study> checkLeader = studyRuleService.verificationLeader(rq, studyId);
+        if (checkLeader.isFail()) {
             return rq.historyBack("스터디 리더가 아닙니다.");
         }
 
@@ -110,8 +110,8 @@ public class StudyRuleController {
     public String delete(@PathVariable("id") Long id) {
         Long studyId = studyRuleService.getStudyId(id);
 
-        RsData<Study> exist = studyRuleService.verificationLeader(rq, studyId);
-        if (exist.isFail()) {
+        RsData<Study> checkLeader = studyRuleService.verificationLeader(rq, studyId);
+        if (checkLeader.isFail()) {
             return rq.historyBack("스터디 리더가 아닙니다.");
         }
 

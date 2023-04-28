@@ -6,6 +6,8 @@ import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyRepository;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
+import com.baeker.baeker.studyRule.StudyRule;
+import com.baeker.baeker.studyRule.StudyRuleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +25,6 @@ import java.util.Optional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
-
 
     //-- create --//
     @Transactional

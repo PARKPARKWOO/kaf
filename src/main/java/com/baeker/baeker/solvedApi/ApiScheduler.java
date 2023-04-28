@@ -7,8 +7,10 @@ import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.study.StudyService;
 import com.baeker.baeker.studyRule.StudyRuleService;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +27,12 @@ public class ApiScheduler {
 
     private final MemberService memberService;
 
+
     /**
      * 티어 별 check
      */
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(cron = "${scheduler.cron.value}")
     public void checkStudyRule() throws IOException, ParseException {
         log.info("스케줄러 실행");
         RsData<List<Member>> memberList = memberService.getAll();
