@@ -124,4 +124,15 @@ public class StudyRuleService {
         return RsData.of("F-1" , "리더가 아닙니다.");
     }
 
+    /**
+     * xp 반환
+     */
+    public Integer getXp(Long id) {
+        StudyRule studyRule = getStudyRule(id).getData();
+        return studyRule.getRule().getXp();
+    }
+
+    public Integer getXp(StudyRule studyRule) {
+        return getXp(studyRule.getId());
+    }
 }
