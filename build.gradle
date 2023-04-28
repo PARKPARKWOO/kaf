@@ -53,6 +53,7 @@ dependencies {
 
     // Oauth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation group: 'org.json', name: 'json', version: '20210307' // json 파서
 
     // api 호출
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'

@@ -41,3 +41,7 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
 
+scheduler:
+  cron:
+    value: "* * * * * *"
+

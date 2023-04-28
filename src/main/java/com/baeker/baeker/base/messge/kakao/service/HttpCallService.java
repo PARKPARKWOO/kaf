@@ -1,12 +1,10 @@
-package com.baeker.baeker.base.messge.kakao;
+package com.baeker.baeker.base.messge.kakao.service;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import java.net.URI;
 
 public class HttpCallService {
     protected static final String APP_TYPE_URL_ENCODED = "application/x-www-form-urlencoded;charset=UTF-8";
@@ -26,10 +24,5 @@ public class HttpCallService {
     public ResponseEntity<String> httpRequest(String url, HttpMethod method, HttpEntity<?> entity) {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.exchange(url, method, entity, String.class);
-    }
-
-    public ResponseEntity<String> httpRequest(URI url, HttpMethod method, HttpEntity<?> entity){
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.exchange(url, method, entity,String.class);
     }
 }
