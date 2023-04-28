@@ -1,4 +1,4 @@
-package com.baeker.baeker.base.messge.kakao;
+package com.baeker.baeker.base.messge.kakao.dto;
 
 import lombok.Data;
 
