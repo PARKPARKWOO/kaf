@@ -44,14 +44,14 @@ spring:
             user-name-attribute: id
 
 
-  thymeleaf:
-    cache: false
-    prefix: file:src/main/resources/templates/
-    devtools:
-      livereload:
-        enabled: true
-      restart:
-        enabled: true
+#  thymeleaf:
+#    cache: false
+#    prefix: file:src/main/resources/templates/
+#    devtools:
+#      livereload:
+#        enabled: true
+#      restart:
+#        enabled: true
 
   jpa:
     hibernate:
