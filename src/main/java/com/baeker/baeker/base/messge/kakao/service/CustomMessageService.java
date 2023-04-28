@@ -1,8 +1,7 @@
-package com.baeker.baeker.base.messge.kakao;
+package com.baeker.baeker.base.messge.kakao.service;
 
-import com.baeker.baeker.base.request.Rq;
+import com.baeker.baeker.base.messge.kakao.dto.KakaoMessageDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,8 +18,6 @@ public class CustomMessageService {
         myMsg.setWebUrl("");
         myMsg.setText("메시지 테스트입니다.");
 
-        return service.sendMessage(accessToken, myMsg);
+        return service.sendMsgToMe(accessToken, myMsg);
     }
-
-
 }
