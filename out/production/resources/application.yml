@@ -1,15 +1,15 @@
 spring:
   profiles:
-    default: dev
+    default:
   mvc:
     hidden-method:
       filter:
         enabled: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ENC(luN+bf0w1R9g5anC4KUI2g==)
-    password: ENC(KfmWnoG7NkR7Dp+RknWqIiIqLshebRLb)
-    url: ENC(Cx/IXKOxUZD0I2Of1dWROE7qNptdfamGeGNDc9Lth5GUAzKsE4mdEff6fG/CDOLNdAbLKSu3lzz4PR+8zL2lgRO1xp+oHXboaTamXLrJygM9HR4wqS5HtSJEAB+3bThhTvug7rklMOQnC9OHSlwEiaVDUDZacCLl7t/NP40Sb9zEifGKtx1mTA==)
+    username: ENC(plDde76MscNwKMt9v4A6Rw==)
+    password: ENC(OH+qshDPtFh1h1gDdWExzz/t0BlOzVbo)
+    url: ENC(L4aT4GfkEsf36RsmLcicmZmhfwgA7o3VTkq0GMSRBorX3d++tPdam9QXDcnR99LE+6YH3dImFev/dHPxJ1+l9++i2B8cg6IHw3Y508pY/zARtnynx6yle453gCfUJkYAzBH2kEtzTeB7cyEvXiXqUIkVgOevG6NMOk3Eth8Kroib8xkHWpFNOOWnSt72b7dC)
 
   security:
     oauth2:
@@ -25,7 +25,7 @@ spring:
             client-name: Naver
           kakao:
             clientId: ENC(v3HCSehY14ighRx423yYdd0c+9lPu14JXCBJBcMLKDcZWKRPmCyo5xlYrh9lmr4B)
-            scope: friends, openid
+            scope: friends
             client-name: Kakao
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
@@ -69,3 +69,8 @@ logging.level:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+
+scheduler:
+  cron:
+    value: "* * * * * *"

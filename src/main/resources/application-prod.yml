@@ -1,0 +1,10 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+
+scheduler:
+  cron:
+    value: "0 0 18 * * *"
+
