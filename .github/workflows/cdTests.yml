@@ -22,7 +22,7 @@ jobs:
           distribution: temurin
 
       - name: 스프링부트 애플리케이션 빌드 # (1)
-        run: ./gradlew build
+        run: ./gradlew build -Pjasypt.encryptor.password=${{secrets.JASYPT_ENCRYPTOR_PASSWORD}}
 
       - name: Docker Hub 로그인 # (2)
         uses: docker/login-action@v2
