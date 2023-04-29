@@ -60,7 +60,7 @@ public class MemberService {
     //-- find all + paging --//
     public Page<Member> getAll(int page) {
         ArrayList<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+        sorts.add(Sort.Order.asc("createDate"));
 
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return memberRepository.findAll(pageable);
