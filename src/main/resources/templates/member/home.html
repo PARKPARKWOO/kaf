@@ -21,6 +21,7 @@
                 </p>
 
                 <div class="min-w-full">
+                    <script th:replace="~{member/fragment/valid :: join}"></script>
                     <form th:replace="~{member/fragment/loginForm :: loginForm(${memberLoginForm})}"></form>
                 </div>
 

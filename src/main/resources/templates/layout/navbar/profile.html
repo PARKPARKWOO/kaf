@@ -33,7 +33,7 @@
                onclick="$(this).next().submit();">
                 로그아웃
             </a>
-            <form th:action="|/member/logout|" method="post"  hidden></form>
+            <form th:action="@{/member/logout}" method="post"  hidden></form>
         </li>
     </ul>
 </div>

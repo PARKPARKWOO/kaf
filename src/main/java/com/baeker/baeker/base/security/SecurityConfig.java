@@ -33,7 +33,7 @@ public class SecurityConfig {
         return http
                 .formLogin(
                         formLogin -> formLogin
-                                .loginPage("/member/login")
+                                .loginPage("/login")
                 )
                 .formLogin(
                         loginFail -> loginFail
@@ -61,8 +61,8 @@ class FailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
-        String encode = Ut.url.encode("아이디 또는 비밀번호가 존재하지 않습니다.");
+        String encode = Ut.url.encode("권한이 없습니다.");
 
-        response.sendRedirect("login?error=true&msg=" + encode);
+        response.sendRedirect("?admin&error=true&msg=" + encode);
     }
 }

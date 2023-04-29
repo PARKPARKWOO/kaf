@@ -1,6 +1,6 @@
 <form th:fragment="loginForm (memberLoginForm)"
       th:if="${param.admin}"
-      th:action th:object="${memberLoginForm}" method="post"
+      th:action="@{/login}" th:object="${memberLoginForm}" method="post"
       class="flex flex-col gap-6"
       onsubmit="JoinForm__submit(this); return false;">
 
