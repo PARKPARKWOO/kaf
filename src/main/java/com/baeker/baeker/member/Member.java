@@ -41,6 +41,7 @@ public class Member {
     private String token;
     private String email;
     private String accessToken;
+    private boolean newMember;
 
     @CreatedDate
     private LocalDateTime createDate;
@@ -68,6 +69,7 @@ public class Member {
                 .profileImg(profileImg)
                 .email(email)
                 .accessToken(token)
+                .newMember(true)
                 .build();
     }
 
@@ -80,6 +82,7 @@ public class Member {
                 .about(about)
                 .profileImg(img)
                 .modifyDate(LocalDateTime.now())
+                .newMember(false)
                 .build();
     }
 
@@ -118,6 +121,11 @@ public class Member {
                 myStudy.getStudy().updateSolve(addedSolved);
 
         return addedSolved;
+    }
+
+    // 회원 가입 완료 //
+    protected void joinComplete() {
+        this.newMember = false;
     }
 
 
