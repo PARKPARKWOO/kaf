@@ -1,5 +1,6 @@
 <form th:fragment="infoForm (memberInfoForm, random)"
       th:action th:object="${memberInfoForm}" method="post"
+      onsubmit="JoinForm__submit(this); return false;"
       class="flex flex-col gap-6">
 
 

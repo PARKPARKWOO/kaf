@@ -211,7 +211,7 @@ public class MemberController {
 
         model.addAttribute("random", random);
         log.info("프로필 수정폼 응답 완료");
-        return "member/modify";
+        return "member/modify/rank";
     }
 
     //-- 프로필 수정 처리 --//
