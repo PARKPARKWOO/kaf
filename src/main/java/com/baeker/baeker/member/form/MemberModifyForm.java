@@ -16,5 +16,5 @@ public class MemberModifyForm {
     @Size(max = 20)
     private String about;
 
-    private Integer profileImg;
+    private String profileImg;
 }

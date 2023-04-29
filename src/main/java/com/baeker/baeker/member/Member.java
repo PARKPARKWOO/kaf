@@ -35,7 +35,7 @@ public class Member {
     private String studyId;
     private String nickName;
     private String about;
-    private Integer profileImg;
+    private String profileImg;
     private String password;
     private String provider;
     private String token;
@@ -58,7 +58,7 @@ public class Member {
 
 
     //-- crate method --//
-    protected static Member createMember(String provider, String username, String name, String about, String password, Integer profileImg, String email, String token) {
+    protected static Member createMember(String provider, String username, String name, String about, String password, String profileImg, String email, String token) {
         return builder()
                 .provider(provider)
                 .username(username)
@@ -74,7 +74,7 @@ public class Member {
     //-- business logic --//
 
     // name, about, profileImg 수정 //
-    protected Member modifyMember(String name, String about, Integer img) {
+    protected Member modifyMember(String name, String about, String img) {
         return this.toBuilder()
                 .nickName(name)
                 .about(about)

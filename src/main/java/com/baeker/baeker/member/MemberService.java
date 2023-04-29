@@ -90,13 +90,13 @@ public class MemberService {
 
     //-- Social Join, Login --//
     @Transactional
-    public RsData<Member> whenSocialLogin(String provider, String username, String name, String email, String token) {
+    public RsData<Member> whenSocialLogin(String provider, String username, String name, String email, String token, String profileImg) {
         Optional<Member> opMember = getMember(username);
 
         if (opMember.isPresent())
             return RsData.of("S-2", "로그인 되었습니다.", opMember.get());
 
-        return join(provider, username, name, "", "", null, email, token);
+        return join(provider, username, name, "", "", profileImg, email, token);
     }
 
 
@@ -122,7 +122,7 @@ public class MemberService {
 
 
     //-- Join : Social + Security 실질적인 처리 --//
-    private RsData<Member> join(String provider, String username, String name, String about, String password, Integer profileImg, String email, String token) {
+    private RsData<Member> join(String provider, String username, String name, String about, String password, String profileImg, String email, String token) {
 
         if (this.getMember(username).isPresent()) {
             return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(username));

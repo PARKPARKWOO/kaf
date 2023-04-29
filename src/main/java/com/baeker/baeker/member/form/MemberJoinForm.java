@@ -26,5 +26,5 @@ public class MemberJoinForm {
     @Size(min = 4, max = 20)
     private String password2;
 
-    private Integer profileImg;
+    private String profileImg;
 }
