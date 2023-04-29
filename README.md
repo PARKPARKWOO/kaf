@@ -6,7 +6,7 @@
 
 <div align="center"><b>알고리즘 스터디를 효율적으로!</b></div>
 
-<div align="center"><a href="#"><b>🔗 show application</b></a></div>
+<div align="center"><a href="ec2-15-164-211-17.ap-northeast-2.compute.amazonaws.com:8080"><b>🔗 show application</b></a></div>
 
 <div align="center"><a href="#"><b>🔗 Video</b></a></div>
 

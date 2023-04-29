@@ -10,7 +10,7 @@
         <div class="hero-overlay bg-opacity-60"></div>
         <div class="hero-content text-center text-neutral-content">
 
-            <div class="max-w-md">
+            <div class="max-w-md flex flex-col items-center">
 
                 <h1 class="mb-5 text-5xl font-bold">Hello there</h1>
 
@@ -19,9 +19,15 @@
                     알고리즘 공부를 위한 스터디 그룹을 만들고 가입하세요.<br>
                     다양한 규칙 수행 보상을 통해 스터디 랭커에 도전해 보세요!<br>
                 </p>
-                <a href="/member/login" class="btn btn-primary">Get Started</a>
 
-                <a href="/line/test" class="btn btn-primary">메시지 테스트</a>
+                <div class="min-w-full">
+                    <form th:replace="~{member/fragment/loginForm :: loginForm(${memberLoginForm})}"></form>
+                </div>
+
+                <a href="/oauth2/authorization/kakao" class="center">
+                    <img src="/images/kakao_login.png">
+                </a>
+
             </div>
         </div>
     </div>

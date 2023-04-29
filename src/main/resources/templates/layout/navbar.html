@@ -5,20 +5,6 @@
 
         <ul class="flex mr-5 mt-3 mb-3">
 
-            <li th:if="${@rq.logout}">
-                <a href="/member/join"
-                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
-                    회원가입
-                </a>
-            </li>
-
-            <li th:if="${@rq.logout}">
-                <a href="/member/login"
-                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
-                    로그인
-                </a>
-            </li>
-
             <div th:if="${@rq.login}" class="relative form-check form-switch rounded text-white">
                 <input class="form-check-input toggle" type="checkbox" onclick="toggle" id="flexSwitchCheckChecked" checked>
             </div>
