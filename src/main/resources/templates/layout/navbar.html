@@ -1,49 +1,18 @@
-<nav th:fragment="navbarFragment" class="sticky top-0 bg-gray-500">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-
-        <a href="/" class="text-white font-bold text-xl ml-5 mt-3 mb-3">BAEKER</a>
-
-        <ul class="flex mr-5 mt-3 mb-3">
-
-            <div th:if="${@rq.login}" class="relative form-check form-switch rounded text-white">
-                <input class="form-check-input toggle" type="checkbox" onclick="toggle" id="flexSwitchCheckChecked" checked>
-            </div>
-
-            <li>
-                <a href="/member/list"
-                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
-                    랭킹
-                </a>
-            </li>
-
-            <li>
-                <a href="/study/list"
-                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
-                    스터디 랭킹
-                </a>
-            </li>
-
-            <li th:if="${@rq.login}" class="">
-                <a href="/study/create"
-                   class="text-white hover:text-gray-200 px-6 py-2 rounded ">
-                    스터디 만들기
-                </a>
-            </li>
-
-            <li th:if="${@rq.login}" class="">
-                <a href="/member/profile/rank"
-                   th:text="${@rq.member.nickName}"
-                   class="text-white hover:text-gray-200 px-6 py-2 rounded ">
-                </a>
-            </li>
-
-            <li th:if="${@rq.login}">
-                <a href="javascript:;" onclick="$(this).next().submit();"
-                   class="text-white hover:text-gray-200 px-3 py-2 rounded">
-                    로그아웃
-                </a>
-                <form th:action="|/member/logout|" method="post"  hidden></form>
-            </li>
-        </ul>
+<div th:fragment="navbarFragment" class="navbar bg-gray-600">
+    <div class="flex-1">
+        <a href="/"
+           class="btn btn-ghost normal-case text-xl">BAEKER</a>
     </div>
-</nav>
+
+    <div class="flex-none gap-2">
+
+        <div th:if="${@rq.login}" class="relative form-check form-switch rounded text-white">
+            <input class="form-check-input toggle" type="checkbox" onclick="toggle" id="flexSwitchCheckChecked">
+        </div>
+
+        <div th:replace="~{layout/navbar/menu :: menu}"></div>
+
+        <div th:replace="~{layout/navbar/profile :: profile}"></div>
+
+    </div>
+</div>
