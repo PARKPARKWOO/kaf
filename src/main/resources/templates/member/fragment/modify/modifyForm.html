@@ -7,7 +7,10 @@
         <table>
             <thead>
             <tr>
-                <th>카톡 이미지</th>
+                <th>현재 이미지</th>
+                <th th:if="${memberModifyForm.profileImg ne @rq.member.kakaoProfileImage}">
+                    카톡 이미지
+                </th>
                 <th>랜덤 이미지</th>
             </tr>
             </thead>
@@ -15,6 +18,9 @@
             <tr>
                 <td>
                     <div th:replace="~{member/fragment/modify/myImg :: myImg (${memberModifyForm})}"></div>
+                </td>
+                <td th:if="${memberModifyForm.profileImg ne @rq.member.kakaoProfileImage}">
+                    <div th:replace="~{member/fragment/modify/kakaoProfile :: kakaoProfile (${memberModifyForm})}"></div>
                 </td>
                 <td>
                     <div th:replace="~{member/fragment/modify/slide :: slide (${memberModifyForm}, ${random})}"></div>

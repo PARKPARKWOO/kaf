@@ -1,11 +1,13 @@
 package com.baeker.baeker.member;
 
+import com.baeker.baeker.base.entity.BaseEntity;
 import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.embed.Programmers;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.study.Study;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,13 +24,10 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @EntityListeners(AuditingEntityListener.class)
-public class Member {
+public class Member extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
     @Column(unique = true)
     private String username;
     @Column(unique = true)
@@ -36,16 +35,13 @@ public class Member {
     private String nickName;
     private String about;
     private String profileImg;
+    private String kakaoProfileImage;
     private String password;
     private String provider;
     private String token;
     private String email;
     private String accessToken;
     private boolean newMember;
-
-    @CreatedDate
-    private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
 
     @Embedded
     private BaekJoon baekJoon;
@@ -67,6 +63,7 @@ public class Member {
                 .about(about)
                 .password(password)
                 .profileImg(profileImg)
+                .kakaoProfileImage(profileImg)
                 .email(email)
                 .accessToken(token)
                 .newMember(true)

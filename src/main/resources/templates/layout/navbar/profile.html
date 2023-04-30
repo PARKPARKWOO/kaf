@@ -23,6 +23,12 @@
         </li>
 
         <li th:if="${@rq.login}">
+            <a href="/member/modify">
+                프로필 수정
+            </a>
+        </li>
+
+        <li th:if="${@rq.login}">
             <a href="/study/create">
                 스터디 만들기
             </a>
