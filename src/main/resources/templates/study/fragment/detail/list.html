@@ -13,7 +13,7 @@
                th:classappend="${list == 'member'} ? 'tab-active' : ''">맴버</a>
 
             <a th:href="@{/study/detail/pending/{id}#list(id=*{study.id})}"
-               th:if="${@rq.member.nickName eq study.leader}"
+               th:if="${@rq.login} and ${@rq.member.nickName eq study.leader}"
                class="tab tab-bordered"
                th:classappend="${list == 'pending'} ? 'tab-active' : ''">가입 요청</a>
         </div>
