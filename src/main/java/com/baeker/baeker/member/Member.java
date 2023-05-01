@@ -25,7 +25,6 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @SuperBuilder(toBuilder = true)
-@EntityListeners(AuditingEntityListener.class)
 public class Member extends BaseEntity {
 
     @Column(unique = true)
