@@ -101,27 +101,6 @@ public class MemberService {
     }
 
 
-    //-- 백준 최신화 --//
-    @Transactional
-    public RsData<BaekJoon> solve(Long memberId, BaekJoon baekJoon) {
-        RsData<Member> memberRs = this.getMember(memberId);
-        BaekJoon addedSolve;
-
-        if (memberRs.isFail())
-            return RsData.failOf(memberRs.getData().getBaekJoon());
-
-        Member member = memberRs.getData();
-
-        if (member.getBaekJoon() == null)
-            addedSolve = member.createSolve(baekJoon);
-        else
-            addedSolve = member.updateSolve(baekJoon);
-
-        // 더해진 값 반환
-        return RsData.successOf(addedSolve);
-    }
-
-
     //-- Join : Social + Security 실질적인 처리 --//
     private RsData<Member> join(String provider, String username, String name, String about, String password, String profileImg, String email, String token) {
 

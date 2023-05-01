@@ -1,6 +1,6 @@
 package com.baeker.baeker.study;
 
-import com.baeker.baeker.base.entity.BaseEntity;
+import com.baeker.baeker.base.entity.Score;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.embed.Programmers;
@@ -9,14 +9,10 @@ import com.baeker.baeker.studyRule.StudyRule;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -24,8 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
-public class Study extends BaseEntity {
+public class Study extends Score {
 
     @Column(unique = true)
     private String name;
