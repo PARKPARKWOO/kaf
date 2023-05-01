@@ -74,6 +74,19 @@ public class Member extends Score {
                 .build();
     }
 
+    //-- 백준 점수 최신화 --//
+    protected Member updateBaeJoon(Score baekJoon, Integer total) {
+        return this.toBuilder()
+                .bronze(baekJoon.getBronze())
+                .sliver(baekJoon.getSliver())
+                .gold(baekJoon.getGold())
+                .platinum(baekJoon.getPlatinum())
+                .diamond(baekJoon.getDiamond())
+                .ruby(baekJoon.getRuby())
+                .solvedBaekJoon(total)
+                .build();
+    }
+
 
     // 회원 가입 완료 //
     protected void joinComplete() {

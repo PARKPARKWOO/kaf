@@ -17,5 +17,5 @@ public abstract class Score extends  BaseEntity{
     private Integer platinum;
     private Integer diamond;
     private Integer ruby;
-
+    private Integer solvedBaekJoon;
 }

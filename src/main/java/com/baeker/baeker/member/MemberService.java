@@ -1,7 +1,7 @@
 package com.baeker.baeker.member;
 
+import com.baeker.baeker.base.entity.Score;
 import com.baeker.baeker.base.request.RsData;
-import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.form.MemberInfoForm;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
@@ -186,4 +186,12 @@ public class MemberService {
         return random;
     }
 
+    public void whenBaekJoonEventType(Score score, Score oldScore, String eventCode) {
+        Member member = getMember(score.getId()).getData();
+        Integer total = 0;
+
+        Member updateMember = member.updateBaeJoon(score, total);
+
+
+    }
 }
