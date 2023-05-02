@@ -1,5 +1,6 @@
 package com.baeker.baeker.solvedApi;
 
+import com.baeker.baeker.base.event.BaekJoonEvent;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
@@ -15,6 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,8 +39,11 @@ public class ApiScheduler {
         log.info("스케줄러 실행");
         RsData<List<Member>> memberList = memberService.getAll();
         for (Member member : memberList.getData()) {
+
+            List<Integer> list = new ArrayList<>();
+
             log.info("tier");
-            Integer Bronze = solvedApiService.getSolvedCount(member, 1, 6);
+            list.add(solvedApiService.getSolvedCount(member, 1, 6));
 
             Integer Silver = solvedApiService.getSolvedCount(member, 6, 11);
 
@@ -50,8 +55,10 @@ public class ApiScheduler {
 
             Integer Ruby = solvedApiService.getSolvedCount(member, 26, 31);
 
+
             BaekJoon baekJoon = BaekJoon.builder().bronze(Bronze).sliver(Silver).gold(Gold).platinum(Platinum)
                     .diamond(Diamond).ruby(Ruby).build();
+
             memberService.solve(member.getId(), baekJoon);
         }
     }
