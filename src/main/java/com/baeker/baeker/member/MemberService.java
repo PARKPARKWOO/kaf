@@ -50,6 +50,16 @@ public class MemberService {
         return RsData.of("F-1", "존재하지 않는 id 입니다.");
     }
 
+    //-- find by 백준 name --//
+    public RsData<Member> getByBaekJoonName(String baekJoonName) {
+        Optional<Member> byId = memberRepository.findByBaekJoonName(baekJoonName);
+
+        if (byId.isPresent())
+            return RsData.successOf(byId.get());
+
+        return RsData.of("F-1", "존재하지 않는 id 입니다.");
+    }
+
     //-- find all --//
     public RsData<List<Member>> getAll() {
         List<Member> memberList = memberRepository.findAll();
@@ -196,12 +206,13 @@ public class MemberService {
 
 
     //-- 백준 해결 문제 추가 이벤트 처리 --//
-    public void whenBaekJoonEventType(ScoreBase score, String eventCode) {
+    public void whenBaekJoonEventType(String baekJoonName, int score, String eventCode) {
 
-        Member member = getMember(score.getId()).getData();
-        MemberSnapshot snapshot = MemberSnapshot.create(eventCode, member);
+        Member member = getByBaekJoonName(baekJoonName).getData();
 
-        Member updateMember = member.updateBaeJoon(score);
+        MemberSnapshot snapshot = MemberSnapshot.create(member);
+
+        Member updateMember = member.updateBaeJoon(score, eventCode);
         memberRepository.save(updateMember);
 
         saveSnapshot(snapshot);

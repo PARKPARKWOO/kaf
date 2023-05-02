@@ -1,6 +1,5 @@
 package com.baeker.baeker.base.event;
 
-import com.baeker.baeker.base.entity.ScoreBase;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
@@ -8,11 +7,14 @@ import org.springframework.context.ApplicationEvent;
 public class BaekJoonEvent extends ApplicationEvent {
 
     private final String eventCode;
-    private final ScoreBase scoreBase;
+    private final String baekJoonName;
+    private final int score;
 
-    public BaekJoonEvent(Object source, ScoreBase score) {
+    public BaekJoonEvent(Object source, String eventCode, String baekJoonName, int score) {
         super(source);
-        this.eventCode = "BaekJoon";
-        this.scoreBase = score;
+        this.eventCode = eventCode;
+        this.baekJoonName = baekJoonName;
+        this.score = score;
     }
+
 }

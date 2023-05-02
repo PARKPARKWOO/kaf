@@ -14,16 +14,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class MemberSnapshot extends ScoreBase {
 
-    private String eventCode;
     private String nickName;
 
     @ManyToOne
     private Member member;
 
-    //-- create method --//
-    public static MemberSnapshot create(String eventCode, Member member) {
+    //-- create score --//
+    public static MemberSnapshot create(Member member) {
         MemberSnapshot snapshot = MemberSnapshot.builder()
-                .eventCode(eventCode)
                 .member(member)
                 .nickName(member.getNickName())
                 .bronze(member.getBronze())
@@ -38,4 +36,25 @@ public class MemberSnapshot extends ScoreBase {
 
         return snapshot;
     }
+
+    //-- update score --//
+    public MemberSnapshot update(int score, String eventCode) {
+        MemberSnapshot snapshot;
+
+        switch (eventCode) {
+            case "bronze" -> snapshot = addBronze(score);
+            case "sliver" -> snapshot = addSliver(score);
+            case "gold" -> snapshot = addGold(score);
+            case "diamond" -> snapshot = addDiamond(score);
+            case "ruby" -> snapshot = addRuby(score);
+            default -> snapshot = addPlatinum(score);
+        }
+        return snapshot;
+    }
+    private MemberSnapshot addBronze(int score) {return this.toBuilder().bronze(score).build();}
+    private MemberSnapshot addSliver(int score) {return this.toBuilder().sliver(score).build();}
+    private MemberSnapshot addGold(int score) {return this.toBuilder().gold(score).build();}
+    private MemberSnapshot addDiamond(int score) {return this.toBuilder().diamond(score).build();}
+    private MemberSnapshot addRuby(int score) {return this.toBuilder().ruby(score).build();}
+    private MemberSnapshot addPlatinum(int score) {return this.toBuilder().platinum(score).build();}
 }

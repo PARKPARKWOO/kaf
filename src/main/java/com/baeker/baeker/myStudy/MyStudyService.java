@@ -81,8 +81,8 @@ public class MyStudyService {
         if (study.getMyStudies().size() == study.getCapacity())
             return RsData.of("F-2", "이미 최대 인원에 도달했습니다.");
 
-        BaekJoon addedSolved = myStudy.accept();
-        return RsData.of("S-1", "정식 회원으로 가입이 완료되었습니다.", addedSolved);
+        myStudy.accept();
+        return RsData.of("S-1", "정식 회원으로 가입이 완료되었습니다.");
     }
 
 

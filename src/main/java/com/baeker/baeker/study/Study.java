@@ -80,22 +80,5 @@ public class Study extends ScoreBase {
         this.xp += addXp;
     }
 
-    // 해결한 문제 수 생성 //
-    public void createSolve(BaekJoon baekJoon) {
-        this.baekJoon = baekJoon;
-    }
 
-    // 해결한 문제 수 업데이트 //
-    public void updateSolve(BaekJoon addedSolved) {
-        BaekJoon beakJoon = BaekJoon.builder()
-                .bronze(addedSolved.getBronze() + baekJoon.getBronze())
-                .sliver(addedSolved.getSliver() + baekJoon.getSliver())
-                .gold(addedSolved.getGold() + baekJoon.getGold())
-                .platinum(addedSolved.getPlatinum() + baekJoon.getPlatinum())
-                .diamond(addedSolved.getDiamond() + baekJoon.getDiamond())
-                .ruby(addedSolved.getRuby() + baekJoon.getRuby())
-                .build();
-
-        this.baekJoon = beakJoon;
-    }
 }

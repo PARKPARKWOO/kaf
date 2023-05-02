@@ -1,6 +1,7 @@
 package com.baeker.baeker.base.entity;
 
 import jakarta.persistence.MappedSuperclass;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -11,16 +12,15 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public abstract class ScoreBase extends  BaseEntity{
 
-    long bronze;
-    long sliver;
-    long gold;
-    long diamond;
-    long ruby;
-    long platinum;
+    int bronze;
+    int sliver;
+    int gold;
+    int diamond;
+    int ruby;
+    int platinum;
 
-    public long solvedBaekJoon() {
+    public int solvedBaekJoon() {
         return bronze + sliver + gold + diamond + ruby;
     }
-
 
 }

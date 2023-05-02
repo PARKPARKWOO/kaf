@@ -28,6 +28,7 @@ public class Member extends ScoreBase {
     @Column(unique = true)
     private String studyId;
     private String nickName;
+    private String baekJoonName;
     private String about;
     private String profileImg;
     private String kakaoProfileImage;
@@ -78,23 +79,40 @@ public class Member extends ScoreBase {
                 .build();
     }
 
-    //-- 백준 점수 최신화 --//
-    protected Member updateBaeJoon(ScoreBase baekJoon) {
-        return this.toBuilder()
-                .bronze(baekJoon.getBronze())
-                .sliver(baekJoon.getSliver())
-                .gold(baekJoon.getGold())
-                .platinum(baekJoon.getPlatinum())
-                .diamond(baekJoon.getDiamond())
-                .ruby(baekJoon.getRuby())
-                .build();
-    }
-
-
-    // 회원 가입 완료 //
+    // 첫방문 회원 체크 //
     protected void joinComplete() {
         this.newMember = false;
     }
+
+
+    // 백준 아이디 등록 //
+    protected Member connectBaekJoon(String baekJoonName) {
+        return this.toBuilder()
+                .baekJoonName(baekJoonName)
+                .build();
+    }
+
+    // 백준 점수 최신화 //
+    protected Member updateBaeJoon(int score, String eventCode) {
+        Member member;
+
+        switch (eventCode) {
+            case "bronze" -> member = addBronze(score);
+            case "sliver" -> member = addSliver(score);
+            case "gold" -> member = addGold(score);
+            case "diamond" -> member = addDiamond(score);
+            case "ruby" -> member = addRuby(score);
+            default -> member = addPlatinum(score);
+        }
+        return member;
+    }
+    private Member addBronze(int score) {return this.toBuilder().bronze(score).build();}
+    private Member addSliver(int score) {return this.toBuilder().sliver(score).build();}
+    private Member addGold(int score) {return this.toBuilder().gold(score).build();}
+    private Member addDiamond(int score) {return this.toBuilder().diamond(score).build();}
+    private Member addRuby(int score) {return this.toBuilder().ruby(score).build();}
+
+    private Member addPlatinum(int score) {return this.toBuilder().platinum(score).build();}
 
 
     //-- create authorize --//

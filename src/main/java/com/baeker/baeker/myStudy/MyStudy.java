@@ -86,15 +86,11 @@ public class MyStudy extends BaseEntity {
     //-- business logic --//
 
     // 가입, 초대 신청 승인 //
-    protected BaekJoon accept() {
-        BaekJoon baekJoon = this.member.getBaekJoon();
+    protected void accept() {
 
-        if (member.getBaekJoon() != null)
-            this.study.updateSolve(baekJoon);
 
         this.status = StudyStatus.MEMBER;
         this.msg = null;
-        return baekJoon;
     }
 
     // 초대, 가입 요청 메시지 변경 //
