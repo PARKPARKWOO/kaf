@@ -1,29 +1,24 @@
-<form th:fragment="modifyForm (memberModifyForm, random)"
-      th:action th:object="${memberModifyForm}" method="post"
-      class="flex flex-col gap-6"
-      onsubmit="JoinForm__submit(this); return false;">
+<form th:fragment="infoForm (memberInfoForm, random)"
+      th:action th:object="${memberInfoForm}" method="post"
+      onsubmit="JoinForm__submit(this); return false;"
+      class="flex flex-col gap-6">
+
 
     <div class="flex justify-center">
         <table>
             <thead>
             <tr>
-                <th>현재 이미지</th>
-                <th th:if="${memberModifyForm.profileImg ne @rq.member.kakaoProfileImage}">
-                    카톡 이미지
-                </th>
-                <th>랜덤 이미지</th>
+                <th>카톡 프로필</th>
+                <th>랜덤 프로필</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td>
-                    <div th:replace="~{member/fragment/modify/myImg :: myImg (${memberModifyForm})}"></div>
-                </td>
-                <td th:if="${memberModifyForm.profileImg ne @rq.member.kakaoProfileImage}">
-                    <div th:replace="~{member/fragment/modify/kakaoProfile :: kakaoProfile (${memberModifyForm})}"></div>
+                    <div th:replace="~{member/fragment/info/myImg :: myImg (${memberInfoForm})}"></div>
                 </td>
                 <td>
-                    <div th:replace="~{member/fragment/modify/slide :: slide (${memberModifyForm}, ${random})}"></div>
+                    <div th:replace="~{member/fragment/info/slide :: slide (${memberInfoForm}, ${random})}"></div>
                 </td>
             </tr>
             </tbody>
@@ -46,7 +41,7 @@
 
     <button class="btn btn-block btn-primary gap-1 mt-8">
         <i class="fa-solid fa-arrow-right-to-bracket"></i>
-        <span>수정하기</span>
+        <span>가입하기</span>
     </button>
 
 </form>

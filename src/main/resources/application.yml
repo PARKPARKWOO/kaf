@@ -1,6 +1,6 @@
 spring:
   profiles:
-    default:
+    default: dev
   mvc:
     hidden-method:
       filter:
@@ -25,7 +25,7 @@ spring:
             client-name: Naver
           kakao:
             clientId: ENC(v3HCSehY14ighRx423yYdd0c+9lPu14JXCBJBcMLKDcZWKRPmCyo5xlYrh9lmr4B)
-            scope: friends
+            scope: friends, talk_message, account_email, profile_nickname, profile_image
             client-name: Kakao
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
@@ -42,7 +42,6 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
-
 
 #  thymeleaf:
 #    cache: false

@@ -1,11 +1,13 @@
 package com.baeker.baeker.member;
 
+import com.baeker.baeker.base.entity.BaseEntity;
 import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.embed.Programmers;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.study.Study;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,29 +24,23 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@Builder(toBuilder = true)
-@EntityListeners(AuditingEntityListener.class)
-public class Member {
+@SuperBuilder(toBuilder = true)
+public class Member extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
     @Column(unique = true)
     private String username;
     @Column(unique = true)
     private String studyId;
     private String nickName;
     private String about;
-    private Integer profileImg;
+    private String profileImg;
+    private String kakaoProfileImage;
     private String password;
     private String provider;
     private String token;
     private String email;
     private String accessToken;
-
-    @CreatedDate
-    private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
+    private boolean newMember;
 
     @Embedded
     private BaekJoon baekJoon;
@@ -58,7 +54,7 @@ public class Member {
 
 
     //-- crate method --//
-    protected static Member createMember(String provider, String username, String name, String about, String password, Integer profileImg, String email, String token) {
+    protected static Member createMember(String provider, String username, String name, String about, String password, String profileImg, String email, String token) {
         return builder()
                 .provider(provider)
                 .username(username)
@@ -66,20 +62,23 @@ public class Member {
                 .about(about)
                 .password(password)
                 .profileImg(profileImg)
+                .kakaoProfileImage(profileImg)
                 .email(email)
                 .accessToken(token)
+                .newMember(true)
                 .build();
     }
 
     //-- business logic --//
 
     // name, about, profileImg 수정 //
-    protected Member modifyMember(String name, String about, Integer img) {
+    protected Member modifyMember(String name, String about, String img) {
         return this.toBuilder()
                 .nickName(name)
                 .about(about)
                 .profileImg(img)
                 .modifyDate(LocalDateTime.now())
+                .newMember(false)
                 .build();
     }
 
@@ -118,6 +117,11 @@ public class Member {
                 myStudy.getStudy().updateSolve(addedSolved);
 
         return addedSolved;
+    }
+
+    // 회원 가입 완료 //
+    protected void joinComplete() {
+        this.newMember = false;
     }
 
 

@@ -1,5 +1,6 @@
 <form th:fragment="loginForm (memberLoginForm)"
-      th:action th:object="${memberLoginForm}" method="post"
+      th:if="${param.admin}"
+      th:action="@{/login}" th:object="${memberLoginForm}" method="post"
       class="flex flex-col gap-6"
       onsubmit="JoinForm__submit(this); return false;">
 
@@ -17,21 +18,9 @@
     <input type="password" th:field="*{password}" placeholder="비빌번호" class="input input-bordered" />
   </div>
 
-  <button class="btn btn-block gap-1">
+  <button class="btn btn-outline gap-3">
     <i class="fa-solid fa-arrow-right-to-bracket"></i>
     <span>로그인</span>
   </button>
-
-  <a href="/oauth2/authorization/kakao"
-     class="btn btn-block gap-1">
-    <i class="fa-solid fa-n text-[color:#2DB400]"></i>
-    <span>카카오톡 로그인</span>
-  </a>
-
-  <a href="/oauth2/authorization/naver"
-     class="btn btn-block gap-1">
-    <i class="fa-solid fa-n text-[color:#2DB400]"></i>
-    <span>네이버 로그인</span>
-  </a>
 
 </form>

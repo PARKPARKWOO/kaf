@@ -1,5 +1,6 @@
 package com.baeker.baeker.study;
 
+import com.baeker.baeker.base.entity.BaseEntity;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.embed.Programmers;
@@ -7,6 +8,7 @@ import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.studyRule.StudyRule;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -20,14 +22,10 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Study {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+public class Study extends BaseEntity {
 
     @Column(unique = true)
     private String name;
@@ -35,10 +33,6 @@ public class Study {
     private String leader;
     private Integer capacity;
     private Integer xp;
-
-    @CreatedDate
-    private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
 
     @Embedded
     private BaekJoon baekJoon;

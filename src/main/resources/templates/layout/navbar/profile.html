@@ -1,0 +1,45 @@
+<div th:fragment="profile"
+     class="dropdown dropdown-end mr-5">
+    <label th:if="${@rq.login}"
+           tabindex="0" class="btn btn-ghost btn-circle avatar">
+
+        <div class="w-10 rounded-full">
+            <img class="mask mask-squircle"
+                 th:src="@{__${@rq.member.profileImg}__}"/>
+        </div>
+
+    </label>
+    <ul tabindex="0"
+        class="mt-3 p-2 mr-5 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
+
+        <li th:if="${@rq.login}">
+            <a href="/member/profile/rank"
+               class="flex flex-col items-start justify-start">
+                <div class="w-full"
+                     th:text="${@rq.member.nickName}">
+                </div>
+                <div th:text="${@rq.member.email}"></div>
+            </a>
+        </li>
+
+        <li th:if="${@rq.login}">
+            <a href="/member/modify">
+                프로필 수정
+            </a>
+        </li>
+
+        <li th:if="${@rq.login}">
+            <a href="/study/create">
+                스터디 만들기
+            </a>
+        </li>
+
+        <li th:if="${@rq.login}">
+            <a href="javascript:;"
+               onclick="$(this).next().submit();">
+                로그아웃
+            </a>
+            <form th:action="@{/member/logout}" method="post"  hidden></form>
+        </li>
+    </ul>
+</div>

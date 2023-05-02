@@ -4,10 +4,13 @@
 
     <div class="card-body items-center text-center pt-10">
 
-        <img th:src="@{https://avatars.dicebear.com/api/avataaars/__${@rq.member.profileImg}__.svg}"
-             alt="profile image" class="rounded-xl px-10 pt-10"/>
+        <div class="mask mask-squircle w-32 h-32">
+            <img class="mask mask-squircle"
+                 th:src="@{__${@rq.member.profileImg}__}"/>
+        </div>
 
-        <h2 class="card-title"
+
+        <h2 class="card-title mt-3"
             th:text="${@rq.member.getNickName}">
         </h2>
 

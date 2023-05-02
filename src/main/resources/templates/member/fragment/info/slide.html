@@ -1,4 +1,4 @@
-<div th:fragment="slide(memberModifyForm, random)" class="carousel rounded-box w-80 h-32">
+<div th:fragment="slide(memberInfoForm, random)" class="carousel rounded-box w-80 h-32">
 
     <th:block th:each="num : ${random}">
 
@@ -8,7 +8,7 @@
                 <label>
                     <input type="radio"
                            class="peer hidden"
-                           th:field="${memberModifyForm.profileImg}"
+                           th:field="${memberInfoForm.profileImg}"
                            th:value="|https://avatars.dicebear.com/api/avataaars/${num}.svg|"
                            onclick="selectImage(this)"/>
 

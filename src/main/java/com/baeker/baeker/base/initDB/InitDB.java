@@ -48,13 +48,13 @@ public class InitDB {
         public void init_alpha_and_study() {
 
             // user 알파와 알파의 스터디 생성
-            Member alpha = createMember("user1", "알파", "안녕하세요 알파입니다.", 100);
+            Member alpha = createMember("user1", "알파", "안녕하세요 알파입니다.", "https://avatars.dicebear.com/api/avataaars/600.svg");
             Study study = createStudy("알파의 스터디", "Provident cupiditate voluptatem et in.", 10, alpha);
             createStudy("알파알파", "Provident cupiditate voluptatem et in.", 10, alpha);
 
             // 더미 user 7명 생성후 알파 스터디 가입
             for (int i = 3; i < 10; i++) {
-                Member member = createMember("user" + i, "member" + i, "안녕하세요" + i, i * 5);
+                Member member = createMember("user" + i, "member" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 10 + ".svg");
                 MyStudy myStudy = myStudyService.join(member, study, "hi").getData();
                 myStudyService.accept(myStudy);
             }
@@ -63,7 +63,7 @@ public class InitDB {
         public void init_beta_and_study() {
 
             // user 베타와 베타의 스터디 생성
-            Member beta = createMember("user2", "베타", "안녕하세요 베타입니다.", 200);
+            Member beta = createMember("user2", "베타", "안녕하세요 베타입니다.", "https://avatars.dicebear.com/api/avataaars/200.svg");
             Study study1 = createStudy("베타의 스터디", "Quaerat voluptatem et cupiditate in.", 10, beta);
             Study study2 = createStudy("베타베타", "Quaerat voluptatem et cupiditate in.", 10, beta);
 
@@ -79,7 +79,7 @@ public class InitDB {
 
             // 스터디가 없는 더미 유저 5명 생성
             for (int i = 0; i < 5; i++)
-                createMember("dummy" + i, "dummy" + i, "안녕하세요" + i, i * 5);
+                createMember("dummy" + i, "dummy" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 50 + ".svg");
         }
 
         public void initData() {
@@ -92,7 +92,7 @@ public class InitDB {
             }
         }
 
-        private Member createMember(String username, String nickName, String about, Integer img) {
+        private Member createMember(String username, String nickName, String about, String img) {
             MemberJoinForm form = new MemberJoinForm(username, nickName, about, "1234", "1234", img);
             return memberService.join(form).getData();
         }

@@ -2,6 +2,7 @@ package com.baeker.baeker.member;
 
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
+import com.baeker.baeker.member.form.MemberInfoForm;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberLoginForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
@@ -84,6 +85,11 @@ public class MemberController {
         Member member = rq.getMember();
         log.info("내 프로필 요청 확인 member = {}", member.toString());
 
+        if (member.isNewMember()) {
+            log.info("신규 회원 확인, 개인정보 입력으로 redirect");
+            return "redirect:/member/info";
+        }
+
         List<MyStudy> myStudies = myStudyService.statusMember(member);
         List<MyStudy> pending = myStudyService.statusNotMember(member);
 
@@ -92,6 +98,45 @@ public class MemberController {
         model.addAttribute("list", list);
         log.info("내 프로필 응답 완료");
         return "member/profile";
+    }
+
+    //-- 내정보 등록 form --//
+    @GetMapping("/info")
+    @PreAuthorize("isAuthenticated()")
+    public String infoForm(
+            MemberInfoForm form,
+            Model model
+    ) {
+        Member member = rq.getMember();
+        log.info("내정보 폼 요청 확인 id = {}", member.getId());
+
+        form.setNickName(member.getNickName());
+        form.setProfileImg(member.getProfileImg());
+        List<Integer> random = memberService.random();
+
+        model.addAttribute("random", random);
+        log.info("내정보 폼 응답 완료");
+        return "member/info";
+    }
+
+    //-- 내정보 등록 처리 --//
+    @PostMapping("/info")
+    @PreAuthorize("isAuthenticated()")
+    public String info(
+            MemberInfoForm form
+    ) {
+        Member member = rq.getMember();
+        log.info("내정보 등록 처리 요청 확인 member id = {}", member.getId());
+
+        RsData<Member> modifyRs = memberService.modify(member, form);
+
+        if (modifyRs.isFail()) {
+            log.info("정보 등록에 실패했습니다. error = {}", modifyRs.getMsg());
+            return rq.historyBack(modifyRs.getMsg());
+        }
+
+        log.info("내정보 등록 성공");
+        return rq.redirectWithMsg("/", "회원 가입이 완료 되었습니다.");
     }
 
 
@@ -183,7 +228,7 @@ public class MemberController {
         }
 
         log.info("프로필 수정 완료");
-        return rq.redirectWithMsg("/member/profile", memberRs.getMsg());
+        return rq.redirectWithMsg("/member/profile/rank", memberRs.getMsg());
     }
 
 }

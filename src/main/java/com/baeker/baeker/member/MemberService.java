@@ -2,6 +2,7 @@ package com.baeker.baeker.member;
 
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.embed.BaekJoon;
+import com.baeker.baeker.member.form.MemberInfoForm;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
 import com.baeker.baeker.myStudy.MyStudy;
@@ -59,7 +60,7 @@ public class MemberService {
     //-- find all + paging --//
     public Page<Member> getAll(int page) {
         ArrayList<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+        sorts.add(Sort.Order.asc("createDate"));
 
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return memberRepository.findAll(pageable);
@@ -90,13 +91,13 @@ public class MemberService {
 
     //-- Social Join, Login --//
     @Transactional
-    public RsData<Member> whenSocialLogin(String provider, String username, String name, String email, String token) {
+    public RsData<Member> whenSocialLogin(String provider, String username, String name, String email, String token, String profileImg) {
         Optional<Member> opMember = getMember(username);
 
         if (opMember.isPresent())
             return RsData.of("S-2", "로그인 되었습니다.", opMember.get());
 
-        return join(provider, username, name, "", "", null, email, token);
+        return join(provider, username, name, "", "", profileImg, email, token);
     }
 
 
@@ -122,7 +123,7 @@ public class MemberService {
 
 
     //-- Join : Social + Security 실질적인 처리 --//
-    private RsData<Member> join(String provider, String username, String name, String about, String password, Integer profileImg, String email, String token) {
+    private RsData<Member> join(String provider, String username, String name, String about, String password, String profileImg, String email, String token) {
 
         if (this.getMember(username).isPresent()) {
             return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(username));
@@ -138,19 +139,29 @@ public class MemberService {
     }
 
 
-    //-- nick name, about, img 수정 --//
+    //-- Modify Form 으로 nick name, about, img 수정 --//
     @Transactional
     public RsData<Member> modify(Member member, MemberModifyForm form) {
 
-        Optional<Member> byName = memberRepository.findByNickName(form.getNickName());
+        return modify(member, form.getNickName(), form.getAbout(), form.getProfileImg());
+    }
 
-        if (!member.getNickName().equals(form.getNickName()))
-            if (byName.isPresent())
-                return RsData.of("F-1", form.getNickName() + "(은)는 이미 존재하는 이름입니다.");
+    //-- Info Form 으로 nick name, about, img 수정 --//
+    @Transactional
+    public RsData<Member> modify(Member member, MemberInfoForm form) {
+
+        return modify(member, form.getNickName(), form.getAbout(), form.getProfileImg());
+    }
+
+    //-- 프로필 닉네임, 소개, 이미지 변경 실질적인 처리 --//
+    private RsData<Member> modify(Member member, String nickName, String about, String profileImg) {
+
+        if (nickName.contains("운영자"))
+            return RsData.of("F-1", nickName + "(은)는 사용할 수 없는 이름입니다.");
 
         List<MyStudy> myStudies = this.getMyStudyOnlyLeader(member);
 
-        Member modifyMember = member.modifyMember(form.getNickName(), form.getAbout(), form.getProfileImg());
+        Member modifyMember = member.modifyMember(nickName, about, profileImg);
         Member saveMember = memberRepository.save(modifyMember);
 
         return this.modifyLeader(saveMember, myStudies);
@@ -160,7 +171,7 @@ public class MemberService {
     //-- 스터디 리더의 이름이 변경될경우 스터디 리더 변경 --//
     private RsData<Member> modifyLeader(Member member, List<MyStudy> myStudies) {
 
-        if (myStudies.size() == 0 )
+        if (myStudies.size() == 0)
             return RsData.of("S-1", "수정이 완료되었습니다.", member);
 
         for (MyStudy myStudy : myStudies) {
