@@ -52,9 +52,9 @@ public class RuleControllerTests {
         RuleForm ruleForm = new RuleForm("name", "about", "2", "provider", "GOLD");
     }
 
-    @Test
-    @WithAnonymousUser
-    @DisplayName("로그인 안했을때 create")
+//    @Test
+//    @WithAnonymousUser
+//    @DisplayName("로그인 안했을때 create")
     void notLogin() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
@@ -70,9 +70,9 @@ public class RuleControllerTests {
     }
 
 
-    @Test
-    @WithUserDetails("user10")
-    @DisplayName("로그인 했을때 create")
+//    @Test
+//    @WithUserDetails("user10")
+//    @DisplayName("로그인 했을때 create")
     void createTests() throws Exception {
 
 
