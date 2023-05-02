@@ -46,7 +46,7 @@ public class RuleControllerTests {
     @Test
     @DisplayName("user10 생성")
     void create() {
-        MemberJoinForm memberJoinForm = new MemberJoinForm("user10", "user10", "소개", "1234", "1234", 1);
+        MemberJoinForm memberJoinForm = new MemberJoinForm("user10", "user10", "소개", "1234", "1234", "");
         Member member = memberService.join(memberJoinForm).getData();
 
         RuleForm ruleForm = new RuleForm("name", "about", "2", "provider", "GOLD");
