@@ -1,10 +1,8 @@
 package com.baeker.baeker.member;
 
-import com.baeker.baeker.base.entity.Score;
-import com.baeker.baeker.member.embed.BaekJoon;
-import com.baeker.baeker.member.embed.Programmers;
+import com.baeker.baeker.base.entity.ScoreBase;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.myStudy.MyStudy;
-import com.baeker.baeker.study.Study;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -22,7 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @SuperBuilder(toBuilder = true)
-public class Member extends Score {
+public class Member extends ScoreBase {
 
     @Column(unique = true)
     private String username;
@@ -43,6 +42,11 @@ public class Member extends Score {
     @Builder.Default
     @OneToMany(mappedBy = "member")
     private List<MyStudy> myStudies = new ArrayList<>();
+
+    @Builder.Default
+    @OrderBy("id desc")
+    @OneToMany(mappedBy = "member", cascade = ALL)
+    private List<MemberSnapshot> snapshotList = new ArrayList<>();
 
 
     //-- crate method --//
@@ -75,7 +79,7 @@ public class Member extends Score {
     }
 
     //-- 백준 점수 최신화 --//
-    protected Member updateBaeJoon(Score baekJoon, Integer total) {
+    protected Member updateBaeJoon(ScoreBase baekJoon) {
         return this.toBuilder()
                 .bronze(baekJoon.getBronze())
                 .sliver(baekJoon.getSliver())
@@ -83,7 +87,6 @@ public class Member extends Score {
                 .platinum(baekJoon.getPlatinum())
                 .diamond(baekJoon.getDiamond())
                 .ruby(baekJoon.getRuby())
-                .solvedBaekJoon(total)
                 .build();
     }
 

@@ -1,6 +1,6 @@
 package com.baeker.baeker.study;
 
-import com.baeker.baeker.base.entity.Score;
+import com.baeker.baeker.base.entity.ScoreBase;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.embed.Programmers;
@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = PROTECTED)
-public class Study extends Score {
+public class Study extends ScoreBase {
 
     @Column(unique = true)
     private String name;

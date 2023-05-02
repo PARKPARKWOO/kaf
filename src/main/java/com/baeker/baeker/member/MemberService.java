@@ -1,10 +1,12 @@
 package com.baeker.baeker.member;
 
-import com.baeker.baeker.base.entity.Score;
+import com.baeker.baeker.base.entity.ScoreBase;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.form.MemberInfoForm;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
+import com.baeker.baeker.member.snapshot.MemberSnapshotRepository;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
@@ -30,6 +32,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder encoder;
     private final StudyService studyService;
+    private final MemberSnapshotRepository memberSnapshotRepository;
 
 
     //-- find by username --//
@@ -186,12 +189,21 @@ public class MemberService {
         return random;
     }
 
-    public void whenBaekJoonEventType(Score score, Score oldScore, String eventCode) {
+    //-- 스넵샷 저장 --//
+    private void saveSnapshot(MemberSnapshot snapshot) {
+        memberSnapshotRepository.save(snapshot);
+    }
+
+
+    //-- 백준 해결 문제 추가 이벤트 처리 --//
+    public void whenBaekJoonEventType(ScoreBase score, String eventCode) {
+
         Member member = getMember(score.getId()).getData();
-        Integer total = 0;
+        MemberSnapshot snapshot = MemberSnapshot.create(eventCode, member);
 
-        Member updateMember = member.updateBaeJoon(score, total);
+        Member updateMember = member.updateBaeJoon(score);
+        memberRepository.save(updateMember);
 
-
+        saveSnapshot(snapshot);
     }
 }

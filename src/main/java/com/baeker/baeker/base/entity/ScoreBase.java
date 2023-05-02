@@ -9,13 +9,18 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public abstract class Score extends  BaseEntity{
+public abstract class ScoreBase extends  BaseEntity{
 
-    private Integer bronze;
-    private Integer sliver;
-    private Integer gold;
-    private Integer platinum;
-    private Integer diamond;
-    private Integer ruby;
-    private Integer solvedBaekJoon;
+    long bronze;
+    long sliver;
+    long gold;
+    long diamond;
+    long ruby;
+    long platinum;
+
+    public long solvedBaekJoon() {
+        return bronze + sliver + gold + diamond + ruby;
+    }
+
+
 }
