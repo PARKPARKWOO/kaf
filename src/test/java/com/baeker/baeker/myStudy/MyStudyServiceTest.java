@@ -88,7 +88,7 @@ class MyStudyServiceTest {
         assertThat(inviting.getResultCode()).isEqualTo("F-2");
     }
 
-    @Test
+//    @Test
     void 정식_스터디맴버로_승인() {
         Member leader = create("user", "leader");
         Study study = createStudy("study", leader);

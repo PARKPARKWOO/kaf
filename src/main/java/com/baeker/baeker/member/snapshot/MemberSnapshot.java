@@ -32,7 +32,7 @@ public class MemberSnapshot extends ScoreBase {
                 .platinum(member.getPlatinum())
                 .build();
 
-        member.getSnapshotList().add(snapshot);
+        member.getSnapshotList().add(0, snapshot);
 
         return snapshot;
     }

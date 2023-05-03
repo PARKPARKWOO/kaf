@@ -35,6 +35,11 @@ public class MyStudyController {
         log.info("스터디 가입 요청 확인 study id = {}", id);
 
         Member member = rq.getMember();
+        if (rq.notConnectBaekJoon()){
+            log.info("백준 아이디 없음");
+            return rq.redirectWithMsg("/member/connect","백준 연동이 필요합니다.");
+        }
+
         RsData<Study> studyRs = studyService.getStudy(id);
 
         if (studyRs.isFail()) {
@@ -67,6 +72,11 @@ public class MyStudyController {
         if (inviteeRs.isFail()) {
             log.info("invitee 조회 실패 error = {}", inviteeRs.getMsg());
             return rq.historyBack(inviteeRs.getMsg());
+        }
+
+        if (inviteeRs.getData().getBaekJoonName() == null){
+            log.info("백준 아이디 없음");
+            return rq.historyBack("백준 id 연동이 안된 회원입니다.");
         }
 
         RsData<Study> studyRs = studyService.getStudy(form.getId());

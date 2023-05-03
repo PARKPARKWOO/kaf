@@ -7,6 +7,7 @@ import com.baeker.baeker.member.embed.BaekJoonDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -28,16 +29,14 @@ public class ApiScheduler {
      * 티어 별 check
      */
 
-//    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 1000)
     public void checkStudyRule() throws IOException, ParseException {
         log.info("스케줄러 실행");
         RsData<List<Member>> memberList = memberService.getAll();
         for (Member member : memberList.getData()) {
 
-            List<Integer> list = new ArrayList<>();
 
-            log.info("tier");
-            list.add(solvedApiService.getSolvedCount(member, 1, 6));
+            solvedApiService.getSolvedCount(member, 1, 6);
 
             Integer Silver = solvedApiService.getSolvedCount(member, 6, 11);
 

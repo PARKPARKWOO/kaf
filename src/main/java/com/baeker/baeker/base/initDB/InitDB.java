@@ -54,7 +54,7 @@ public class InitDB {
             Study study = createStudy("알파의 스터디", "Provident cupiditate voluptatem et in.", 10, alpha);
             createStudy("알파알파", "Provident cupiditate voluptatem et in.", 10, alpha);
 
-            // 더미 user 7명 생성후 알파 스터디 가입
+            // 더미 user 3명 생성후 알파 스터디 가입
             for (int i = 3; i < 10; i++) {
                 Member member = createMember("user" + i, "member" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 10 + ".svg", "Joon" + i);
                 MyStudy myStudy = myStudyService.join(member, study, "hi").getData();
@@ -79,10 +79,15 @@ public class InitDB {
         }
 
         public void init_dummy_user() {
+            // 스터디가 없는 더미 유저 6명 생성
 
-            // 스터디가 없는 더미 유저 5명 생성
-            for (int i = 0; i < 5; i++)
+            // 백준 아이디 연동 O
+            for (int i = 0; i < 3; i++)
                 createMember("dummy" + i, "dummy" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 50 + ".svg", "Baek" + i);
+
+            // 백준 아이디 연동 X
+            for (int i = 3; i < 6; i++)
+                createMember("dummy" + i, "dummy" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 50 + ".svg", null);
         }
 
         public void initData() {

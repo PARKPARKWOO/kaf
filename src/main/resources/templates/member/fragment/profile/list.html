@@ -26,6 +26,8 @@
 
   </div>
 
+  <div th:replace="~{member/fragment/profile/baekJoon :: baekJoon(${list})}"></div>
+
   <table th:replace="~{member/fragment/profile/study :: study(${list}, ${myStudies})}"></table>
 
   <table th:replace="~{member/fragment/profile/join :: join(${list}, ${pending})}"></table>
