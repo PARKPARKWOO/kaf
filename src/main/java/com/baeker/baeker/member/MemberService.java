@@ -262,4 +262,11 @@ public class MemberService {
         Member member = Member.initMemberCreate(provider, username, name, about, password, profileImg, baekJoonName, dto);
         return memberRepository.save(member);
     }
+
+    //-- init db 용 create member snapshot --//
+    @Transactional
+    public void initDbSnapshotCreate(Member member, BaekJoonDto dto, LocalDateTime createDate) {
+        MemberSnapshot snapshot = MemberSnapshot.initDbCreate(member, dto, createDate);
+        memberSnapshotRepository.save(snapshot);
+    }
 }

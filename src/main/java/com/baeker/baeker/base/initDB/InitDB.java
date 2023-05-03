@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Profile("dev")
 @Configuration
 @RequiredArgsConstructor
@@ -53,6 +55,14 @@ public class InitDB {
 
             Study study = createStudy("알파의 스터디", "Provident cupiditate voluptatem et in.", 10, alpha);
             createStudy("알파알파", "Provident cupiditate voluptatem et in.", 10, alpha);
+
+            for (int i = 0; i < 7; i++) {
+                BaekJoonDto dto = new BaekJoonDto(i, i, i, i, i, i);
+
+                LocalDateTime today = LocalDateTime.now();
+
+                memberService.initDbSnapshotCreate(alpha, dto, today.minusDays(i));
+            }
 
             // 더미 user 3명 생성후 알파 스터디 가입
             for (int i = 3; i < 10; i++) {
