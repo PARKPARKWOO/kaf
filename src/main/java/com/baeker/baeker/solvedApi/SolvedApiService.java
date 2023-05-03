@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 public class SolvedApiService {
 
     private final SolvedApiManager solvedApiManager;
-    
+    private final MemberService memberService;
 
     /**
      * 난이도별 체크 후 문제풀이 수 리턴
@@ -35,7 +35,7 @@ public class SolvedApiService {
 
         return solvedCount;
     }
-
+    
 
     public Integer getSolvedCount(Member member) throws IOException, ParseException, UnsupportedEncodingException {
             return Integer.parseInt(this.solvedApiManager.getSolvedCount(member));

@@ -32,7 +32,7 @@ public class ApiScheduler {
      * 티어 별 check
      */
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(cron = "${scheduler.cron.value}")
     public void checkStudyRule() throws IOException, ParseException {
         log.info("스케줄러 실행");
         RsData<List<Member>> memberList = memberService.getAll();
@@ -53,6 +53,7 @@ public class ApiScheduler {
             BaekJoon baekJoon = BaekJoon.builder().bronze(Bronze).sliver(Silver).gold(Gold).platinum(Platinum)
                     .diamond(Diamond).ruby(Ruby).build();
             memberService.solve(member.getId(), baekJoon);
+
         }
     }
 }
