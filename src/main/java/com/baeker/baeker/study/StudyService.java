@@ -2,10 +2,13 @@ package com.baeker.baeker.study;
 
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyRepository;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
+import com.baeker.baeker.study.snapshot.StudySnapShot;
+import com.baeker.baeker.study.snapshot.StudySnapShotRepository;
 import com.baeker.baeker.studyRule.StudyRule;
 import com.baeker.baeker.studyRule.StudyRuleService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import java.util.Optional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
+    private final StudySnapShotRepository studySnapShotRepository;
 
     //-- create --//
     @Transactional
@@ -38,7 +42,17 @@ public class StudyService {
         Study study = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
         Study saveStudy = studyRepository.save(study);
 
+
+
         return RsData.of("S-1", "새로운 스터디가 개설되었습니다!", saveStudy);
+    }
+
+    //-- 스터디 가입시 맴버의 백준 문제 추가 --//
+    @Transactional
+    public Study addBaekJoon(Study study, Member member) {
+        Study updateStudy = study.addBaekJoon(member);
+        Study saveStudy = studyRepository.save(updateStudy);
+        return saveStudy;
     }
 
 
@@ -160,5 +174,25 @@ public class StudyService {
         }
 
         return RsData.of("F-2", "스터디에 존재하지 않는 회원입니다.");
+    }
+
+    //-- 스냅샷 저장 --//
+    private void saveSnapshot(StudySnapShot snapShot) {
+        studySnapShotRepository.save(snapShot);
+    }
+
+    //-- 백준 스케쥴 이벤트 처리 --//
+    @Transactional
+    public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
+        List<MyStudy> myStudies = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudies) {
+            Study study = myStudy.getStudy();
+            StudySnapShot snapShot = StudySnapShot.create(study);
+
+            study.updateBaekJoon(dto);
+
+            saveSnapshot(snapShot);
+        }
     }
 }

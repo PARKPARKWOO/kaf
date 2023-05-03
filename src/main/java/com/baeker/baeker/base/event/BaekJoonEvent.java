@@ -1,5 +1,7 @@
 package com.baeker.baeker.base.event;
 
+import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
@@ -7,14 +9,14 @@ import org.springframework.context.ApplicationEvent;
 public class BaekJoonEvent extends ApplicationEvent {
 
     private final String eventCode;
-    private final String baekJoonName;
-    private final int score;
+    private final Member member;
+    private final BaekJoonDto solved;
 
-    public BaekJoonEvent(Object source, String eventCode, String baekJoonName, int score) {
+    public BaekJoonEvent(Object source, Member member, BaekJoonDto solved) {
         super(source);
-        this.eventCode = eventCode;
-        this.baekJoonName = baekJoonName;
-        this.score = score;
+        this.eventCode = "BAEKJOON_SOLVED_COUNT_UPDATE";
+        this.member = member;
+        this.solved = solved;
     }
 
 }

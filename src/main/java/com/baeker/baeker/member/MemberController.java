@@ -2,17 +2,12 @@ package com.baeker.baeker.member;
 
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
-import com.baeker.baeker.member.form.MemberInfoForm;
-import com.baeker.baeker.member.form.MemberJoinForm;
-import com.baeker.baeker.member.form.MemberLoginForm;
-import com.baeker.baeker.member.form.MemberModifyForm;
+import com.baeker.baeker.member.embed.BaekJoonDto;
+import com.baeker.baeker.member.form.*;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
-import com.baeker.baeker.myStudy.form.MyStudyJoinForm;
 import com.baeker.baeker.myStudy.form.MyStudyModfyMsgForm;
-import com.baeker.baeker.study.Study;
-import com.baeker.baeker.study.StudyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -137,6 +132,68 @@ public class MemberController {
 
         log.info("내정보 등록 성공");
         return rq.redirectWithMsg("/", "회원 가입이 완료 되었습니다.");
+    }
+
+    //-- 백준 연동 폼 --// : 미완성
+    @GetMapping("/connect")
+    @PreAuthorize("isAuthenticated()")
+    public String connectForm() {
+        Member member = rq.getMember();
+        log.info("백준 연동 폼 요청 확인 member id = {}", member.getId());
+
+        return "/member/connect";
+    }
+
+    //-- 백준 연동 이메일 인증 --// : 미완성
+    @GetMapping("/verify")
+    @PreAuthorize("isAuthenticated()")
+    public String connectForm(
+            BaekJoonConnectForm form
+    ) {
+        log.info("백준 연동 이메일 인증 폼 요청 확인 백준 id = {}", form.getBaekJoonName());
+        RsData<Member> getMemberRs = memberService.getByBaekJoonName(form.getBaekJoonName());
+
+        if (getMemberRs.isSuccess()) {
+            log.info("이미 연동되어있는 백준 id");
+            return rq.historyBack("이미 연동되어있는 id 입니다.");
+        }
+
+        // solved ac 를 호출해 존재하는 id 인지 확인하고 해당 계정의 email 값을 반환
+
+        int code = memberService.verifyCode();
+        form.setSendCode(code);
+
+        // 반환 받은 email 에 code 를 보냄
+
+        log.info("인증 코드 발송 완료 code = {}", code);
+        return "/";
+    }
+
+    //-- 백준 연동 처리 --// : 미완성
+    @PostMapping("/verify")
+    @PreAuthorize("isAuthenticated()")
+    public String connect(
+            BaekJoonConnectForm form
+    ) {
+        log.info("백준 연동 처리 요청 확인");
+
+        if (form.getSendCode() != form.getVerifyCode()) {
+            log.info("인증 코드가 일치하지 않습니다.");
+            return rq.historyBack("인증 코드가 일치하지 않습니다.");
+        }
+        Member member = rq.getMember();
+
+        // solved ac 를 호출해 해결한 문제 수가 저장된 BaekJoonDto 를 반환받음
+        BaekJoonDto dto = new BaekJoonDto();
+
+        RsData<Member> memberRs = memberService.connectBaekJoon(member, form.getBaekJoonName(), dto);
+        if (memberRs.isFail()) {
+            log.info("연동 실패 error = {}", memberRs.getMsg());
+            return rq.historyBack(memberRs.getMsg());
+        }
+
+        log.info("백준 id 연동 성공 member id ={} / 백준 id = {}", member.getId(), form.getBaekJoonName());
+        return rq.redirectWithMsg("", memberRs.getMsg());
     }
 
 

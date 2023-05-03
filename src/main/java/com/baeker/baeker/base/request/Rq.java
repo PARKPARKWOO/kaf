@@ -53,6 +53,12 @@ public class Rq {
         return !isLogin();
     }
 
+    // 백준과 연동되어있는지 체크
+    public boolean isConnectBaekJoon() {
+        if (isLogout()) return false;
+        return member.getBaekJoonName() != null;
+    }
+
 
     // 로그인 된 회원의 객체
     public Member getMember() {

@@ -1,6 +1,7 @@
 package com.baeker.baeker.member;
 
 import com.baeker.baeker.base.entity.ScoreBase;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.myStudy.MyStudy;
 import jakarta.persistence.*;
@@ -84,35 +85,30 @@ public class Member extends ScoreBase {
         this.newMember = false;
     }
 
-
     // 백준 아이디 등록 //
-    protected Member connectBaekJoon(String baekJoonName) {
+    protected Member connectBaekJoon(String baekJoonName, BaekJoonDto dto) {
         return this.toBuilder()
                 .baekJoonName(baekJoonName)
+                .bronze(dto.getBronze())
+                .sliver(dto.getSliver())
+                .gold(dto.getGold())
+                .diamond(dto.getDiamond())
+                .ruby(dto.getRuby())
+                .platinum(dto.getPlatinum())
                 .build();
     }
 
     // 백준 점수 최신화 //
-    protected Member updateBaeJoon(int score, String eventCode) {
-        Member member;
-
-        switch (eventCode) {
-            case "bronze" -> member = addBronze(score);
-            case "sliver" -> member = addSliver(score);
-            case "gold" -> member = addGold(score);
-            case "diamond" -> member = addDiamond(score);
-            case "ruby" -> member = addRuby(score);
-            default -> member = addPlatinum(score);
-        }
-        return member;
+    protected Member updateBaeJoon(BaekJoonDto dto) {
+        return this.toBuilder()
+                .bronze(this.getBronze() + dto.getBronze())
+                .sliver(this.getSliver() + dto.getSliver())
+                .gold(this.getGold() + dto.getGold())
+                .diamond(this.getDiamond() + dto.getDiamond())
+                .ruby(this.getRuby() + dto.getRuby())
+                .platinum(this.getPlatinum() + dto.getPlatinum())
+                .build();
     }
-    private Member addBronze(int score) {return this.toBuilder().bronze(score).build();}
-    private Member addSliver(int score) {return this.toBuilder().sliver(score).build();}
-    private Member addGold(int score) {return this.toBuilder().gold(score).build();}
-    private Member addDiamond(int score) {return this.toBuilder().diamond(score).build();}
-    private Member addRuby(int score) {return this.toBuilder().ruby(score).build();}
-
-    private Member addPlatinum(int score) {return this.toBuilder().platinum(score).build();}
 
 
     //-- create authorize --//
@@ -127,5 +123,27 @@ public class Member extends ScoreBase {
             grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
 
         return grantedAuthorities;
+    }
+
+
+    //-- init db 용 create method --//
+    protected  static Member initMemberCreate(String provider, String username, String name, String about, String password, String profileImg, String baekJoonName, BaekJoonDto dto) {
+        return builder()
+                .provider(provider)
+                .username(username)
+                .nickName(name)
+                .baekJoonName(baekJoonName)
+                .about(about)
+                .password(password)
+                .profileImg(profileImg)
+                .kakaoProfileImage(profileImg)
+                .newMember(false)
+                .bronze(dto.getBronze())
+                .sliver(dto.getSliver())
+                .gold(dto.getGold())
+                .diamond(dto.getDiamond())
+                .ruby(dto.getRuby())
+                .platinum(dto.getPlatinum())
+                .build();
     }
 }

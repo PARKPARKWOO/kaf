@@ -2,9 +2,9 @@ package com.baeker.baeker.study;
 
 import com.baeker.baeker.base.entity.ScoreBase;
 import com.baeker.baeker.member.Member;
-import com.baeker.baeker.member.embed.BaekJoon;
-import com.baeker.baeker.member.embed.Programmers;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.study.snapshot.StudySnapShot;
 import com.baeker.baeker.studyRule.StudyRule;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -29,11 +30,6 @@ public class Study extends ScoreBase {
     private Integer capacity;
     private Integer xp;
 
-    @Embedded
-    private BaekJoon baekJoon;
-    @Embedded
-    private Programmers programmers;
-
     @Builder.Default
     @OneToMany(mappedBy = "study")
     private List<MyStudy> myStudies = new ArrayList<>();
@@ -42,9 +38,13 @@ public class Study extends ScoreBase {
     @OneToMany(mappedBy = "study")
     private List<StudyRule> studyRules = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "study", cascade = ALL)
+    private List<StudySnapShot> snapShotList = new ArrayList<>();
+
 
     //-- create method --//
-    public static Study createStudy(String name, String about, Integer capacity, Member member) {
+    protected static Study createStudy(String name, String about, Integer capacity, Member member) {
         return builder()
                 .name(name)
                 .about(about)
@@ -58,7 +58,7 @@ public class Study extends ScoreBase {
     //-- business logic --//
 
     // 이름, 소개, 최대 인원 변경 //
-    public Study modifyStudy(String name, String about, Integer capacity) {
+    protected Study modifyStudy(String name, String about, Integer capacity) {
         return this.toBuilder()
                 .name(name)
                 .about(about)
@@ -68,7 +68,7 @@ public class Study extends ScoreBase {
     }
 
     // 리더 변경 //
-    public Study modifyLeader(String leader) {
+    protected Study modifyLeader(String leader) {
         return this.toBuilder()
                 .leader(leader)
                 .modifyDate(LocalDateTime.now())
@@ -76,9 +76,32 @@ public class Study extends ScoreBase {
     }
 
     // 경험치 상승 //
-    public void xpUp(Integer addXp) {
+    protected void xpUp(Integer addXp) {
         this.xp += addXp;
     }
 
+    // 스터디 가입시 맴버의 백준 문제 추가 //
+    protected Study addBaekJoon(Member member) {
+        return this.toBuilder()
+                .bronze(this.getBronze() + member.getBronze())
+                .sliver(this.getSliver() + member.getSliver())
+                .gold(this.getGold() + member.getGold())
+                .diamond(this.getDiamond() + member.getDiamond())
+                .ruby(this.getRuby() + member.getRuby())
+                .platinum(this.getPlatinum() + member.getPlatinum())
+                .build();
+    }
+
+    // 백준 점수 최신화 //
+    protected Study updateBaekJoon(BaekJoonDto dto) {
+        return this.toBuilder()
+                .bronze(this.getBronze() + dto.getBronze())
+                .sliver(this.getSliver() + dto.getSliver())
+                .gold(this.getGold() + dto.getGold())
+                .diamond(this.getDiamond() + dto.getDiamond())
+                .ruby(this.getRuby() + dto.getRuby())
+                .platinum(this.getPlatinum() + dto.getPlatinum())
+                .build();
+    }
 
 }

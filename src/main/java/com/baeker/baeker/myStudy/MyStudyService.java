@@ -2,7 +2,6 @@ package com.baeker.baeker.myStudy;
 
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
-import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.study.Study;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -72,7 +71,7 @@ public class MyStudyService {
 
     //-- 가입, 초대신청 승인 --//
     @Transactional
-    public RsData<BaekJoon> accept(MyStudy myStudy) {
+    public RsData<MyStudy> accept(MyStudy myStudy) {
 
         if (myStudy.getStudy().equals(StudyStatus.MEMBER))
             return RsData.of("F-1", "이미 정식 스터디 맴버입니다.");

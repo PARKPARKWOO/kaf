@@ -1,18 +1,12 @@
 package com.baeker.baeker.solvedApi;
 
-import com.baeker.baeker.base.event.BaekJoonEvent;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
-import com.baeker.baeker.member.embed.BaekJoon;
-import com.baeker.baeker.study.StudyService;
-import com.baeker.baeker.studyRule.StudyRuleService;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
-import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -56,10 +50,10 @@ public class ApiScheduler {
             Integer Ruby = solvedApiService.getSolvedCount(member, 26, 31);
 
 
-            BaekJoon baekJoon = BaekJoon.builder().bronze(Bronze).sliver(Silver).gold(Gold).platinum(Platinum)
-                    .diamond(Diamond).ruby(Ruby).build();
-
-            memberService.solve(member.getId(), baekJoon);
+//            BaekJoonDto baekJoon = BaekJoonDto.builder().bronze(Bronze).sliver(Silver).gold(Gold).platinum(Platinum)
+//                    .diamond(Diamond).ruby(Ruby).build();
+//
+//            memberService.solve(member.getId(), baekJoon);
         }
     }
 }

@@ -1,9 +1,7 @@
 package com.baeker.baeker.member;
 
 import com.baeker.baeker.base.request.RsData;
-import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.member.form.MemberJoinForm;
-import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
@@ -63,5 +61,10 @@ class MemberServiceTest {
 
         String nickName = findMember.get().getNickName();
         System.out.println(nickName);
+    }
+
+    @Test
+    void name() {
+        System.out.println(memberService.verifyCode());
     }
 }

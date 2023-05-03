@@ -1,7 +1,7 @@
 package com.baeker.baeker.member;
 
-import com.baeker.baeker.base.entity.ScoreBase;
 import com.baeker.baeker.base.request.RsData;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberInfoForm;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
@@ -145,6 +145,16 @@ public class MemberService {
         return modify(member, form.getNickName(), form.getAbout(), form.getProfileImg());
     }
 
+    //-- 백준 id 연동 --//
+    @Transactional
+    public RsData<Member> connectBaekJoon(Member member, String baekJoonName, BaekJoonDto dto) {
+
+        Member connectBaekJoon = member.connectBaekJoon(baekJoonName, dto);
+        Member saveMember = memberRepository.save(connectBaekJoon);
+
+        return RsData.of("S-1", "백준 연동에 성공했습니다.", saveMember);
+    }
+
     //-- 프로필 닉네임, 소개, 이미지 변경 실질적인 처리 --//
     private RsData<Member> modify(Member member, String nickName, String about, String profileImg) {
 
@@ -199,6 +209,11 @@ public class MemberService {
         return random;
     }
 
+    //-- 랜덤숫자 6자리 생성 --//
+    public int verifyCode() {
+        return (int) (Math.random() * 1000000);
+    }
+
     //-- 스넵샷 저장 --//
     private void saveSnapshot(MemberSnapshot snapshot) {
         memberSnapshotRepository.save(snapshot);
@@ -206,15 +221,26 @@ public class MemberService {
 
 
     //-- 백준 해결 문제 추가 이벤트 처리 --//
-    public void whenBaekJoonEventType(String baekJoonName, int score, String eventCode) {
-
-        Member member = getByBaekJoonName(baekJoonName).getData();
+    @Transactional
+    public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
 
         MemberSnapshot snapshot = MemberSnapshot.create(member);
 
-        Member updateMember = member.updateBaeJoon(score, eventCode);
+        Member updateMember = member.updateBaeJoon(dto);
         memberRepository.save(updateMember);
 
         saveSnapshot(snapshot);
+    }
+
+    //-- init db 용 create method --//
+    @Transactional
+    public Member initDbMemberCreate(String provider, String username, String name, String about, String password, String profileImg, String baekJoonName, BaekJoonDto dto) {
+
+        if (StringUtils.hasText(password)) {
+            password = encoder.encode(password);
+        }
+
+        Member member = Member.initMemberCreate(provider, username, name, about, password, profileImg, baekJoonName, dto);
+        return memberRepository.save(member);
     }
 }

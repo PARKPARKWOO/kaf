@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class MemberSnapshot extends ScoreBase {
 
-    private String nickName;
+    private String baekJoonName;
 
     @ManyToOne
     private Member member;
@@ -23,7 +23,7 @@ public class MemberSnapshot extends ScoreBase {
     public static MemberSnapshot create(Member member) {
         MemberSnapshot snapshot = MemberSnapshot.builder()
                 .member(member)
-                .nickName(member.getNickName())
+                .baekJoonName(member.getBaekJoonName())
                 .bronze(member.getBronze())
                 .sliver(member.getSliver())
                 .gold(member.getGold())

@@ -4,7 +4,6 @@ import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
-import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
 import com.baeker.baeker.myStudy.form.MyStudyJoinForm;
 import com.baeker.baeker.study.Study;
@@ -13,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -133,12 +129,14 @@ public class MyStudyController {
             return rq.historyBack("권한이 없습니다.");
         }
 
-        RsData<BaekJoon> acceptRs = myStudyService.accept(myStudy);
+        RsData<MyStudy> acceptRs = myStudyService.accept(myStudy);
 
         if (acceptRs.isFail()) {
             log.info("승인 실패 error = {}", acceptRs.getMsg());
             return rq.historyBack(acceptRs.getMsg());
         }
+
+        studyService.addBaekJoon(myStudy.getStudy(), myStudy.getMember());
 
         log.info("정식 스터디 원으로 승인 완료");
         return rq.redirectWithMsg("/member/profile/study#list", acceptRs.getMsg());
@@ -166,12 +164,13 @@ public class MyStudyController {
             return rq.historyBack("권한이 없습니다.");
         }
 
-        RsData<BaekJoon> acceptRs = myStudyService.accept(myStudy);
+        RsData<MyStudy> acceptRs = myStudyService.accept(myStudy);
 
         if (acceptRs.isFail()) {
             log.info("승인 실패 error = {}", acceptRs.getMsg());
             return rq.historyBack(acceptRs.getMsg());
         }
+        studyService.addBaekJoon(myStudy.getStudy(), myStudy.getMember());
 
         log.info("정식 스터디 원으로 승인 완료");
         return rq.redirectWithMsg("/study/detail/member/" + myStudy.getStudy().getId(), acceptRs.getMsg());

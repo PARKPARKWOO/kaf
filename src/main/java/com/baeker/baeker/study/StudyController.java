@@ -45,8 +45,13 @@ public class StudyController {
     @PreAuthorize("isAuthenticated()")
     public String showCreate(StudyCreateForm form) {
         log.info("스터디 생성 요청 확인 form ={}", form.toString());
-        Member member = rq.getMember();
 
+        if (!rq.isConnectBaekJoon()){
+            log.info("연동된 백준 id 가 없음");
+            return rq.redirectWithMsg("/member/connect","백준 연동이 필요합니다.");
+        }
+
+        Member member = rq.getMember();
         RsData<Study> studyRs = studyService.create(form, member);
 
         if (studyRs.isFail()) {
@@ -56,6 +61,7 @@ public class StudyController {
 
         Study study = studyRs.getData();
         myStudyService.create(member, study);
+        studyService.addBaekJoon(study, member);
 
         log.info("스터디 생성 완료 study name = {}", study.getName());
         return rq.redirectWithMsg("/study/detail/rule/" + study.getId(), "스터디 개설 완료!");
