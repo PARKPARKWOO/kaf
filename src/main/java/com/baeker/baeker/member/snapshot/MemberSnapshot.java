@@ -2,11 +2,14 @@ package com.baeker.baeker.member.snapshot;
 
 import com.baeker.baeker.base.entity.ScoreBase;
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -20,41 +23,31 @@ public class MemberSnapshot extends ScoreBase {
     private Member member;
 
     //-- create score --//
-    public static MemberSnapshot create(Member member) {
+    public static MemberSnapshot create(Member member, BaekJoonDto dto) {
         MemberSnapshot snapshot = MemberSnapshot.builder()
                 .member(member)
                 .baekJoonName(member.getBaekJoonName())
-                .bronze(member.getBronze())
-                .sliver(member.getSliver())
-                .gold(member.getGold())
-                .diamond(member.getDiamond())
-                .ruby(member.getRuby())
-                .platinum(member.getPlatinum())
+                .bronze(dto.getBronze())
+                .sliver(dto.getSliver())
+                .gold(dto.getGold())
+                .diamond(dto.getDiamond())
+                .ruby(dto.getRuby())
+                .platinum(dto.getPlatinum())
                 .build();
 
         member.getSnapshotList().add(0, snapshot);
-
         return snapshot;
     }
 
     //-- update score --//
-    public MemberSnapshot update(int score, String eventCode) {
-        MemberSnapshot snapshot;
-
-        switch (eventCode) {
-            case "bronze" -> snapshot = addBronze(score);
-            case "sliver" -> snapshot = addSliver(score);
-            case "gold" -> snapshot = addGold(score);
-            case "diamond" -> snapshot = addDiamond(score);
-            case "ruby" -> snapshot = addRuby(score);
-            default -> snapshot = addPlatinum(score);
-        }
-        return snapshot;
+    public MemberSnapshot update(BaekJoonDto dto) {
+        return this.toBuilder()
+                .bronze(this.getBronze() + dto.getBronze())
+                .sliver(this.getSliver() + dto.getSliver())
+                .gold(this.getGold() + dto.getGold())
+                .diamond(this.getDiamond() + dto.getDiamond())
+                .ruby(this.getRuby() + dto.getRuby())
+                .platinum(this.getPlatinum() + dto.getPlatinum())
+                .build();
     }
-    private MemberSnapshot addBronze(int score) {return this.toBuilder().bronze(score).build();}
-    private MemberSnapshot addSliver(int score) {return this.toBuilder().sliver(score).build();}
-    private MemberSnapshot addGold(int score) {return this.toBuilder().gold(score).build();}
-    private MemberSnapshot addDiamond(int score) {return this.toBuilder().diamond(score).build();}
-    private MemberSnapshot addRuby(int score) {return this.toBuilder().ruby(score).build();}
-    private MemberSnapshot addPlatinum(int score) {return this.toBuilder().platinum(score).build();}
 }

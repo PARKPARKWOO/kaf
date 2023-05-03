@@ -1,44 +1,47 @@
 <div th:fragment="chart"
      class="w-full flex justify-center">
 
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript" th:inline="javascript">
-    google.charts.load("current", {packages:['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        google.charts.load("current", {packages: ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
 
-      var data = google.visualization.arrayToDataTable([
-        ["day", "solved count", { role: "style" } ],
-        ["mon", [[${@rq.member.bronze}]], "color: #8b5cf6"],
-        ["tue", 8, "color: #8b5cf6"],
-        ["wed", 3, "color: #8b5cf6"],
-        ["thu", 2, "color: #8b5cf6"],
-        ["fri", 4, "color: #8b5cf6"],
-        ["sat", 5, "color: #8b5cf6"],
-        ["sun", 7, "color: #8b5cf6"]
-      ]);
+        function drawChart() {
 
-      var view = new google.visualization.DataView(data);
-      view.setColumns([0, 1,
-        { calc: "stringify",
-          sourceColumn: 1,
-          type: "string",
-          role: "annotation" },
-        2]);
+            var data = google.visualization.arrayToDataTable([
+                ["day", "solved count", {role: "style"}],
+                ["mon", [[${@rq.member.bronze}]], "color: #8b5cf6"],
+                ["tue", 8, "color: #8b5cf6"],
+                ["wed", 3, "color: #8b5cf6"],
+                ["thu", 2, "color: #8b5cf6"],
+                ["fri", 4, "color: #8b5cf6"],
+                ["sat", 5, "color: #8b5cf6"],
+                ["sun", 7, "color: #8b5cf6"]
+            ]);
 
-      var options = {
-        title: "1주간 해결한 문제",
-        width: 500,
-        height: 350,
-        bar: {groupWidth: "80%"},
-        legend: { position: "none" },
+            var view = new google.visualization.DataView(data);
+            view.setColumns([0, 1,
+                {
+                    calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                },
+                2]);
 
-      };
-      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-      chart.draw(view, options);
-    }
-  </script>
-  <div id="columnchart_values" style="width: 900px; height: 300px;"></div>
+            var options = {
+                title: "1주간 해결한 문제",
+                width: 500,
+                height: 350,
+                bar: {groupWidth: "80%"},
+                legend: {position: "none"},
+
+            };
+            var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+            chart.draw(view, options);
+        }
+    </script>
+    <div id="columnchart_values" style="width: 900px; height: 300px;"></div>
 
 
 </div>

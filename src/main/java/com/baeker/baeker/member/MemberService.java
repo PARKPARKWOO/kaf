@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -214,23 +216,40 @@ public class MemberService {
         return (int) (Math.random() * 1000000);
     }
 
+
     //-- 스넵샷 저장 --//
-    private void saveSnapshot(MemberSnapshot snapshot) {
+    private void saveSnapshot(Member member, BaekJoonDto dto) {
+
+        MemberSnapshot snapshot;
+
+        try {
+            snapshot = member.getSnapshotList().get(0);
+            int createDay = snapshot.getCreateDate().getDayOfMonth();
+            int today = LocalDate.now().getDayOfMonth();
+
+            if (createDay == today)
+                snapshot.update(dto);
+            else
+                snapshot = MemberSnapshot.create(member, dto);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            snapshot = MemberSnapshot.create(member, dto);
+        }
+
         memberSnapshotRepository.save(snapshot);
     }
-
 
     //-- 백준 해결 문제 추가 이벤트 처리 --//
     @Transactional
     public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
 
-        MemberSnapshot snapshot = MemberSnapshot.create(member);
+        saveSnapshot(member, dto);
 
         Member updateMember = member.updateBaeJoon(dto);
         memberRepository.save(updateMember);
-
-        saveSnapshot(snapshot);
     }
+
+
+
 
     //-- init db 용 create method --//
     @Transactional
