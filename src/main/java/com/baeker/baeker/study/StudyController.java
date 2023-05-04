@@ -69,7 +69,7 @@ public class StudyController {
         studyService.addBaekJoon(study, member);
 
         log.info("스터디 생성 완료 study name = {}", study.getName());
-        return rq.redirectWithMsg("/study/detail/rule/" + study.getId(), "스터디 개설 완료!");
+        return rq.redirectWithMsg("/study/detail/rank/" + study.getId(), "스터디 개설 완료!");
     }
 
     //-- 스터디 상세 페이지 --//
@@ -97,6 +97,7 @@ public class StudyController {
         List<MyStudy> myStudies = myStudyService.statusMember(studyRs.getData());
         List<MyStudy> pending = myStudyService.statusNotMember(studyRs.getData());
 
+        model.addAttribute("snapshotList", studyRs.getData().getSnapShotList());
         model.addAttribute("myStudies", myStudies);
         model.addAttribute("pending", pending);
         model.addAttribute("isMyStudy", isMyStudy);
@@ -174,7 +175,7 @@ public class StudyController {
             return rq.historyBack(modifyStudyRs.getMsg());
 
         log.info("스터디 수정 처리 완료");
-        return rq.redirectWithMsg("/study/detail/" + modifyStudyRs.getData().getId(), "수정이 완료되었습니다.");
+        return rq.redirectWithMsg("/study/detail/rank/" + modifyStudyRs.getData().getId(), "수정이 완료되었습니다.");
     }
 }
 

@@ -39,6 +39,7 @@ public class Study extends ScoreBase {
     private List<StudyRule> studyRules = new ArrayList<>();
 
     @Builder.Default
+    @OrderBy("id desc")
     @OneToMany(mappedBy = "study", cascade = ALL)
     private List<StudySnapShot> snapShotList = new ArrayList<>();
 

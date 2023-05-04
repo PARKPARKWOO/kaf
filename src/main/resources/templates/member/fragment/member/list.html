@@ -22,7 +22,7 @@
 
     </div>
     <div th:if="${list eq 'rank'} and ${member.baekJoonName ne null}" class="flex">
-        <div th:replace="~{member/fragment/member/baekJoon :: baekJoon(${list}, ${member})}"></div>
+        <div th:replace="~{member/fragment/member/baekJoon :: baekJoon(${member})}"></div>
 
         <div th:replace="~{member/fragment/profile/chart :: chart(${snapshotList})}"></div>
     </div>
