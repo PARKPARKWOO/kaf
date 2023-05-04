@@ -41,6 +41,7 @@ public class StudyController {
             log.info("연동된 백준 id 가 없음");
 
             return rq.redirectWithMsg("/member/connect","백준 연동이 필요합니다.");
+
         }
         form.setCapacity(10);
         return "/study/create";
@@ -59,6 +60,8 @@ public class StudyController {
             return rq.redirectWithMsg("/member/connect","백준 연동이 필요합니다.");
         }
 
+
+        Member member = rq.getMember();
         RsData<Study> studyRs = studyService.create(form, member);
 
         if (studyRs.getResultCode().equals("F-1")) {

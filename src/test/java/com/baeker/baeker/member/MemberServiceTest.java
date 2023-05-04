@@ -9,6 +9,7 @@ import com.baeker.baeker.member.snapshot.MemberSnapshot;
 
 
 import com.baeker.baeker.member.form.MemberJoinForm;
+
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
@@ -69,6 +70,7 @@ class MemberServiceTest {
     }
 
 
+
     @Test
     void 프로필_변경() {
         Member member = create("user1", "member1");
@@ -112,8 +114,6 @@ class MemberServiceTest {
         assertThat(snapshotList.get(0).getDayOfWeek()).isEqualTo(today);
         assertThat(snapshotList.get(0).solvedBaekJoon()).isEqualTo(6);
     }
-
-
 
 
 }
