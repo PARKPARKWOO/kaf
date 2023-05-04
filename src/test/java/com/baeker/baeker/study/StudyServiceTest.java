@@ -3,6 +3,7 @@ package com.baeker.baeker.study;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -32,6 +34,11 @@ class StudyServiceTest {
         return memberService.join(form).getData();
     }
 
+    private void connect(Member member, String baekJoonName) {
+        BaekJoonDto dummy = new BaekJoonDto();
+        RsData<Member> memberRsData = memberService.connectBaekJoon(member, baekJoonName, dummy);
+    }
+
     private RsData<Study> createStudy(String name, String about, Integer capacity, Member member) {
         StudyCreateForm form = new StudyCreateForm(name, about, capacity);
         RsData<Study> studyRsData = studyService.create(form, member);
@@ -45,6 +52,7 @@ class StudyServiceTest {
     @Test
     void 스터디_생성() {
         Member member = create("user", "member");
+        connect(member, "Joon");
         RsData<Study> studyRs = createStudy("study1", "hi", 8, member);
         Long studyId = studyRs.getData().getId();
 
@@ -55,6 +63,7 @@ class StudyServiceTest {
         assertThat(studyRs.getResultCode()).isEqualTo("S-1");
         assertThat(study.getName()).isEqualTo("study1");
         assertThat(study.getCapacity()).isEqualTo(8);
+        assertThat(study.getSnapShotList().size()).isEqualTo(7);
 
         MyStudy myStudy = study.getMyStudies().get(0);
 
@@ -62,12 +71,20 @@ class StudyServiceTest {
         assertThat(myStudy.getStatus()).isSameAs(StudyStatus.MEMBER);
         assertThat(myStudy.getMember()).isSameAs(member);
         assertThat(member.getMyStudies().get(0)).isSameAs(myStudy);
+    }
 
+    @Test
+    void 백준_연동_없이_스터디_생성_금지() {
+        Member member = create("user", "member");
+
+        assertThatThrownBy(() -> createStudy("study", "about", 10, member))
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test
     void 이름_소개_인원_수정() {
         Member member = create("user", "member");
+        connect(member, "Joon");
         RsData<Study> studyRs = createStudy("study1", "hi", 8, member);
         Study study = studyRs.getData();
         List<Study> studies = studyService.getAll();
@@ -94,7 +111,10 @@ class StudyServiceTest {
     @Test
     void 리더_변경() {
         Member memberA = create("userA", "memberA");
+        connect(memberA, "Joon");
         Member memberB = create("userB", "memberB");
+        connect(memberB, "Baek");
+
         RsData<Study> studyRs = createStudy("study1", "hi", 8, memberA);
         Study study = studyRs.getData();
 
@@ -107,5 +127,9 @@ class StudyServiceTest {
         Study modifyStudy = modifyRs.getData();
 
         assertThat(modifyStudy.getLeader()).isEqualTo("memberB");
+    }
+
+    @Test
+    void name() {
     }
 }

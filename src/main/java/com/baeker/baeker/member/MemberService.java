@@ -258,7 +258,7 @@ public class MemberService {
     }
 
     //-- 스냅샷 삭제 --//
-    public void deleteSnapshot(Member member) {
+    private void deleteSnapshot(Member member) {
         List<MemberSnapshot> snapshotList = member.getSnapshotList();
         MemberSnapshot snapshot = snapshotList.get(snapshotList.size() - 1);
 

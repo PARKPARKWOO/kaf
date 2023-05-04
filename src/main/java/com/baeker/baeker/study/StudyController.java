@@ -39,7 +39,7 @@ public class StudyController {
         rq.getMember();
         if (rq.notConnectBaekJoon()){
             log.info("연동된 백준 id 가 없음");
-            return rq.redirectWithMsg("/member/connect","백준 연동이 필요합니다.");
+            return rq.redirectWithMsg("/member/connect","백준과 연동이 필요합니다.");
         }
         form.setCapacity(10);
         return "/study/create";
@@ -52,14 +52,14 @@ public class StudyController {
         log.info("스터디 생성 요청 확인 form ={}", form.toString());
 
         Member member = rq.getMember();
-        if (rq.notConnectBaekJoon()){
-            log.info("연동된 백준 id 가 없음");
-            return rq.redirectWithMsg("/member/connect","백준 연동이 필요합니다.");
-        }
-
         RsData<Study> studyRs = studyService.create(form, member);
 
-        if (studyRs.isFail()) {
+        if (studyRs.getResultCode().equals("F-1")) {
+            log.info("백준 id 가 없음");
+            return rq.redirectWithMsg("/member/connect", studyRs.getMsg());
+        }
+
+        if (studyRs.getResultCode().equals("F-2")) {
             log.info("중복검사 실패 study name = {}", form.getName());
             return rq.historyBack(studyRs);
         }

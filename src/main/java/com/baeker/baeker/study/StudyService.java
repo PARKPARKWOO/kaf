@@ -3,6 +3,7 @@ package com.baeker.baeker.study;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.embed.BaekJoonDto;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyRepository;
 import com.baeker.baeker.study.form.StudyCreateForm;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,20 +42,24 @@ public class StudyService {
     @Transactional
     public RsData<Study> create(StudyCreateForm form, Member member) {
 
+        if (member.getBaekJoonName() == null)
+            return RsData.of("F-1", "백준과 연동이 필요합니다.");
+
         // 스터디 이름 중복검사
         RsData<Study> studyRs = this.getStudy(form.getName());
         if (studyRs.isSuccess())
-            return RsData.of("F-1", "는 이미 사용 중입니다.");
+            return RsData.of("F-2", "는 이미 사용 중입니다.");
 
         Study study = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
         Study saveStudy = studyRepository.save(study);
+        this.saveSnapshot(study);
 
         return RsData.of("S-1", "새로운 스터디가 개설되었습니다!", saveStudy);
     }
 
 
     /**
-     ** 조회 관련 method **
+     * * 조회 관련 method **
      * find by id
      * find by study name
      * find member in study by member id, study id
@@ -82,7 +89,7 @@ public class StudyService {
     }
 
     //-- 스터디원 id 로 member 찾기 --//
-    public RsData<Member> getMember(Long memberId,Long studyId) {
+    public RsData<Member> getMember(Long memberId, Long studyId) {
         RsData<List<Member>> studyMemberRs = this.getAllMember(studyId);
 
         if (studyMemberRs.isFail())
@@ -200,27 +207,59 @@ public class StudyService {
 
     /**
      ** Snapshot 과 Event 처리 관련 Method **
+     * Study 최초 생성시 더미 Snapshot 7 개 생성
      * Snapshot 저장
+     * Snapshot 삭제
      * 백준 Solved Evnet 처리
      */
 
+    //-- 스터디 생성 시 더미 스냅샷 7개 생성 --//
+    private void saveSnapshot(Study study) {
+        for (int i = 6; i >= 0; i--) {
+            BaekJoonDto dummy = new BaekJoonDto();
+            String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
+
+            StudySnapShot snapShot = StudySnapShot.create(study, dummy, dayOfWeek.substring(0, 3));
+            studySnapShotRepository.save(snapShot);
+        }
+    }
+
     //-- 스냅샷 저장 --//
-    private void saveSnapshot(StudySnapShot snapShot) {
-        studySnapShotRepository.save(snapShot);
+    private void saveSnapshot(MyStudy myStudy, BaekJoonDto dto, String today) {
+
+        Study study = myStudy.getStudy();
+        StudySnapShot snapshot = study.getSnapShotList().get(0);
+
+        if (snapshot.getDayOfWeek().equals(today))
+            snapshot = snapshot.update(dto);
+
+        else {
+            snapshot = StudySnapShot.create(study, dto, today);
+            this.deleteSnapshot(study);
+        }
+        studySnapShotRepository.save(snapshot);
+    }
+
+    //-- 스냅샷 삭제 --//
+    private void deleteSnapshot(Study study) {
+        List<StudySnapShot> snapShotList = study.getSnapShotList();
+        StudySnapShot snapshot = snapShotList.get(snapShotList.size() - 1);
+
+        snapShotList.remove(snapshot);
+        studySnapShotRepository.delete(snapshot);
     }
 
     //-- 백준 스케쥴 이벤트 처리 --//
     @Transactional
     public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
         List<MyStudy> myStudies = member.getMyStudies();
+        String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
 
         for (MyStudy myStudy : myStudies) {
-            Study study = myStudy.getStudy();
-            StudySnapShot snapShot = StudySnapShot.create(study);
+            this.saveSnapshot(myStudy, dto, today);
 
-            study.updateBaekJoon(dto);
-
-            saveSnapshot(snapShot);
+            Study study = myStudy.getStudy().updateBaekJoon(dto);
+            studyRepository.save(study);
         }
     }
 }
