@@ -20,14 +20,17 @@ public class MemberSnapshot extends ScoreBase {
 
     private String baekJoonName;
 
+    private String dayOfWeek;
+
     @ManyToOne
     private Member member;
 
     //-- create score --//
-    public static MemberSnapshot create(Member member, BaekJoonDto dto) {
+    public static MemberSnapshot create(Member member, BaekJoonDto dto, String dayOfWeek) {
         MemberSnapshot snapshot = MemberSnapshot.builder()
                 .member(member)
                 .baekJoonName(member.getBaekJoonName())
+                .dayOfWeek(dayOfWeek)
                 .bronze(dto.getBronze())
                 .sliver(dto.getSliver())
                 .gold(dto.getGold())
@@ -55,7 +58,7 @@ public class MemberSnapshot extends ScoreBase {
 
 
     //-- initdb 용 create --//
-    public static MemberSnapshot initDbCreate(Member member, BaekJoonDto dto, LocalDateTime createDate) {
+    public static MemberSnapshot initDbCreate(Member member, BaekJoonDto dto, String dayOfWeek) {
         MemberSnapshot snapshot = MemberSnapshot.builder()
                 .member(member)
                 .baekJoonName(member.getBaekJoonName())
@@ -65,7 +68,7 @@ public class MemberSnapshot extends ScoreBase {
                 .diamond(dto.getDiamond())
                 .ruby(dto.getRuby())
                 .platinum(dto.getPlatinum())
-                .createDate(createDate)
+                .dayOfWeek(dayOfWeek)
                 .build();
 
         member.getSnapshotList().add(0, snapshot);

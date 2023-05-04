@@ -4,6 +4,7 @@ import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.*;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
@@ -87,7 +88,9 @@ public class MemberController {
 
         List<MyStudy> myStudies = myStudyService.statusMember(member);
         List<MyStudy> pending = myStudyService.statusNotMember(member);
+        List<MemberSnapshot> snapshotList = member.getSnapshotList();
 
+        model.addAttribute("snapshotList", snapshotList);
         model.addAttribute("myStudies", myStudies);
         model.addAttribute("pending", pending);
         model.addAttribute("list", list);

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -221,18 +222,17 @@ public class MemberService {
     private void saveSnapshot(Member member, BaekJoonDto dto) {
 
         MemberSnapshot snapshot;
+        String today = LocalDate.now().getDayOfWeek().toString().substring(0,3);
 
         try {
             snapshot = member.getSnapshotList().get(0);
-            int createDay = snapshot.getCreateDate().getDayOfMonth();
-            int today = LocalDate.now().getDayOfMonth();
+            String createDay = snapshot.getDayOfWeek();
 
-            if (createDay == today)
-                snapshot.update(dto);
-            else
-                snapshot = MemberSnapshot.create(member, dto);
+            if (createDay.equals(today)) snapshot = snapshot.update(dto);
+            else snapshot = MemberSnapshot.create(member, dto, today);
+
         } catch (ArrayIndexOutOfBoundsException e) {
-            snapshot = MemberSnapshot.create(member, dto);
+            snapshot = MemberSnapshot.create(member, dto, today);
         }
 
         memberSnapshotRepository.save(snapshot);
@@ -249,8 +249,6 @@ public class MemberService {
     }
 
 
-
-
     //-- init db 용 create method --//
     @Transactional
     public Member initDbMemberCreate(String provider, String username, String name, String about, String password, String profileImg, String baekJoonName, BaekJoonDto dto) {
@@ -265,8 +263,9 @@ public class MemberService {
 
     //-- init db 용 create member snapshot --//
     @Transactional
-    public void initDbSnapshotCreate(Member member, BaekJoonDto dto, LocalDateTime createDate) {
-        MemberSnapshot snapshot = MemberSnapshot.initDbCreate(member, dto, createDate);
+    public void initDbSnapshotCreate(Member member, BaekJoonDto dto, String dayOfWeek) {
+
+        MemberSnapshot snapshot = MemberSnapshot.initDbCreate(member, dto, dayOfWeek.substring(0,3));
         memberSnapshotRepository.save(snapshot);
     }
 }

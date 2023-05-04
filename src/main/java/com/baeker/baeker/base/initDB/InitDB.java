@@ -56,12 +56,15 @@ public class InitDB {
             Study study = createStudy("알파의 스터디", "Provident cupiditate voluptatem et in.", 10, alpha);
             createStudy("알파알파", "Provident cupiditate voluptatem et in.", 10, alpha);
 
+            // 스넵샷 강제 생성 (총 문제 풀이 수 반영 x)
             for (int i = 0; i < 7; i++) {
-                BaekJoonDto dto = new BaekJoonDto(i, i, i, i, i, i);
 
-                LocalDateTime today = LocalDateTime.now();
+                int num = (int) (Math.random() * 5);
+                BaekJoonDto dto = new BaekJoonDto(num, num, num, num, num, num);
 
-                memberService.initDbSnapshotCreate(alpha, dto, today.minusDays(i));
+                String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
+
+                memberService.initDbSnapshotCreate(alpha, dto, dayOfWeek);
             }
 
             // 더미 user 3명 생성후 알파 스터디 가입
