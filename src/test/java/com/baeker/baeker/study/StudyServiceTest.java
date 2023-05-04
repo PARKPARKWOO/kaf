@@ -51,10 +51,11 @@ class StudyServiceTest {
         Study study = studyRsData.getData();
 
         myStudyService.create(member, study);
+        studyService.addBaekJoon(study, member);
         return studyRsData;
     }
 
-//    @Test
+    @Test
     void 스터디_생성() {
         Member member = create("user", "member");
         connect(member, "Joon");
@@ -76,6 +77,18 @@ class StudyServiceTest {
         assertThat(myStudy.getStatus()).isSameAs(StudyStatus.MEMBER);
         assertThat(myStudy.getMember()).isSameAs(member);
         assertThat(member.getMyStudies().get(0)).isSameAs(myStudy);
+    }
+
+    @Test
+    void 스터디_생성시_맴버의_solved_스터디로_반영() {
+        Member member = create("user", "member");
+
+        BaekJoonDto dto = new BaekJoonDto(1,1,1,1,1,1);
+        memberService.connectBaekJoon(member, "Baek", dto);
+
+        Study study = createStudy("study", "", 10, member).getData();
+        assertThat(study.solvedBaekJoon()).isEqualTo(6);
+        assertThat(study.getSnapShotList().size()).isEqualTo(7);
     }
 
     @Test
@@ -134,7 +147,7 @@ class StudyServiceTest {
         assertThat(modifyStudy.getLeader()).isEqualTo("memberB");
     }
 
-//    @Test
+    @Test
     void 백준_이벤트_처리() {
         Member leader = create("user1", "leader");
         connect(leader, "Joon");

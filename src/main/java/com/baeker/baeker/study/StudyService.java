@@ -13,6 +13,7 @@ import com.baeker.baeker.study.snapshot.StudySnapShotRepository;
 import com.baeker.baeker.studyRule.StudyRule;
 import com.baeker.baeker.studyRule.StudyRuleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -52,7 +53,7 @@ public class StudyService {
 
         Study study = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
         Study saveStudy = studyRepository.save(study);
-        this.saveSnapshot(study);
+        this.createStudySnapshot(study);
 
         return RsData.of("S-1", "새로운 스터디가 개설되었습니다!", saveStudy);
     }
@@ -176,11 +177,13 @@ public class StudyService {
     @Transactional
     public Study addBaekJoon(Study study, Member member) {
 
-        saveSnapshot(member, study);
+        BaekJoonDto dto = new BaekJoonDto(member.getBronze(), member.getSliver(), member.getGold(), member.getPlatinum(), member.getDiamond(), member.getRuby());
+        String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
 
-        Study updateStudy = study.addBaekJoon(member);
-        Study saveStudy = studyRepository.save(updateStudy);
-        return saveStudy;
+        this.saveSnapshot(study,dto,today);
+
+        Study updateStudy = study.updateBaekJoon(dto);
+        return studyRepository.save(updateStudy);
     }
 
     //-- 경험치 상승 --//
@@ -217,8 +220,8 @@ public class StudyService {
      */
 
     //-- 스터디 생성 시 더미 스냅샷 7개 생성 --//
-    private void saveSnapshot(Study study) {
-        for (int i = 6; i > 0; i--) {
+    private void createStudySnapshot(Study study) {
+        for (int i = 6; i >= 0; i--) {
             BaekJoonDto dummy = new BaekJoonDto();
             String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
 
@@ -227,26 +230,9 @@ public class StudyService {
         }
     }
 
-    //-- Member 로 Snapshot 저장 --//
-    private void saveSnapshot(Member member, Study study) {
+    //-- Snapshot 저장 --//
+    private void saveSnapshot(Study study, BaekJoonDto dto, String today) {
 
-        String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
-        StudySnapShot snapshot = study.getSnapShotList().get(0);
-
-        if (snapshot.getDayOfWeek().equals(today))
-            snapshot = snapshot.update(member);
-
-        else {
-            snapshot = StudySnapShot.create(study, member, today);
-            this.deleteSnapshot(study);
-        }
-        studySnapShotRepository.save(snapshot);
-    }
-
-    //-- Dto 로 Snapshot 저장 --//
-    private void saveSnapshot(MyStudy myStudy, BaekJoonDto dto, String today) {
-
-        Study study = myStudy.getStudy();
         StudySnapShot snapshot = study.getSnapShotList().get(0);
 
         if (snapshot.getDayOfWeek().equals(today))
@@ -275,7 +261,7 @@ public class StudyService {
         String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
 
         for (MyStudy myStudy : myStudies) {
-            this.saveSnapshot(myStudy, dto, today);
+            this.saveSnapshot(myStudy.getStudy(), dto, today);
 
             Study study = myStudy.getStudy().updateBaekJoon(dto);
             studyRepository.save(study);

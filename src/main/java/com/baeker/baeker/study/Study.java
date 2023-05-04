@@ -80,18 +80,6 @@ public class Study extends ScoreBase {
         this.xp += addXp;
     }
 
-    // 스터디 가입시 맴버의 백준 문제 추가 //
-    protected Study addBaekJoon(Member member) {
-        return this.toBuilder()
-                .bronze(this.getBronze() + member.getBronze())
-                .sliver(this.getSliver() + member.getSliver())
-                .gold(this.getGold() + member.getGold())
-                .diamond(this.getDiamond() + member.getDiamond())
-                .ruby(this.getRuby() + member.getRuby())
-                .platinum(this.getPlatinum() + member.getPlatinum())
-                .build();
-    }
-
     // 백준 점수 최신화 //
     protected Study updateBaekJoon(BaekJoonDto dto) {
         return this.toBuilder()

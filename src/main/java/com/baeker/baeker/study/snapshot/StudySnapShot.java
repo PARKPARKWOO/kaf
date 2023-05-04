@@ -70,16 +70,4 @@ public class StudySnapShot extends ScoreBase {
                 .platinum(this.getPlatinum() + dto.getPlatinum())
                 .build();
     }
-
-    //-- update score by member --//
-    public StudySnapShot update(Member member) {
-        return this.toBuilder()
-                .bronze(this.getBronze() + member.getBronze())
-                .sliver(this.getSliver() + member.getSliver())
-                .gold(this.getGold() + member.getGold())
-                .diamond(this.getDiamond() + member.getDiamond())
-                .ruby(this.getRuby() + member.getRuby())
-                .platinum(this.getPlatinum() + member.getPlatinum())
-                .build();
-    }
 }
