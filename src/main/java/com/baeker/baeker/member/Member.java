@@ -1,15 +1,12 @@
 package com.baeker.baeker.member;
 
-import com.baeker.baeker.base.entity.BaseEntity;
-import com.baeker.baeker.member.embed.BaekJoon;
-import com.baeker.baeker.member.embed.Programmers;
+import com.baeker.baeker.base.entity.ScoreBase;
+import com.baeker.baeker.member.embed.BaekJoonDto;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.myStudy.MyStudy;
-import com.baeker.baeker.study.Study;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -17,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -25,13 +22,14 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @SuperBuilder(toBuilder = true)
-public class Member extends BaseEntity {
+public class Member extends ScoreBase {
 
     @Column(unique = true)
     private String username;
     @Column(unique = true)
     private String studyId;
     private String nickName;
+    private String baekJoonName;
     private String about;
     private String profileImg;
     private String kakaoProfileImage;
@@ -42,15 +40,15 @@ public class Member extends BaseEntity {
     private String accessToken;
     private boolean newMember;
 
-    @Embedded
-    private BaekJoon baekJoon;
-    @Embedded
-    private Programmers programmers;
-
 
     @Builder.Default
     @OneToMany(mappedBy = "member")
     private List<MyStudy> myStudies = new ArrayList<>();
+
+    @Builder.Default
+    @OrderBy("id desc")
+    @OneToMany(mappedBy = "member", cascade = ALL)
+    private List<MemberSnapshot> snapshotList = new ArrayList<>();
 
 
     //-- crate method --//
@@ -82,46 +80,34 @@ public class Member extends BaseEntity {
                 .build();
     }
 
-
-    // BaekJoon 생성 //
-    protected BaekJoon createSolve(BaekJoon baekJoon) {
-        this.baekJoon = baekJoon;
-
-        if (myStudies.size() != 0)
-            for (MyStudy myStudy : myStudies) {
-                Study study = myStudy.getStudy();
-
-                if (study.getBaekJoon() == null)
-                    study.createSolve(baekJoon);
-                else
-                    study.updateSolve(baekJoon);
-            }
-
-        return baekJoon;
-    }
-
-    // BaekJoon 최신화 , Study BaekJoon 합산 //
-    protected BaekJoon updateSolve(BaekJoon baekJoon) {
-        BaekJoon addedSolved = BaekJoon.builder()
-                .bronze(baekJoon.getBronze() - this.baekJoon.getBronze())
-                .sliver(baekJoon.getSliver() - this.baekJoon.getSliver())
-                .gold(baekJoon.getGold() - this.baekJoon.getGold())
-                .platinum(baekJoon.getPlatinum() - this.baekJoon.getPlatinum())
-                .diamond(baekJoon.getDiamond() - this.baekJoon.getDiamond())
-                .ruby(baekJoon.getRuby() - this.baekJoon.getRuby())
-                .build();
-
-        this.baekJoon = baekJoon;
-        if (myStudies.size() != 0)
-            for (MyStudy myStudy : myStudies)
-                myStudy.getStudy().updateSolve(addedSolved);
-
-        return addedSolved;
-    }
-
-    // 회원 가입 완료 //
+    // 첫방문 회원 체크 //
     protected void joinComplete() {
         this.newMember = false;
+    }
+
+    // 백준 아이디 등록 //
+    protected Member connectBaekJoon(String baekJoonName, BaekJoonDto dto) {
+        return this.toBuilder()
+                .baekJoonName(baekJoonName)
+                .bronze(dto.getBronze())
+                .sliver(dto.getSliver())
+                .gold(dto.getGold())
+                .diamond(dto.getDiamond())
+                .ruby(dto.getRuby())
+                .platinum(dto.getPlatinum())
+                .build();
+    }
+
+    // 백준 점수 최신화 //
+    protected Member updateBaeJoon(BaekJoonDto dto) {
+        return this.toBuilder()
+                .bronze(this.getBronze() + dto.getBronze())
+                .sliver(this.getSliver() + dto.getSliver())
+                .gold(this.getGold() + dto.getGold())
+                .diamond(this.getDiamond() + dto.getDiamond())
+                .ruby(this.getRuby() + dto.getRuby())
+                .platinum(this.getPlatinum() + dto.getPlatinum())
+                .build();
     }
 
 
@@ -137,5 +123,27 @@ public class Member extends BaseEntity {
             grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
 
         return grantedAuthorities;
+    }
+
+
+    //-- init db 용 create method --//
+    protected  static Member initMemberCreate(String provider, String username, String name, String about, String password, String profileImg, String baekJoonName, BaekJoonDto dto) {
+        return builder()
+                .provider(provider)
+                .username(username)
+                .nickName(name)
+                .baekJoonName(baekJoonName)
+                .about(about)
+                .password(password)
+                .profileImg(profileImg)
+                .kakaoProfileImage(profileImg)
+                .newMember(false)
+                .bronze(dto.getBronze())
+                .sliver(dto.getSliver())
+                .gold(dto.getGold())
+                .diamond(dto.getDiamond())
+                .ruby(dto.getRuby())
+                .platinum(dto.getPlatinum())
+                .build();
     }
 }

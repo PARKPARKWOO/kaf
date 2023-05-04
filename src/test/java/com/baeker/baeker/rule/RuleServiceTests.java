@@ -2,7 +2,6 @@ package com.baeker.baeker.rule;
 
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
-import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.studyRule.StudyRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

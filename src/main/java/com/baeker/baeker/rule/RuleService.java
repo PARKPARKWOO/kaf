@@ -54,7 +54,7 @@ public class RuleService {
         RsData.of("S-1", "규칙이 수정 되었습니다.", rule1);
     }
 
-    public void setModify(Rule rule, RuleForm ruleForm) {
+    public void setForm(Rule rule, RuleForm ruleForm) {
         ruleForm.setName(rule.getName());
         ruleForm.setAbout(rule.getAbout());
         ruleForm.setProvider(rule.getProvider());

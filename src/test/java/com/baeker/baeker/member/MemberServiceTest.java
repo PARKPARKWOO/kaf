@@ -1,9 +1,14 @@
 package com.baeker.baeker.member;
 
+import com.baeker.baeker.base.event.BaekJoonEvent;
 import com.baeker.baeker.base.request.RsData;
-import com.baeker.baeker.member.embed.BaekJoon;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
-import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
+
+
+
+import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
@@ -11,8 +16,11 @@ import com.baeker.baeker.study.form.StudyCreateForm;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,10 +33,17 @@ class MemberServiceTest {
     @Autowired private StudyService studyService;
     @Autowired private MyStudyService myStudyService;
     @Autowired private MemberRepository memberRepository;
+    @Autowired private ApplicationEventPublisher publisher;
 
     private Member create(String username, String name) {
+
         MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", "");
         return memberService.join(form).getData();
+    }
+
+    private void connect(Member member, String baekJoonName) {
+        BaekJoonDto dummy = new BaekJoonDto();
+        RsData<Member> memberRsData = memberService.connectBaekJoon(member, baekJoonName, dummy);
     }
 
     private Study createStudy(String name, Member member) {
@@ -49,54 +64,10 @@ class MemberServiceTest {
         assertThat(memberRs.getResultCode()).isEqualTo("S-1");
         assertThat(member).isSameAs(findMember);
         assertThat(member.getNickName()).isEqualTo(findMember.getNickName());
+        assertThat(member.solvedBaekJoon()).isEqualTo(0);
+
     }
 
-    @Test
-    void 해결한_문제_수_업데이트() {
-
-        // member1 : study 생성
-        Member member1 = create("user1", "member1");
-        Study study = createStudy("study", member1);
-
-
-        assertThat(member1.getBaekJoon()).isNull();
-        assertThat(study.getBaekJoon()).isNull();
-
-        BaekJoon baekJoon = BaekJoon.builder()
-                .bronze(4)
-                .sliver(2)
-                .build();
-
-        // member1 : 해결한 문제 백준 브론즈 4문제, 실버 2문제 추가
-        RsData<BaekJoon> baekJoonRs = memberService.solve(member1.getId(), baekJoon);
-        assertThat(baekJoonRs.getResultCode()).isEqualTo("S-1");
-
-        // member1 이 속한 스터디까지 추가 완료
-        assertThat(member1.getBaekJoon().getBronze()).isEqualTo(4);
-        assertThat(member1.getBaekJoon().getSliver()).isEqualTo(2);
-        assertThat(member1.getBaekJoon().totalSolved()).isEqualTo(6);
-        assertThat(study.getBaekJoon().getSliver()).isEqualTo(2);
-
-
-        // member2 : 백준 실버 8문제 해결
-        Member member2 = create("user2", "member2");
-        BaekJoon baekJoon2 = BaekJoon.builder()
-                .sliver(8)
-                .build();
-        RsData<BaekJoon> solve = memberService.solve(member2.getId(), baekJoon2);
-        assertThat(member2.getBaekJoon().getSliver()).isEqualTo(8);
-
-        // member2 : study 가입
-        MyStudy myStudy = myStudyService.join(member2, study, "hi").getData();
-        RsData<BaekJoon> addedSolveRs = myStudyService.accept(myStudy);
-
-        // 가입이 성공하면 member2 의 해결문제수가 study 에 자동 합산됨
-        assertThat(addedSolveRs.getResultCode()).isEqualTo("S-1");
-        assertThat(study.getBaekJoon().getSliver()).isEqualTo(10);
-
-        // 반환값으로 추가된 값 반환
-        assertThat(addedSolveRs.getData().getSliver()).isEqualTo(8);
-    }
 
     @Test
     void 프로필_변경() {
@@ -109,6 +80,40 @@ class MemberServiceTest {
         assertThat(findMember.isPresent()).isTrue();
 
         String nickName = findMember.get().getNickName();
-        System.out.println(nickName);
     }
+
+    @Test
+    void 백준_id_연동() {
+        Member member = create("user1", "member1");
+        connect(member, "Joon");
+
+        assertThat(member.getBaekJoonName()).isEqualTo("Joon");
+        assertThat(member.getSnapshotList().size()).isEqualTo(7);
+
+        String today = LocalDateTime.now().getDayOfWeek().toString().substring(0, 3);
+        String dayOfWeek = member.getSnapshotList().get(0).getDayOfWeek();
+        assertThat(today).isEqualTo(dayOfWeek);
+    }
+
+    @Test
+    void 백준_이벤트_처리() {
+        Member member = create("user1", "member1");
+        connect(member, "Joon");
+
+        BaekJoonDto dto = new BaekJoonDto(1, 1, 1, 1, 1, 1);
+        publisher.publishEvent(new BaekJoonEvent(this, member, dto));
+
+        assertThat(member.solvedBaekJoon()).isEqualTo(6);
+
+        List<MemberSnapshot> snapshotList = member.getSnapshotList();
+        String today = LocalDateTime.now().getDayOfWeek().toString().substring(0, 3);
+
+        assertThat(snapshotList.size()).isEqualTo(7);
+        assertThat(snapshotList.get(0).getDayOfWeek()).isEqualTo(today);
+        assertThat(snapshotList.get(0).solvedBaekJoon()).isEqualTo(6);
+    }
+
+
+
+
 }

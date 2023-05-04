@@ -2,8 +2,6 @@ package com.baeker.baeker.base.request;
 
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
-import com.baeker.baeker.study.Study;
-import com.baeker.baeker.study.StudyService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.Date;
-import java.util.List;
 
 @Component
 @RequestScope
@@ -51,6 +48,12 @@ public class Rq {
     // 로그아웃 되어 있는지 체크
     public boolean isLogout() {
         return !isLogin();
+    }
+
+    // 백준과 연동되어있는지 체크
+    public boolean notConnectBaekJoon() {
+        if (isLogout()) return false;
+        return member.getBaekJoonName() == null;
     }
 
 

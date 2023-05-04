@@ -19,7 +19,7 @@
         <th th:text="${loop.count}"></th>
 
         <td>
-            <a th:href="@{/member/member/{id}(id=${myStudy.member.id})}">
+            <a th:href="@{/member/member/{id}/rank(id=${myStudy.member.id})}">
                 <div class="flex items-center space-x-3">
                     <div class="avatar">
                         <div class="mask mask-squircle w-12 h-12">
@@ -40,7 +40,7 @@
 
         <td>
             <a class="flex justify-center"
-               th:href="@{/member/member/{id}(id=${myStudy.member.id})}">
+               th:href="@{/member/member/{id}/rank(id=${myStudy.member.id})}">
                 <span th:text="|0|"></span>
                 <br/>
             </a>

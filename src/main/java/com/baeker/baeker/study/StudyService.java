@@ -2,10 +2,14 @@ package com.baeker.baeker.study;
 
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.embed.BaekJoonDto;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyRepository;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
+import com.baeker.baeker.study.snapshot.StudySnapShot;
+import com.baeker.baeker.study.snapshot.StudySnapShotRepository;
 import com.baeker.baeker.studyRule.StudyRule;
 import com.baeker.baeker.studyRule.StudyRuleService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,22 +31,42 @@ import java.util.Optional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
+    private final StudySnapShotRepository studySnapShotRepository;
 
+
+    /**
+     ** 생성 관련 method **
+     * create
+     */
     //-- create --//
     @Transactional
     public RsData<Study> create(StudyCreateForm form, Member member) {
 
+        if (member.getBaekJoonName() == null)
+            return RsData.of("F-1", "백준과 연동이 필요합니다.");
+
         // 스터디 이름 중복검사
         RsData<Study> studyRs = this.getStudy(form.getName());
         if (studyRs.isSuccess())
-            return RsData.of("F-1", "는 이미 사용 중입니다.");
+            return RsData.of("F-2", "는 이미 사용 중입니다.");
 
         Study study = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
         Study saveStudy = studyRepository.save(study);
+        this.saveSnapshot(study);
 
         return RsData.of("S-1", "새로운 스터디가 개설되었습니다!", saveStudy);
     }
 
+
+    /**
+     * * 조회 관련 method **
+     * find by id
+     * find by study name
+     * find member in study by member id, study id
+     * find all member in study
+     * find all
+     * find all + paging
+     */
 
     //-- find by id --//
     public RsData<Study> getStudy(Long id) {
@@ -62,13 +88,21 @@ public class StudyService {
         return RsData.of("F-1", "존재 하지않는 name");
     }
 
-    //-- find all + page --//
-    public Page<Study> getAll(int page) {
-        ArrayList<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("xp"));
+    //-- 스터디원 id 로 member 찾기 --//
+    public RsData<Member> getMember(Long memberId, Long studyId) {
+        RsData<List<Member>> studyMemberRs = this.getAllMember(studyId);
 
-        PageRequest pageable = PageRequest.of(page, 5, Sort.by(sorts));
-        return studyRepository.findAll(pageable);
+        if (studyMemberRs.isFail())
+            return RsData.of("F-1", studyMemberRs.getMsg());
+
+        List<Member> members = studyMemberRs.getData();
+
+        for (Member member : members) {
+            if (member.getId() == memberId)
+                return RsData.successOf(member);
+        }
+
+        return RsData.of("F-2", "스터디에 존재하지 않는 회원입니다.");
     }
 
     //-- find all member --//
@@ -85,13 +119,31 @@ public class StudyService {
         return RsData.successOf(members);
     }
 
+    //-- find all + page --//
+    public Page<Study> getAll(int page) {
+        ArrayList<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("xp"));
+
+        PageRequest pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return studyRepository.findAll(pageable);
+    }
+
     //-- find all --//
     public List<Study> getAll() {
         return studyRepository.findAll();
     }
 
 
-    //-- 이름, 소개, 최대 인원 변경 --//
+    /**
+     ** 수정과 삭제 관련 method **
+     * 이름, 소개, 최대 인원 수정
+     * leader 변경
+     * study 가입시 member 의 백준 solved 추가
+     * Xp 상승
+     * Study 삭제
+     */
+
+    //-- 이름, 소개, 최대 인원 수정 --//
     @Transactional
     public RsData<Study> modify(StudyModifyForm form, Long id) {
         RsData<Study> studyRs = this.getStudy(id);
@@ -120,6 +172,17 @@ public class StudyService {
         return RsData.of("S-1", "리더가 변경되었습니다.", modifyLeader);
     }
 
+    //-- 스터디 가입시 맴버의 백준 문제 추가 --//
+    @Transactional
+    public Study addBaekJoon(Study study, Member member) {
+
+        saveSnapshot(member, study);
+
+        Study updateStudy = study.addBaekJoon(member);
+        Study saveStudy = studyRepository.save(updateStudy);
+        return saveStudy;
+    }
+
     //-- 경험치 상승 --//
     @Transactional
     public RsData<Study> xpUp(Integer xp, Long id) {
@@ -131,7 +194,6 @@ public class StudyService {
         study.xpUp(xp);
         return RsData.of("S-1", "경험치가 상승했습니다.", study);
     }
-
 
     //-- 스터디 삭제 --//
     @Transactional
@@ -145,20 +207,78 @@ public class StudyService {
         return RsData.of("S-1", "스터디가 삭제되었습니다.");
     }
 
-    //-- 스터디원 id 로 찾기 --//
-    public RsData<Member> getMember(Long memberId,Long studyId) {
-        RsData<List<Member>> studyMemberRs = this.getAllMember(studyId);
 
-        if (studyMemberRs.isFail())
-            return RsData.of("F-1", studyMemberRs.getMsg());
+    /**
+     ** Snapshot 과 Event 처리 관련 Method **
+     * Study 최초 생성시 더미 Snapshot 7 개 생성
+     * Snapshot 저장
+     * Snapshot 삭제
+     * 백준 Solved Evnet 처리
+     */
 
-        List<Member> members = studyMemberRs.getData();
+    //-- 스터디 생성 시 더미 스냅샷 7개 생성 --//
+    private void saveSnapshot(Study study) {
+        for (int i = 6; i > 0; i--) {
+            BaekJoonDto dummy = new BaekJoonDto();
+            String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
 
-        for (Member member : members) {
-            if (member.getId() == memberId)
-                return RsData.successOf(member);
+            StudySnapShot snapShot = StudySnapShot.create(study, dummy, dayOfWeek.substring(0, 3));
+            studySnapShotRepository.save(snapShot);
         }
+    }
 
-        return RsData.of("F-2", "스터디에 존재하지 않는 회원입니다.");
+    //-- Member 로 Snapshot 저장 --//
+    private void saveSnapshot(Member member, Study study) {
+
+        String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
+        StudySnapShot snapshot = study.getSnapShotList().get(0);
+
+        if (snapshot.getDayOfWeek().equals(today))
+            snapshot = snapshot.update(member);
+
+        else {
+            snapshot = StudySnapShot.create(study, member, today);
+            this.deleteSnapshot(study);
+        }
+        studySnapShotRepository.save(snapshot);
+    }
+
+    //-- Dto 로 Snapshot 저장 --//
+    private void saveSnapshot(MyStudy myStudy, BaekJoonDto dto, String today) {
+
+        Study study = myStudy.getStudy();
+        StudySnapShot snapshot = study.getSnapShotList().get(0);
+
+        if (snapshot.getDayOfWeek().equals(today))
+            snapshot = snapshot.update(dto);
+
+        else {
+            snapshot = StudySnapShot.create(study, dto, today);
+            this.deleteSnapshot(study);
+        }
+        studySnapShotRepository.save(snapshot);
+    }
+
+    //-- 스냅샷 삭제 --//
+    private void deleteSnapshot(Study study) {
+        List<StudySnapShot> snapShotList = study.getSnapShotList();
+        StudySnapShot snapshot = snapShotList.get(snapShotList.size() - 1);
+
+        snapShotList.remove(snapshot);
+        studySnapShotRepository.delete(snapshot);
+    }
+
+    //-- 백준 스케쥴 이벤트 처리 --//
+    @Transactional
+    public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
+        List<MyStudy> myStudies = member.getMyStudies();
+        String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
+
+        for (MyStudy myStudy : myStudies) {
+            this.saveSnapshot(myStudy, dto, today);
+
+            Study study = myStudy.getStudy().updateBaekJoon(dto);
+            studyRepository.save(study);
+        }
     }
 }
