@@ -32,7 +32,8 @@ class MemberServiceTest {
     @Autowired private ApplicationEventPublisher publisher;
 
     private Member create(String username, String name) {
-        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", null);
+
+        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", "");
         return memberService.join(form).getData();
     }
 
@@ -50,7 +51,7 @@ class MemberServiceTest {
 
     @Test
     void 회원가입() {
-        MemberJoinForm form = new MemberJoinForm("username", "name",  "","1234", "1234" ,null);
+        MemberJoinForm form = new MemberJoinForm("username", "name",  "","1234", "1234" ,"");
         RsData<Member> memberRs = memberService.join(form);
         Member member = memberRs.getData();
 

@@ -25,6 +25,7 @@ class MyStudyServiceTest {
 
     private Member create(String username, String name) {
         MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", "");
+
         Member member = memberService.join(form).getData();
 
         BaekJoonDto dummy = new BaekJoonDto();
