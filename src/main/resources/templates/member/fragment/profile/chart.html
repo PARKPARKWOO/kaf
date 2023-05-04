@@ -12,13 +12,13 @@
 
             var data = google.visualization.arrayToDataTable([
                 ["day", "solved count", {role: "style"}],
-                [ [[${snapshotList.get(6).dayOfWeek}]], [[${snapshotList.get(6).solvedBaekJoon()}]], "color: #8b5cf6"]
+                [ [[${snapshotList.get(6).dayOfWeek}]], [[${snapshotList.get(6).solvedBaekJoon()}]], "color: #8b5cf6"],
                 [ [[${snapshotList.get(5).dayOfWeek}]], [[${snapshotList.get(5).solvedBaekJoon()}]], "color: #8b5cf6"],
                 [ [[${snapshotList.get(4).dayOfWeek}]], [[${snapshotList.get(4).solvedBaekJoon()}]], "color: #8b5cf6"],
                 [ [[${snapshotList.get(3).dayOfWeek}]], [[${snapshotList.get(3).solvedBaekJoon()}]], "color: #8b5cf6"],
                 [ [[${snapshotList.get(2).dayOfWeek}]], [[${snapshotList.get(2).solvedBaekJoon()}]], "color: #8b5cf6"],
                 [ [[${snapshotList.get(1).dayOfWeek}]], [[${snapshotList.get(1).solvedBaekJoon()}]], "color: #8b5cf6"],
-                [ [[${snapshotList.get(0).dayOfWeek}]], [[${snapshotList.get(0).solvedBaekJoon()}]], "color: #8b5cf6"],
+                [ [[${snapshotList.get(0).dayOfWeek}]], [[${snapshotList.get(0).solvedBaekJoon()}]], "color: #8b5cf6"]
             ]);
 
             var view = new google.visualization.DataView(data);
