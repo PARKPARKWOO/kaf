@@ -20,7 +20,7 @@ public abstract class ScoreBase extends  BaseEntity{
     int platinum;
 
     public int solvedBaekJoon() {
-        return bronze + sliver + gold + diamond + ruby;
+        return bronze + sliver + gold + diamond + ruby + platinum;
     }
 
 }

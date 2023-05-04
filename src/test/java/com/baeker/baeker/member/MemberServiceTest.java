@@ -1,8 +1,10 @@
 package com.baeker.baeker.member;
 
+import com.baeker.baeker.base.event.BaekJoonEvent;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
@@ -10,9 +12,11 @@ import com.baeker.baeker.study.form.StudyCreateForm;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +29,7 @@ class MemberServiceTest {
     @Autowired private StudyService studyService;
     @Autowired private MyStudyService myStudyService;
     @Autowired private MemberRepository memberRepository;
+    @Autowired private ApplicationEventPublisher publisher;
 
     private Member create(String username, String name) {
         MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", null);
@@ -83,5 +88,22 @@ class MemberServiceTest {
         assertThat(today).isEqualTo(dayOfWeek);
     }
 
+    @Test
+    void 백준_이벤트_처리() {
+        Member member = create("user1", "member1");
+        connect(member, "Joon");
+
+        BaekJoonDto dto = new BaekJoonDto(1, 1, 1, 1, 1, 1);
+        publisher.publishEvent(new BaekJoonEvent(this, member, dto));
+
+        assertThat(member.solvedBaekJoon()).isEqualTo(6);
+
+        List<MemberSnapshot> snapshotList = member.getSnapshotList();
+        String today = LocalDateTime.now().getDayOfWeek().toString().substring(0, 3);
+
+        assertThat(snapshotList.size()).isEqualTo(7);
+        assertThat(snapshotList.get(0).getDayOfWeek()).isEqualTo(today);
+        assertThat(snapshotList.get(0).solvedBaekJoon()).isEqualTo(6);
+    }
 
 }
