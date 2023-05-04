@@ -165,6 +165,7 @@ public class MemberService {
 
         Member connectBaekJoon = member.connectBaekJoon(baekJoonName, dto);
         Member saveMember = memberRepository.save(connectBaekJoon);
+        this.saveSnapshot(member);
 
         return RsData.of("S-1", "백준 연동에 성공했습니다.", saveMember);
     }
@@ -228,6 +229,17 @@ public class MemberService {
      * 백준 solved count update 이벤트 처리
      */
 
+    //-- 백준 최초 연동시 더미 스냅샷 7개 생성 --//
+    private void saveSnapshot(Member member) {
+        for (int i = 0; i < 7; i++) {
+            BaekJoonDto dummy = new BaekJoonDto();
+            String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
+
+            MemberSnapshot snapshot = MemberSnapshot.create(member, dummy, dayOfWeek.substring(0, 3));
+            memberSnapshotRepository.save(snapshot);
+        }
+    }
+
     //-- 스냅샷 저장 --//
     private void saveSnapshot(Member member, BaekJoonDto dto) {
 
@@ -254,11 +266,11 @@ public class MemberService {
         memberSnapshotRepository.delete(snapshot);
     }
 
-    //-- 백준 해결 문제 추가 이벤트 처리 --//
+    //-- 백준 Solved Count 이벤트 처리 --//
     @Transactional
     public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
 
-        saveSnapshot(member, dto);
+        this.saveSnapshot(member, dto);
 
         Member updateMember = member.updateBaeJoon(dto);
         memberRepository.save(updateMember);
@@ -304,13 +316,7 @@ public class MemberService {
         Member saveMember = memberRepository.save(member);
 
         if (saveMember.getBaekJoonName() != null)
-            for (int i = 0; i < 7; i++) {
-                BaekJoonDto dummy = new BaekJoonDto();
-                String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
-
-                MemberSnapshot snapshot = MemberSnapshot.create(saveMember, dummy, dayOfWeek.substring(0, 3));
-                memberSnapshotRepository.save(snapshot);
-            }
+            this.saveSnapshot(member);
         return saveMember;
     }
 
