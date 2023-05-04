@@ -18,7 +18,15 @@ public class MyStudyService {
 
     private final MyStudyRepository myStudyRepository;
 
-    //-- 새로운 스터디 개설 --//
+    /**
+     ** 생성 관련 method **
+     * Study 개설시 개설자 등록 작업
+     * 가입 신청
+     * 스터디에 초대
+     * 스터디 중복 가입여부 확인
+     */
+
+    //-- Study 개설시 개설자 등록 작업 --//
     @Transactional
     public MyStudy create(Member member, Study study) {
         MyStudy newStudy = MyStudy.createNewStudy(member, study);
@@ -69,6 +77,25 @@ public class MyStudyService {
         return RsData.of("S-1", inviter.getNickName() + "님을 스터디에 초대했습니다.", save);
     }
 
+    //-- 스터디 중복 가입 확인 --//
+    private static RsData<MyStudy> duplicationCheck(Member member, Study study) {
+        List<MyStudy> myStudies = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudies) {
+            if (myStudy.getStudy().equals(study))
+                return RsData.of("F-1", "이미 가입한 스터디입니다.");
+        }
+        return RsData.of("S-1", "성공");
+    }
+
+
+    /**
+     ** 수정과 삭제 관련 method **
+     * 가입과 초대 승인
+     * 가입과 초대 메시지 변경
+     * 가입 요청과 초대 삭제
+     */
+
     //-- 가입, 초대신청 승인 --//
     @Transactional
     public RsData<MyStudy> accept(MyStudy myStudy) {
@@ -84,6 +111,37 @@ public class MyStudyService {
         return RsData.of("S-1", "정식 회원으로 가입이 완료되었습니다.");
     }
 
+    //-- 초대, 가입 요청 메시지 변경 --//
+    @Transactional
+    public MyStudy modifyMsg(MyStudy myStudy, String msg) {
+        MyStudy modify = myStudy.modifyMsg(msg);
+        return myStudyRepository.save(modify);
+    }
+
+    //-- 초대, 가입 요청 삭제 --//
+    @Transactional
+    public RsData delete(MyStudy myStudy) {
+
+        StudyStatus status = myStudy.getStatus();
+
+        myStudyRepository.delete(myStudy);
+
+        if (status == StudyStatus.INVITING)
+            return RsData.of("S-1", "초대를 거절했습니다.");
+        else
+            return RsData.of("S-1", "가입 요청을 취소했습니다.");
+    }
+
+
+    /**
+     ** 조회 관련 method **
+     * find by id
+     * find by member & study
+     * find Status == member by member
+     * find Status == member by study
+     * find Status != member by member
+     * find Status != member by study
+     */
 
     //-- find by id --//
     public RsData<MyStudy> getMyStudy(Long id) {
@@ -106,18 +164,7 @@ public class MyStudyService {
         return RsData.of("F-1", "가입하지 않은 스터디 입니다.");
     }
 
-    //-- 스터디 중복 가입 확인 --//
-    private static RsData<MyStudy> duplicationCheck(Member member, Study study) {
-        List<MyStudy> myStudies = member.getMyStudies();
-
-        for (MyStudy myStudy : myStudies) {
-            if (myStudy.getStudy().equals(study))
-                return RsData.of("F-1", "이미 가입한 스터디입니다.");
-        }
-        return RsData.of("S-1", "성공");
-    }
-
-    //-- member 등급인 my study 만 조회 --//
+    //-- member 등급인 my study 만 조회 by member --//
     public List<MyStudy> statusMember(Member member) {
         List<MyStudy> myStudies = new ArrayList<>();
         List<MyStudy> myStudyList = member.getMyStudies();
@@ -129,6 +176,7 @@ public class MyStudyService {
         return myStudies;
     }
 
+    //-- member 등급인 my study 만 조회 by study --//
     public List<MyStudy> statusMember(Study study) {
         List<MyStudy> myStudies = new ArrayList<>();
         List<MyStudy> myStudyList = study.getMyStudies();
@@ -141,7 +189,7 @@ public class MyStudyService {
     }
 
 
-    //-- member 등급이 아닌 my study 조회 --//
+    //-- member 등급이 아닌 my study 조회 by member --//
     public List<MyStudy> statusNotMember(Member member) {
         List<MyStudy> pending = new ArrayList<>();
         List<MyStudy> myStudies = member.getMyStudies();
@@ -153,6 +201,7 @@ public class MyStudyService {
         return pending;
     }
 
+    //-- member 등급이 아닌 my study 조회 by study --//
     public List<MyStudy> statusNotMember(Study study) {
         List<MyStudy> pending = new ArrayList<>();
         List<MyStudy> myStudies = study.getMyStudies();
@@ -162,26 +211,5 @@ public class MyStudyService {
                 pending.add(myStudy);
 
         return pending;
-    }
-
-    //-- 초대, 가입 요청 메시지 변경 --//
-    @Transactional
-    public MyStudy modifyMsg(MyStudy myStudy, String msg) {
-        MyStudy modify = myStudy.modifyMsg(msg);
-        return myStudyRepository.save(modify);
-    }
-
-    //-- 초대, 가입 요청 삭제 --//
-    @Transactional
-    public RsData delete(MyStudy myStudy) {
-
-        StudyStatus status = myStudy.getStatus();
-
-        myStudyRepository.delete(myStudy);
-
-        if (status == StudyStatus.INVITING)
-            return RsData.of("S-1", "초대를 거절했습니다.");
-        else
-            return RsData.of("S-1", "가입 요청을 취소했습니다.");
     }
 }

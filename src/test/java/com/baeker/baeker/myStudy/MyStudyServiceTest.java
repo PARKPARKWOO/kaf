@@ -25,9 +25,13 @@ class MyStudyServiceTest {
 
     private Member create(String username, String name) {
         MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", "");
-        return memberService.join(form).getData();
-    }
+        Member member = memberService.join(form).getData();
 
+        BaekJoonDto dummy = new BaekJoonDto();
+        RsData<Member> memberRsData = memberService.connectBaekJoon(member, name, dummy);
+        return member;
+    }
+    
     private Study createStudy(String name, Member member) {
         StudyCreateForm form = new StudyCreateForm(name, "about", 7);
         Study study = studyService.create(form, member).getData();
