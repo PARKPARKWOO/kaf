@@ -3,6 +3,7 @@ package com.baeker.baeker.myStudy;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.study.Study;
+import com.baeker.baeker.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class MyStudyService {
 
     private final MyStudyRepository myStudyRepository;
+    private final StudyService studyService;
 
     /**
      ** 생성 관련 method **
@@ -108,6 +110,8 @@ public class MyStudyService {
             return RsData.of("F-2", "이미 최대 인원에 도달했습니다.");
 
         myStudy.accept();
+        studyService.addBaekJoon(study, myStudy.getMember());
+
         return RsData.of("S-1", "정식 회원으로 가입이 완료되었습니다.");
     }
 

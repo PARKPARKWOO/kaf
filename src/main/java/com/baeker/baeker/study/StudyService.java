@@ -175,6 +175,9 @@ public class StudyService {
     //-- 스터디 가입시 맴버의 백준 문제 추가 --//
     @Transactional
     public Study addBaekJoon(Study study, Member member) {
+
+        saveSnapshot(member, study);
+
         Study updateStudy = study.addBaekJoon(member);
         Study saveStudy = studyRepository.save(updateStudy);
         return saveStudy;
@@ -215,7 +218,7 @@ public class StudyService {
 
     //-- 스터디 생성 시 더미 스냅샷 7개 생성 --//
     private void saveSnapshot(Study study) {
-        for (int i = 6; i >= 0; i--) {
+        for (int i = 6; i > 0; i--) {
             BaekJoonDto dummy = new BaekJoonDto();
             String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
 
@@ -224,7 +227,23 @@ public class StudyService {
         }
     }
 
-    //-- 스냅샷 저장 --//
+    //-- Member 로 Snapshot 저장 --//
+    private void saveSnapshot(Member member, Study study) {
+
+        String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
+        StudySnapShot snapshot = study.getSnapShotList().get(0);
+
+        if (snapshot.getDayOfWeek().equals(today))
+            snapshot = snapshot.update(member);
+
+        else {
+            snapshot = StudySnapShot.create(study, member, today);
+            this.deleteSnapshot(study);
+        }
+        studySnapShotRepository.save(snapshot);
+    }
+
+    //-- Dto 로 Snapshot 저장 --//
     private void saveSnapshot(MyStudy myStudy, BaekJoonDto dto, String today) {
 
         Study study = myStudy.getStudy();
