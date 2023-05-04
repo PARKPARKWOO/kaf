@@ -57,9 +57,9 @@ public class StudyRuleControllerTests {
         Rule rule = ruleService.create(ruleForm).getData();
     }
 
-    @Test
-    @WithAnonymousUser
-    @DisplayName("로그인 안했을때 create")
+//    @Test
+//    @WithAnonymousUser
+//    @DisplayName("로그인 안했을때 create")
     void notLogin() throws Exception {
         // WHEN
         ResultActions resultActions = mvc

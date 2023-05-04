@@ -3,6 +3,7 @@ package com.baeker.baeker.studyRule;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.rule.RuleForm;
@@ -41,7 +42,11 @@ public class StudyRuleServiceTests {
 
     private Member create(String username, String name) {
         MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", "");
-        return memberService.join(form).getData();
+        Member member = memberService.join(form).getData();
+
+        BaekJoonDto dummy = new BaekJoonDto();
+        RsData<Member> memberRsData = memberService.connectBaekJoon(member, name, dummy);
+        return member;
     }
 
     private RsData<Study> createStudy(String name, String about, Integer capacity, Member member) {

@@ -1,0 +1,49 @@
+<div th:fragment="chart (snapshotList)"
+     class="w-full flex justify-center">
+
+<!--    <div th:text=""></div>-->
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        google.charts.load("current", {packages: ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                ["day", "solved count", {role: "style"}],
+                [ [[${snapshotList.get(6).dayOfWeek}]], [[${snapshotList.get(6).solvedBaekJoon()}]], "color: #8b5cf6"],
+                [ [[${snapshotList.get(5).dayOfWeek}]], [[${snapshotList.get(5).solvedBaekJoon()}]], "color: #8b5cf6"],
+                [ [[${snapshotList.get(4).dayOfWeek}]], [[${snapshotList.get(4).solvedBaekJoon()}]], "color: #8b5cf6"],
+                [ [[${snapshotList.get(3).dayOfWeek}]], [[${snapshotList.get(3).solvedBaekJoon()}]], "color: #8b5cf6"],
+                [ [[${snapshotList.get(2).dayOfWeek}]], [[${snapshotList.get(2).solvedBaekJoon()}]], "color: #8b5cf6"],
+                [ [[${snapshotList.get(1).dayOfWeek}]], [[${snapshotList.get(1).solvedBaekJoon()}]], "color: #8b5cf6"],
+                [ [[${snapshotList.get(0).dayOfWeek}]], [[${snapshotList.get(0).solvedBaekJoon()}]], "color: #8b5cf6"]
+            ]);
+
+            var view = new google.visualization.DataView(data);
+            view.setColumns([0, 1,
+                {
+                    calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                },
+                2]);
+
+            var options = {
+                title: "1주간 해결한 문제",
+                width: 500,
+                height: 350,
+                bar: {groupWidth: "80%"},
+                legend: {position: "none"},
+
+            };
+            var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+            chart.draw(view, options);
+        }
+    </script>
+    <div id="columnchart_values" style="width: 900px; height: 300px;"></div>
+
+
+</div>

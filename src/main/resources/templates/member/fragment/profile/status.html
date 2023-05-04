@@ -2,21 +2,49 @@
      class="stats stats-vertical shadow">
 
     <div class="stat">
-      <div class="stat-title">Ranking</div>
-      <div class="stat-value">31th</div>
-      <div class="stat-desc"></div>
+        <div class="stat-title">Ranking</div>
+        <div class="stat-value">31th</div>
+        <div class="stat-desc"></div>
     </div>
 
     <div class="stat">
-      <div class="stat-title">백준</div>
-      <div class="stat-value">4,200</div>
-      <div class="stat-desc">↗︎ 400 (22%)</div>
+        <div class="stat-title">백준</div>
+
+        <div th:unless="${@rq.notConnectBaekJoon()}">
+            <span class="stat-value"
+                  th:text="${@rq.member.solvedBaekJoon()}">
+            </span>
+            <span>문제 해결</span>
+        </div>
+
+        <div th:if="${@rq.notConnectBaekJoon()}"
+             class="mt-3">
+            <a href="/member/connect"
+               class="link link-hover">
+                BAEKER 랑 연동하기
+            </a>
+        </div>
+
+        <div class="stat-desc"></div>
     </div>
 
     <div class="stat">
-      <div class="stat-title">프로그래머스</div>
-      <div class="stat-value">1,200</div>
-      <div class="stat-desc">↘︎ 90 (14%)</div>
+        <div class="stat-title">프로그래머스</div>
+
+<!--        <div th:unless="${@rq.notConnectBaekJoon()}">-->
+<!--            <span class="stat-value"-->
+<!--                  th:text="${@rq.member.solvedBaekJoon()}">-->
+<!--            </span>-->
+<!--            <span>문제 해결</span>-->
+<!--        </div>-->
+
+        <div class="mt-3">
+            <a href="#"
+               class="link link-hover">
+                BAEKER 랑 연동하기
+            </a>
+        </div>
+        <div class="stat-desc"></div>
     </div>
 
 </div>

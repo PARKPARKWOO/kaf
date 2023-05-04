@@ -3,18 +3,15 @@ package com.baeker.baeker.solvedApi;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
-import com.baeker.baeker.member.embed.BaekJoon;
-import com.baeker.baeker.study.StudyService;
-import com.baeker.baeker.studyRule.StudyRuleService;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,13 +29,15 @@ public class ApiScheduler {
      * 티어 별 check
      */
 
-    @Scheduled(fixedRate = 1000)
+
+    @Scheduled(cron = "${scheduler.cron.value}")
     public void checkStudyRule() throws IOException, ParseException {
         log.info("스케줄러 실행");
         RsData<List<Member>> memberList = memberService.getAll();
         for (Member member : memberList.getData()) {
-            log.info("tier");
-            Integer Bronze = solvedApiService.getSolvedCount(member, 1, 6);
+
+
+            solvedApiService.getSolvedCount(member, 1, 6);
 
             Integer Silver = solvedApiService.getSolvedCount(member, 6, 11);
 
@@ -50,9 +49,11 @@ public class ApiScheduler {
 
             Integer Ruby = solvedApiService.getSolvedCount(member, 26, 31);
 
-            BaekJoon baekJoon = BaekJoon.builder().bronze(Bronze).sliver(Silver).gold(Gold).platinum(Platinum)
-                    .diamond(Diamond).ruby(Ruby).build();
-            memberService.solve(member.getId(), baekJoon);
+
+//            BaekJoonDto baekJoon = BaekJoonDto.builder().bronze(Bronze).sliver(Silver).gold(Gold).platinum(Platinum)
+//                    .diamond(Diamond).ruby(Ruby).build();
+//
+//            memberService.solve(member.getId(), baekJoon);
         }
     }
 }

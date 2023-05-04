@@ -43,7 +43,6 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
-
 #  thymeleaf:
 #    cache: false
 #    prefix: file:src/main/resources/templates/
@@ -64,8 +63,7 @@ spring:
 logging.level:
   org.hibernate:
     SQL: debug
-    #    type: trace # (Spring boot 2.X.X)
-    orm.jdbc.bind: trace # (Spring boot 3.X.X)
+    orm.jdbc.bind: trace
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
