@@ -201,9 +201,10 @@ public class MemberController {
 
 
     //-- member profile --//
-    @GetMapping("/member/{id}")
+    @GetMapping("/member/{id}/{list}")
     public String profile(
             @PathVariable Long id,
+            @PathVariable String list,
             MyStudyInviteForm form,
             Model model
     ) {
@@ -228,7 +229,13 @@ public class MemberController {
             model.addAttribute("myStudies", myStudies);
         }
 
+        List<MemberSnapshot> snapshotList = member.getSnapshotList();
+        List<MyStudy> myStudies = myStudyService.statusMember(member);
+
+        model.addAttribute("snapshotList", snapshotList);
+        model.addAttribute("myStudies", myStudies);
         model.addAttribute("member", member);
+        model.addAttribute("list", list);
 
         log.info("member 조회 성공 member name = {}", member.getNickName());
         return "member/member";

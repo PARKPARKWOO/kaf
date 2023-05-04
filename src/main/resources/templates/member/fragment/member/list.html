@@ -1,0 +1,33 @@
+<div th:fragment="list (list, myStudies, member, snapshotList)"
+     class="overflow-x-auto w-[70%] mb-5">
+
+    <div class="tabs flex justify-center mb-7">
+
+        <div class="tabs" id="list">
+
+            <a th:href="@{/member/member/{id}/rank#list(id=${member.id})}"
+               class="tab tab-bordered"
+               th:classappend="${list == 'rank'} ? 'tab-active' : ''">백준</a>
+
+            <a th:href="@{/member/member/{id}/rank2#list(id=${member.id})}"
+               class="tab tab-bordered"
+               th:classappend="${list == 'rank2'} ? 'tab-active' : ''">프로그래머스</a>
+
+            <a th:href="@{/member/member/{id}/study#list(id=${member.id})}"
+               class="tab tab-bordered"
+               th:classappend="${list == 'study'} ? 'tab-active' : ''">스터디</a>
+
+        </div>
+
+
+    </div>
+    <div th:if="${list eq 'rank'}" class="flex">
+        <div th:replace="~{member/fragment/member/baekJoon :: baekJoon(${list}, ${member})}"></div>
+
+        <div th:replace="~{member/fragment/profile/chart :: chart(${snapshotList})}"></div>
+    </div>
+
+    <table th:replace="~{member/fragment/member/study :: study (${list}, ${myStudies})}"></table>
+
+
+</div>

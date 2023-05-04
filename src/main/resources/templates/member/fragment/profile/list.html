@@ -25,11 +25,12 @@
 
 
     </div>
-    <div class="flex">
+    <div th:if="${list eq 'rank'}" class="flex">
         <div th:replace="~{member/fragment/profile/baekJoon :: baekJoon(${list})}"></div>
 
         <div th:replace="~{member/fragment/profile/chart :: chart(${snapshotList})}"></div>
     </div>
+
     <table th:replace="~{member/fragment/profile/study :: study(${list}, ${myStudies})}"></table>
 
     <table th:replace="~{member/fragment/profile/join :: join(${list}, ${pending})}"></table>
