@@ -1,6 +1,7 @@
 package com.baeker.baeker.study.snapshot;
 
 import com.baeker.baeker.base.entity.ScoreBase;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.study.Study;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -15,15 +16,17 @@ import lombok.experimental.SuperBuilder;
 public class StudySnapShot extends ScoreBase {
 
     private String studyName;
+    private String dayOfWeek;
 
     @ManyToOne
     private Study study;
 
     //-- create score --//
-    public static StudySnapShot create(Study study) {
+    public static StudySnapShot create(Study study, BaekJoonDto dto, String dayOfWeek) {
         StudySnapShot snapshot = StudySnapShot.builder()
                 .study(study)
                 .studyName(study.getName())
+                .dayOfWeek(dayOfWeek)
                 .bronze(study.getBronze())
                 .sliver(study.getSliver())
                 .gold(study.getGold())
@@ -32,29 +35,19 @@ public class StudySnapShot extends ScoreBase {
                 .platinum(study.getPlatinum())
                 .build();
 
-        study.getSnapShotList().add(snapshot);
-
+        study.getSnapShotList().add(0, snapshot);
         return snapshot;
     }
 
     //-- update score --//
-    public StudySnapShot update(int score, String eventCode) {
-        StudySnapShot snapshot;
-
-        switch (eventCode) {
-            case "bronze" -> snapshot = addBronze(score);
-            case "sliver" -> snapshot = addSliver(score);
-            case "gold" -> snapshot = addGold(score);
-            case "diamond" -> snapshot = addDiamond(score);
-            case "ruby" -> snapshot = addRuby(score);
-            default -> snapshot = addPlatinum(score);
-        }
-        return snapshot;
+    public StudySnapShot update(BaekJoonDto dto) {
+        return this.toBuilder()
+                .bronze(this.getBronze() + dto.getBronze())
+                .sliver(this.getSliver() + dto.getSliver())
+                .gold(this.getGold() + dto.getGold())
+                .diamond(this.getDiamond() + dto.getDiamond())
+                .ruby(this.getRuby() + dto.getRuby())
+                .platinum(this.getPlatinum() + dto.getPlatinum())
+                .build();
     }
-    private StudySnapShot addBronze(int score) {return this.toBuilder().bronze(score).build();}
-    private StudySnapShot addSliver(int score) {return this.toBuilder().sliver(score).build();}
-    private StudySnapShot addGold(int score) {return this.toBuilder().gold(score).build();}
-    private StudySnapShot addDiamond(int score) {return this.toBuilder().diamond(score).build();}
-    private StudySnapShot addRuby(int score) {return this.toBuilder().ruby(score).build();}
-    private StudySnapShot addPlatinum(int score) {return this.toBuilder().platinum(score).build();}
 }

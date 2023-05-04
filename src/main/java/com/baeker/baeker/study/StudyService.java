@@ -30,6 +30,11 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final StudySnapShotRepository studySnapShotRepository;
 
+
+    /**
+     ** 생성 관련 method **
+     * create
+     */
     //-- create --//
     @Transactional
     public RsData<Study> create(StudyCreateForm form, Member member) {
@@ -42,19 +47,19 @@ public class StudyService {
         Study study = Study.createStudy(form.getName(), form.getAbout(), form.getCapacity(), member);
         Study saveStudy = studyRepository.save(study);
 
-
-
         return RsData.of("S-1", "새로운 스터디가 개설되었습니다!", saveStudy);
     }
 
-    //-- 스터디 가입시 맴버의 백준 문제 추가 --//
-    @Transactional
-    public Study addBaekJoon(Study study, Member member) {
-        Study updateStudy = study.addBaekJoon(member);
-        Study saveStudy = studyRepository.save(updateStudy);
-        return saveStudy;
-    }
 
+    /**
+     ** 조회 관련 method **
+     * find by id
+     * find by study name
+     * find member in study by member id, study id
+     * find all member in study
+     * find all
+     * find all + paging
+     */
 
     //-- find by id --//
     public RsData<Study> getStudy(Long id) {
@@ -76,13 +81,21 @@ public class StudyService {
         return RsData.of("F-1", "존재 하지않는 name");
     }
 
-    //-- find all + page --//
-    public Page<Study> getAll(int page) {
-        ArrayList<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("xp"));
+    //-- 스터디원 id 로 member 찾기 --//
+    public RsData<Member> getMember(Long memberId,Long studyId) {
+        RsData<List<Member>> studyMemberRs = this.getAllMember(studyId);
 
-        PageRequest pageable = PageRequest.of(page, 5, Sort.by(sorts));
-        return studyRepository.findAll(pageable);
+        if (studyMemberRs.isFail())
+            return RsData.of("F-1", studyMemberRs.getMsg());
+
+        List<Member> members = studyMemberRs.getData();
+
+        for (Member member : members) {
+            if (member.getId() == memberId)
+                return RsData.successOf(member);
+        }
+
+        return RsData.of("F-2", "스터디에 존재하지 않는 회원입니다.");
     }
 
     //-- find all member --//
@@ -99,13 +112,31 @@ public class StudyService {
         return RsData.successOf(members);
     }
 
+    //-- find all + page --//
+    public Page<Study> getAll(int page) {
+        ArrayList<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("xp"));
+
+        PageRequest pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return studyRepository.findAll(pageable);
+    }
+
     //-- find all --//
     public List<Study> getAll() {
         return studyRepository.findAll();
     }
 
 
-    //-- 이름, 소개, 최대 인원 변경 --//
+    /**
+     ** 수정과 삭제 관련 method **
+     * 이름, 소개, 최대 인원 수정
+     * leader 변경
+     * study 가입시 member 의 백준 solved 추가
+     * Xp 상승
+     * Study 삭제
+     */
+
+    //-- 이름, 소개, 최대 인원 수정 --//
     @Transactional
     public RsData<Study> modify(StudyModifyForm form, Long id) {
         RsData<Study> studyRs = this.getStudy(id);
@@ -134,6 +165,14 @@ public class StudyService {
         return RsData.of("S-1", "리더가 변경되었습니다.", modifyLeader);
     }
 
+    //-- 스터디 가입시 맴버의 백준 문제 추가 --//
+    @Transactional
+    public Study addBaekJoon(Study study, Member member) {
+        Study updateStudy = study.addBaekJoon(member);
+        Study saveStudy = studyRepository.save(updateStudy);
+        return saveStudy;
+    }
+
     //-- 경험치 상승 --//
     @Transactional
     public RsData<Study> xpUp(Integer xp, Long id) {
@@ -145,7 +184,6 @@ public class StudyService {
         study.xpUp(xp);
         return RsData.of("S-1", "경험치가 상승했습니다.", study);
     }
-
 
     //-- 스터디 삭제 --//
     @Transactional
@@ -159,22 +197,12 @@ public class StudyService {
         return RsData.of("S-1", "스터디가 삭제되었습니다.");
     }
 
-    //-- 스터디원 id 로 찾기 --//
-    public RsData<Member> getMember(Long memberId,Long studyId) {
-        RsData<List<Member>> studyMemberRs = this.getAllMember(studyId);
 
-        if (studyMemberRs.isFail())
-            return RsData.of("F-1", studyMemberRs.getMsg());
-
-        List<Member> members = studyMemberRs.getData();
-
-        for (Member member : members) {
-            if (member.getId() == memberId)
-                return RsData.successOf(member);
-        }
-
-        return RsData.of("F-2", "스터디에 존재하지 않는 회원입니다.");
-    }
+    /**
+     ** Snapshot 과 Event 처리 관련 Method **
+     * Snapshot 저장
+     * 백준 Solved Evnet 처리
+     */
 
     //-- 스냅샷 저장 --//
     private void saveSnapshot(StudySnapShot snapShot) {

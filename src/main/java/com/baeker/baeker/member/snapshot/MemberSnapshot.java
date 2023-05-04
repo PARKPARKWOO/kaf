@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 public class MemberSnapshot extends ScoreBase {
 
     private String baekJoonName;
-
     private String dayOfWeek;
 
     @ManyToOne
