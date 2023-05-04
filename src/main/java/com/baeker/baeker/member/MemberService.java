@@ -231,7 +231,7 @@ public class MemberService {
 
     //-- 백준 최초 연동시 더미 스냅샷 7개 생성 --//
     private void saveSnapshot(Member member) {
-        for (int i = 0; i < 7; i++) {
+        for (int i = 6; i >= 0; i--) {
             BaekJoonDto dummy = new BaekJoonDto();
             String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
 

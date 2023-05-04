@@ -1,6 +1,7 @@
 package com.baeker.baeker.member;
 
 import com.baeker.baeker.base.request.RsData;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.study.Study;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,6 +29,11 @@ class MemberServiceTest {
     private Member create(String username, String name) {
         MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", null);
         return memberService.join(form).getData();
+    }
+
+    private void connect(Member member, String baekJoonName) {
+        BaekJoonDto dummy = new BaekJoonDto();
+        RsData<Member> memberRsData = memberService.connectBaekJoon(member, baekJoonName, dummy);
     }
 
     private Study createStudy(String name, Member member) {
@@ -47,6 +54,7 @@ class MemberServiceTest {
         assertThat(memberRs.getResultCode()).isEqualTo("S-1");
         assertThat(member).isSameAs(findMember);
         assertThat(member.getNickName()).isEqualTo(findMember.getNickName());
+        assertThat(member.solvedBaekJoon()).isEqualTo(0);
     }
 
     @Test
@@ -60,11 +68,20 @@ class MemberServiceTest {
         assertThat(findMember.isPresent()).isTrue();
 
         String nickName = findMember.get().getNickName();
-        System.out.println(nickName);
     }
 
     @Test
-    void name() {
-        System.out.println(memberService.verifyCode());
+    void 백준_id_연동() {
+        Member member = create("user1", "member1");
+        connect(member, "Joon");
+
+        assertThat(member.getBaekJoonName()).isEqualTo("Joon");
+        assertThat(member.getSnapshotList().size()).isEqualTo(7);
+
+        String today = LocalDateTime.now().getDayOfWeek().toString().substring(0, 3);
+        String dayOfWeek = member.getSnapshotList().get(0).getDayOfWeek();
+        assertThat(today).isEqualTo(dayOfWeek);
     }
+
+
 }
