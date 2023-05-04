@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,7 +36,16 @@ public class MemberService {
     private final StudyService studyService;
     private final MemberSnapshotRepository memberSnapshotRepository;
 
-
+    /**
+     ** 조회 관련 method **
+     * find by username
+     * find by id
+     * find by 백준 name
+     * find all
+     * find All + paging
+     * member 가 leader 인 MyStudy 조회
+     * Study 가입 여부 조회
+     */
     //-- find by username --//
     public Optional<Member> getMember(String username) {
         return memberRepository.findByUsername(username);
@@ -94,6 +102,24 @@ public class MemberService {
         return onlyLeader;
     }
 
+    //-- 스터디 가입 여부 확인 --//
+    public boolean isMyStudy(Member member, Study study) {
+        List<MyStudy> myStudies = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudies)
+            if (!myStudy.getStudy().equals(study))
+                return false;
+
+        return true;
+    }
+
+    /**
+     ** 생성과 로그인 관련 method **
+     * Security Join      - admin, init data 용
+     * Scocil join, login - 일반 회원용
+     * 회원가입 처리 method
+     * 백준 id 연동
+     */
 
     //-- Security Join ( password 검증 ) --//
     @Transactional
@@ -133,6 +159,21 @@ public class MemberService {
         return RsData.of("S-1", "회원가입이 완료되었습니다. \n로그인 해주세요.", member);
     }
 
+    //-- 백준 id 연동 --//
+    @Transactional
+    public RsData<Member> connectBaekJoon(Member member, String baekJoonName, BaekJoonDto dto) {
+
+        Member connectBaekJoon = member.connectBaekJoon(baekJoonName, dto);
+        Member saveMember = memberRepository.save(connectBaekJoon);
+
+        return RsData.of("S-1", "백준 연동에 성공했습니다.", saveMember);
+    }
+
+    /**
+     * 수정 관련 method
+     * nick name, about, img 수정
+     * Study leader 의 nickname 변경시 study leader 변경
+     */
 
     //-- Modify Form 으로 nick name, about, img 수정 --//
     @Transactional
@@ -148,15 +189,6 @@ public class MemberService {
         return modify(member, form.getNickName(), form.getAbout(), form.getProfileImg());
     }
 
-    //-- 백준 id 연동 --//
-    @Transactional
-    public RsData<Member> connectBaekJoon(Member member, String baekJoonName, BaekJoonDto dto) {
-
-        Member connectBaekJoon = member.connectBaekJoon(baekJoonName, dto);
-        Member saveMember = memberRepository.save(connectBaekJoon);
-
-        return RsData.of("S-1", "백준 연동에 성공했습니다.", saveMember);
-    }
 
     //-- 프로필 닉네임, 소개, 이미지 변경 실질적인 처리 --//
     private RsData<Member> modify(Member member, String nickName, String about, String profileImg) {
@@ -189,17 +221,54 @@ public class MemberService {
         return RsData.of("S-1", "수정이 완료되었습니다.", member);
     }
 
-    //-- 스터디 가입 여부 확인 --//
-    public boolean isMyStudy(Member member, Study study) {
-        List<MyStudy> myStudies = member.getMyStudies();
+    /**
+     * Event 와 Snapshot 관련 method
+     * Snapshot 저장
+     * Snapshot 삭제
+     * 백준 solved count update 이벤트 처리
+     */
 
-        for (MyStudy myStudy : myStudies)
-            if (!myStudy.getStudy().equals(study))
-                return false;
+    //-- 스냅샷 저장 --//
+    private void saveSnapshot(Member member, BaekJoonDto dto) {
 
-        return true;
+        String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
+
+        MemberSnapshot snapshot = member.getSnapshotList().get(0);
+        String createDay = snapshot.getDayOfWeek();
+
+        if (createDay.equals(today)) snapshot = snapshot.update(dto);
+
+        else {
+            snapshot = MemberSnapshot.create(member, dto, today);
+            this.deleteSnapshot(member);
+        }
+        memberSnapshotRepository.save(snapshot);
     }
 
+    //-- 스냅샷 삭제 --//
+    public void deleteSnapshot(Member member) {
+        List<MemberSnapshot> snapshotList = member.getSnapshotList();
+        MemberSnapshot snapshot = snapshotList.get(snapshotList.size() - 1);
+
+        snapshotList.remove(snapshot);
+        memberSnapshotRepository.delete(snapshot);
+    }
+
+    //-- 백준 해결 문제 추가 이벤트 처리 --//
+    @Transactional
+    public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
+
+        saveSnapshot(member, dto);
+
+        Member updateMember = member.updateBaeJoon(dto);
+        memberRepository.save(updateMember);
+    }
+
+    /**
+     * 기타 business 관련 method
+     * 1 - 999 까지 랜덤 숫자 생성 - 랜덤 프로필 이미지 목록 생성용
+     * 6 자리 랜덤 숫자 생성       - 백준 id 연동시 인증 코드 생성용
+     */
 
     //-- 1~999 랜덤숫자 생성 --//
     public List<Integer> random() {
@@ -217,37 +286,11 @@ public class MemberService {
         return (int) (Math.random() * 1000000);
     }
 
-
-    //-- 스넵샷 저장 --//
-    private void saveSnapshot(Member member, BaekJoonDto dto) {
-
-        MemberSnapshot snapshot;
-        String today = LocalDate.now().getDayOfWeek().toString().substring(0,3);
-
-        try {
-            snapshot = member.getSnapshotList().get(0);
-            String createDay = snapshot.getDayOfWeek();
-
-            if (createDay.equals(today)) snapshot = snapshot.update(dto);
-            else snapshot = MemberSnapshot.create(member, dto, today);
-
-        } catch (ArrayIndexOutOfBoundsException e) {
-            snapshot = MemberSnapshot.create(member, dto, today);
-        }
-
-        memberSnapshotRepository.save(snapshot);
-    }
-
-    //-- 백준 해결 문제 추가 이벤트 처리 --//
-    @Transactional
-    public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
-
-        saveSnapshot(member, dto);
-
-        Member updateMember = member.updateBaeJoon(dto);
-        memberRepository.save(updateMember);
-    }
-
+    /**
+     * Init Data 관련 method
+     * member 와 7 일간의 빈 snapshot 생성
+     * snpshot 생성
+     */
 
     //-- init db 용 create method --//
     @Transactional
@@ -258,14 +301,25 @@ public class MemberService {
         }
 
         Member member = Member.initMemberCreate(provider, username, name, about, password, profileImg, baekJoonName, dto);
-        return memberRepository.save(member);
+        Member saveMember = memberRepository.save(member);
+
+        if (saveMember.getBaekJoonName() != null)
+            for (int i = 0; i < 7; i++) {
+                BaekJoonDto dummy = new BaekJoonDto();
+                String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
+
+                MemberSnapshot snapshot = MemberSnapshot.create(saveMember, dummy, dayOfWeek.substring(0, 3));
+                memberSnapshotRepository.save(snapshot);
+            }
+        return saveMember;
     }
 
     //-- init db 용 create member snapshot --//
     @Transactional
     public void initDbSnapshotCreate(Member member, BaekJoonDto dto, String dayOfWeek) {
 
-        MemberSnapshot snapshot = MemberSnapshot.initDbCreate(member, dto, dayOfWeek.substring(0,3));
+        MemberSnapshot snapshot = MemberSnapshot.initDbCreate(member, dto, dayOfWeek.substring(0, 3));
         memberSnapshotRepository.save(snapshot);
+        this.deleteSnapshot(member);
     }
 }

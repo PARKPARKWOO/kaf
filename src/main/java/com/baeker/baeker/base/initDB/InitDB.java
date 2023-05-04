@@ -57,7 +57,7 @@ public class InitDB {
             createStudy("알파알파", "Provident cupiditate voluptatem et in.", 10, alpha);
 
             // 스넵샷 강제 생성 (총 문제 풀이 수 반영 x)
-            for (int i = 0; i < 7; i++) {
+            for (int i = 6; i >= 0; i--) {
 
                 int num = (int) (Math.random() * 5);
                 BaekJoonDto dto = new BaekJoonDto(num, num, num, num, num, num);
