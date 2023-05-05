@@ -61,7 +61,7 @@ public class RuleServiceTests {
         }
 
         Rule rule1 = optionalRule.get();
-        ruleService.modify(rule1, ruleForm1);
+        ruleService.modify(rule1.getId(), ruleForm1);
 
         assertThat(rule1.getXp()).isEqualTo(2);
 
