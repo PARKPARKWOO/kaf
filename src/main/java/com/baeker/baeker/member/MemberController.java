@@ -6,8 +6,6 @@ import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.*;
 import com.baeker.baeker.member.snapshot.MemberSnapshot;
 
-
-
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.myStudy.form.MyStudyInviteForm;

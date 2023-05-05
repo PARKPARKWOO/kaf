@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,7 @@ public class ApiScheduler {
 
             int Silver = solvedApiService.getSolvedCount(member, 6, 11) - member.getSliver();
 
+
             int Gold = solvedApiService.getSolvedCount(member, 11, 16) - member.getGold();
 
             int Platinum = solvedApiService.getSolvedCount(member, 16, 21) - member.getPlatinum();
@@ -56,6 +59,7 @@ public class ApiScheduler {
 
             BaekJoonDto dto = new BaekJoonDto(Bronze, Silver, Gold, Platinum, Diamond, Ruby);
             publisher.publishEvent(new BaekJoonEvent(this, member, dto));
+
 
         }
     }
