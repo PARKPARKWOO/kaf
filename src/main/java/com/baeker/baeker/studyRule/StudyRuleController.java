@@ -77,7 +77,7 @@ public class StudyRuleController {
         if (rsData.isSuccess()) {
             model.addAttribute("ruleList", ruleList);
             StudyRule studyRule = rsData.getData();
-            studyRuleService.setModify(studyRule, studyRuleForm);
+            studyRuleService.setForm(studyRule, studyRuleForm);
             return "studyRule/create";
         } else {
             return rq.historyBack(rsData);

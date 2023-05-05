@@ -83,3 +83,4 @@ public class StudySnapShot extends ScoreBase {
                 .build();
     }
 }
+

@@ -55,7 +55,7 @@ public class RuleController {
             return rq.historyBack(rsData);
         }
         Rule rule = rsData.getData();
-        ruleService.setModify(rule, ruleForm);
+        ruleService.setForm(rule, ruleForm);
         return "rule/create";
     }
 

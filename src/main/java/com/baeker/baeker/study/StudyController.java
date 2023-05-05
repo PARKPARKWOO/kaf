@@ -11,6 +11,7 @@ import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.h2.engine.Mode;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -35,12 +36,6 @@ public class StudyController {
     @PreAuthorize("isAuthenticated()")
     public String createForm(StudyCreateForm form) {
         log.info("스터디 생성폼 요청 확인");
-
-        rq.getMember();
-        if (rq.notConnectBaekJoon()){
-            log.info("연동된 백준 id 가 없음");
-            return rq.redirectWithMsg("/member/connect","백준과 연동이 필요합니다.");
-        }
         form.setCapacity(10);
         return "/study/create";
     }
@@ -50,23 +45,17 @@ public class StudyController {
     @PreAuthorize("isAuthenticated()")
     public String showCreate(StudyCreateForm form) {
         log.info("스터디 생성 요청 확인 form ={}", form.toString());
-
         Member member = rq.getMember();
+
         RsData<Study> studyRs = studyService.create(form, member);
 
-        if (studyRs.getResultCode().equals("F-1")) {
-            log.info("백준 id 가 없음");
-            return rq.redirectWithMsg("/member/connect", studyRs.getMsg());
-        }
-
-        if (studyRs.getResultCode().equals("F-2")) {
+        if (studyRs.isFail()) {
             log.info("중복검사 실패 study name = {}", form.getName());
             return rq.historyBack(studyRs);
         }
 
         Study study = studyRs.getData();
         myStudyService.create(member, study);
-        studyService.addBaekJoon(study, member);
 
         log.info("스터디 생성 완료 study name = {}", study.getName());
         return rq.redirectWithMsg("/study/detail/rule/" + study.getId(), "스터디 개설 완료!");
@@ -177,7 +166,6 @@ public class StudyController {
         return rq.redirectWithMsg("/study/detail/" + modifyStudyRs.getData().getId(), "수정이 완료되었습니다.");
     }
 }
-
 
 
 

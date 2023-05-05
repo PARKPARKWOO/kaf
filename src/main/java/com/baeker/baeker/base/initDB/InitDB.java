@@ -67,6 +67,7 @@ public class InitDB {
                 memberService.initDbSnapshotCreate(alpha, dto, dayOfWeek);
             }
 
+
             // 더미 user 3명 생성후 알파 스터디 가입
             for (int i = 3; i < 10; i++) {
                 Member member = createMember("user" + i, "member" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 10 + ".svg", "Joon" + i);

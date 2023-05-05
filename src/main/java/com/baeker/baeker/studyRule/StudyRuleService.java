@@ -62,7 +62,7 @@ public class StudyRuleService {
         RsData.of("S-1", "수정되었습니다.", modifyRule);
     }
 
-    public void setModify(StudyRule studyRule, StudyRuleForm studyRuleForm) {
+    public void setForm(StudyRule studyRule, StudyRuleForm studyRuleForm) {
         studyRuleForm.setName(studyRule.getName());
         studyRuleForm.setAbout(studyRule.getAbout());
     }

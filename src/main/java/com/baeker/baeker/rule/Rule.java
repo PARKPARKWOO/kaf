@@ -1,8 +1,10 @@
 package com.baeker.baeker.rule;
 
+import com.baeker.baeker.base.entity.BaseEntity;
 import com.baeker.baeker.studyRule.StudyRule;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,17 +21,12 @@ import static lombok.AccessLevel.PROTECTED;
 
 
 @Entity
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Rule {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "rule_id")
-    private Long id;
+public class Rule extends BaseEntity {
 
     private String name;
 
@@ -39,12 +36,6 @@ public class Rule {
 
     private Integer xp;
     private String difficulty;
-
-    @CreatedDate
-    private LocalDateTime createDate;
-
-    @LastModifiedDate
-    private LocalDateTime modifyDate;
 
     @OneToMany(mappedBy = "rule", cascade = ALL)
     @Builder.Default

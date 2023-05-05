@@ -5,6 +5,11 @@ import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.snapshot.MemberSnapshot;
+
+
+
+import com.baeker.baeker.member.form.MemberJoinForm;
+
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
@@ -61,7 +66,10 @@ class MemberServiceTest {
         assertThat(member).isSameAs(findMember);
         assertThat(member.getNickName()).isEqualTo(findMember.getNickName());
         assertThat(member.solvedBaekJoon()).isEqualTo(0);
+
     }
+
+
 
     @Test
     void 프로필_변경() {
@@ -106,5 +114,6 @@ class MemberServiceTest {
         assertThat(snapshotList.get(0).getDayOfWeek()).isEqualTo(today);
         assertThat(snapshotList.get(0).solvedBaekJoon()).isEqualTo(6);
     }
+
 
 }

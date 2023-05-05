@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3  # 사용할 버전 명시인데 공식문서를 확인해 봐야함
+        uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: temurin
@@ -47,12 +47,3 @@ jobs:
       - name: deploy run
         run: |
           sh /home/ubuntu/dep/docker/run.sh
-#          host: ${{ secrets.WAS_HOST }}
-#          username: ${{ secrets.WAS_USERNAME }}
-#          password: ${{ secrets.WAS_PASSWORD }}
-#          port: ${{ secrets.WAS_SSH_PORT }}
-#          script: |
-#            docker stop $(docker ps -a -q)
-#            docker rm $(docker ps -a -q)
-#            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}
-#            docker run -d --name=test -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}

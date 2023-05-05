@@ -15,7 +15,6 @@ spring:
     oauth2:
       client:
         registration:
-
           naver:
             client-id: ENC(0ryhL75ty9DPzpCm3xR9h0xxOGYBddlHBb3l//6kPHk=)
             client-secret: ENC(yP4oKUUrldyaMwy1xYVNNn5bumB052Zm)
