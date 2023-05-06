@@ -39,7 +39,7 @@ public class ApiScheduler {
      */
 
 
-//    @Scheduled(cron = "${scheduler.cron.value}")
+    @Scheduled(cron = "${scheduler.cron.value}")
     public void checkStudyRule() throws IOException, ParseException {
         log.info("스케줄러 실행");
         RsData<List<Member>> memberList = memberService.getAll();
