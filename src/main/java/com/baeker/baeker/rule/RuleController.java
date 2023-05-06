@@ -64,9 +64,9 @@ public class RuleController {
     public String modify(@PathVariable("id") Long id, @Valid RuleForm ruleForm, BindingResult bindingResult) {
         RsData<Rule> rsData = ruleService.getRule(id);
         if (rsData.isFail() || bindingResult.hasErrors()) {
-            return rq.historyBack(rsData);
+            return rq.historyBack("다시 확인해주세ㄴ");
         }
-        ruleService.modify(rsData.getData(), ruleForm);
+        ruleService.modify(rsData.getData().getId(), ruleForm);
         return rq.redirectWithMsg(String.format("/rule/detail/%s", id), "규칙이 수정되었습니다");
     }
 

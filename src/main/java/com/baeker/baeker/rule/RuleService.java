@@ -42,7 +42,9 @@ public class RuleService {
      */
 
     @Transactional
-    public void modify(Rule rule, RuleForm ruleForm) {
+    public void modify(Long ruleId, RuleForm ruleForm) {
+        Rule rule = getRule(ruleId).getData();
+
         Rule rule1 = rule.toBuilder()
                 .name(ruleForm.getName())
                 .about(ruleForm.getAbout())

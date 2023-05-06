@@ -3,6 +3,7 @@ package com.baeker.baeker.rule;
 import com.baeker.baeker.base.entity.BaseEntity;
 import com.baeker.baeker.studyRule.StudyRule;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;

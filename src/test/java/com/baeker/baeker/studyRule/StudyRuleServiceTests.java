@@ -62,10 +62,10 @@ public class StudyRuleServiceTests {
         Member member = create("wy9295", "wy9295");
         Study study = createStudy("study", "study", 1, member).getData();
         StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
+        Rule rule = ruleService.create(ruleForm).getData();
 
         //생성 메서드 //
-        Rule rule = ruleService.create(ruleForm).getData();
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, study);
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule.getId(), study);
         StudyRule studyRule = rsData.getData();
         assertThat(studyRule.getName()).isEqualTo("aaaa");
         System.out.println(rsData.getMsg());
@@ -84,10 +84,10 @@ public class StudyRuleServiceTests {
         Member member = create("wy9295", "wy9295");
         Study study = createStudy("study", "study", 1, member).getData();
         StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
-
-        //생성 메서드 //
         Rule rule = ruleService.create(ruleForm).getData();
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, study);
+        //생성 메서드 //
+
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule.getId(), study);
         StudyRule studyRule = rsData.getData();
         assertThat(studyRule.getName()).isEqualTo("aaaa");
 
@@ -115,10 +115,9 @@ public class StudyRuleServiceTests {
         Member member = create("wy9295", "wy9295");
         Study study = createStudy("study", "study", 1, member).getData();
         StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
-
-        //생성 메서드 //
         Rule rule = ruleService.create(ruleForm).getData();
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, study);
+        //생성 메서드 //
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule.getId(), study);
         StudyRule studyRule = rsData.getData();
         assertThat(studyRule.getName()).isEqualTo("aaaa");
         System.out.println(rsData.getMsg());
