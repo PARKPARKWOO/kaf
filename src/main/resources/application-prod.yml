@@ -3,7 +3,9 @@ spring:
     activate:
       on-profile: prod
 
-
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
 scheduler:
   cron:
     value: "0 0 18 * * *"

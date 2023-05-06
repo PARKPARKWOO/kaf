@@ -32,30 +32,30 @@ public class StudyRuleController {
     /**
      * 생성
      */
-    @GetMapping("/create/{id}")
+    @GetMapping("/create/{studyId}")
     @PreAuthorize("isAuthenticated()")
-    public String showForm(Model model, @PathVariable Long id, StudyRuleForm studyRuleForm) {
+    public String showForm(Model model, @PathVariable("studyId") Long studyId, StudyRuleForm studyRuleForm) {
         List<Rule> ruleList = ruleService.getRuleList();
         model.addAttribute("ruleList", ruleList);
         return "studyRule/create";
     }
 
-    @PostMapping("/create/{id}")
+    @PostMapping("/create/{studyId}")
     @PreAuthorize("isAuthenticated()")
-    public String create(@PathVariable("id") Long id,@RequestParam("rule") Rule rule,
+    public String create(@PathVariable("studyId") Long studyId,@RequestParam("ruleId") Long ruleId,
                          @Valid StudyRuleForm studyRuleForm, BindingResult bindingResult) {
 
-        RsData<Study> checkLeader = studyRuleService.verificationLeader(rq, id);
+        RsData<Study> checkLeader = studyRuleService.verificationLeader(rq, studyId);
         if (checkLeader.isFail()) {
             return rq.historyBack("스터디 리더가 아닙니다.");
         }
 
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, checkLeader.getData());
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, ruleId, checkLeader.getData());
 
         if (rsData.isFail() || bindingResult.hasErrors()) {
             return rq.historyBack(rsData);
         }
-        return rq.redirectWithMsg(String.format("/study/detail/rule/%s", id), rsData.getMsg());
+        return rq.redirectWithMsg(String.format("/study/detail/rule/%s", studyId), rsData.getMsg());
     }
 
     /**
@@ -77,7 +77,7 @@ public class StudyRuleController {
         if (rsData.isSuccess()) {
             model.addAttribute("ruleList", ruleList);
             StudyRule studyRule = rsData.getData();
-            studyRuleService.setModify(studyRule, studyRuleForm);
+            studyRuleService.setForm(studyRule, studyRuleForm);
             return "studyRule/create";
         } else {
             return rq.historyBack(rsData);

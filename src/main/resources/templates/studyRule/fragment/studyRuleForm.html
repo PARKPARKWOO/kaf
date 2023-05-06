@@ -8,7 +8,7 @@
         <label class="label">
             <span class="label-text">Rule 선택</span>
         </label>
-        <select name="rule" class="input input-bordered">
+        <select name="ruleId" class="input input-bordered">
             <option th:each="rule : ${ruleList}"
                     th:value="${rule.id}"
                     th:text="${rule.name}" />

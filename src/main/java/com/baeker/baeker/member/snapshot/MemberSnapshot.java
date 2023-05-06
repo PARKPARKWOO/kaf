@@ -74,3 +74,6 @@ public class MemberSnapshot extends ScoreBase {
         return snapshot;
     }
 }
+
+
+

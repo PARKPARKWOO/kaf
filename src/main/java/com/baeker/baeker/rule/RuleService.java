@@ -42,7 +42,9 @@ public class RuleService {
      */
 
     @Transactional
-    public void modify(Rule rule, RuleForm ruleForm) {
+    public void modify(Long ruleId, RuleForm ruleForm) {
+        Rule rule = getRule(ruleId).getData();
+
         Rule rule1 = rule.toBuilder()
                 .name(ruleForm.getName())
                 .about(ruleForm.getAbout())
@@ -54,7 +56,7 @@ public class RuleService {
         RsData.of("S-1", "규칙이 수정 되었습니다.", rule1);
     }
 
-    public void setModify(Rule rule, RuleForm ruleForm) {
+    public void setForm(Rule rule, RuleForm ruleForm) {
         ruleForm.setName(rule.getName());
         ruleForm.setAbout(rule.getAbout());
         ruleForm.setProvider(rule.getProvider());

@@ -1,5 +1,6 @@
 package com.baeker.baeker.solvedApi;
 
+import com.baeker.baeker.base.event.BaekJoonEvent;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
@@ -7,10 +8,17 @@ import com.baeker.baeker.member.embed.BaekJoonDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
+
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+
+import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +32,7 @@ public class ApiScheduler {
 
     private final MemberService memberService;
 
+    private final ApplicationEventPublisher publisher;
 
     /**
      * 티어 별 check
@@ -35,25 +44,23 @@ public class ApiScheduler {
         log.info("스케줄러 실행");
         RsData<List<Member>> memberList = memberService.getAll();
         for (Member member : memberList.getData()) {
+            int Bronze = solvedApiService.getSolvedCount(member, 1, 6) - member.getBronze();
+
+            int Silver = solvedApiService.getSolvedCount(member, 6, 11) - member.getSliver();
 
 
-            solvedApiService.getSolvedCount(member, 1, 6);
+            int Gold = solvedApiService.getSolvedCount(member, 11, 16) - member.getGold();
 
-            Integer Silver = solvedApiService.getSolvedCount(member, 6, 11);
+            int Platinum = solvedApiService.getSolvedCount(member, 16, 21) - member.getPlatinum();
 
-            Integer Gold = solvedApiService.getSolvedCount(member, 11, 16);
+            int Diamond = solvedApiService.getSolvedCount(member, 21, 26) - member.getDiamond();
 
-            Integer Platinum = solvedApiService.getSolvedCount(member, 16, 21);
+            int Ruby = solvedApiService.getSolvedCount(member, 26, 31) - member.getRuby();
 
-            Integer Diamond = solvedApiService.getSolvedCount(member, 21, 26);
+            BaekJoonDto dto = new BaekJoonDto(Bronze, Silver, Gold, Platinum, Diamond, Ruby);
+            publisher.publishEvent(new BaekJoonEvent(this, member, dto));
 
-            Integer Ruby = solvedApiService.getSolvedCount(member, 26, 31);
 
-
-//            BaekJoonDto baekJoon = BaekJoonDto.builder().bronze(Bronze).sliver(Silver).gold(Gold).platinum(Platinum)
-//                    .diamond(Diamond).ruby(Ruby).build();
-//
-//            memberService.solve(member.getId(), baekJoon);
         }
     }
 }

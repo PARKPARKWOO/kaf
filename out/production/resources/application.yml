@@ -71,4 +71,4 @@ jasypt:
 
 scheduler:
   cron:
-    value: "* * * * * *"
+    value: "* * 1 * * *"
