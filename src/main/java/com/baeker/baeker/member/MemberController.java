@@ -10,15 +10,18 @@ import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
 import com.baeker.baeker.myStudy.form.MyStudyModfyMsgForm;
+import com.baeker.baeker.solvedApi.SolvedApiService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -29,6 +32,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MyStudyService myStudyService;
+    private final SolvedApiService solvedApiService;
     private final Rq rq;
 
 
@@ -138,20 +142,43 @@ public class MemberController {
         return rq.redirectWithMsg("/", "회원 가입이 완료 되었습니다.");
     }
 
-    //-- 백준 연동 폼 --// : 미완성
+    //-- 백준 연동 폼 --//
     @GetMapping("/connect")
     @PreAuthorize("isAuthenticated()")
-    public String connectForm() {
+    public String connectForm(
+            BaekJoonConnectForm form
+    ) {
         Member member = rq.getMember();
         log.info("백준 연동 폼 요청 확인 member id = {}", member.getId());
 
         return "/member/connect";
     }
 
+    @PostMapping("/connect")
+    @PreAuthorize("isAuthenticated()")
+    public String connect(
+            BaekJoonConnectForm form
+    ) throws IOException, ParseException {
+        String baekJoonName = form.getBaekJoonName();
+        log.info("백준 연동 요청 확인 BaekJoon id = {}", baekJoonName);
+
+        boolean getUser = solvedApiService.findUser(baekJoonName);
+
+        if (!getUser) {
+            log.info("존재하지 않는 id 입니다.");
+            return rq.historyBack( baekJoonName + "은(는) 존재하지 않는 id 입니다.");
+        }
+        RsData<Member> connectRs = memberService.connectBaekJoon(rq.getMember(), baekJoonName);
+        solvedApiService.getSolvedCount(rq.getMember());
+
+        log.info("백준 연동 성공 BaakJoon id = {}", baekJoonName);
+        return rq.redirectWithMsg("/", connectRs.getMsg());
+    }
+
     //-- 백준 연동 이메일 인증 --// : 미완성
     @GetMapping("/verify")
     @PreAuthorize("isAuthenticated()")
-    public String connectForm(
+    public String connectVerifyForm(
             BaekJoonConnectForm form
     ) {
         log.info("백준 연동 이메일 인증 폼 요청 확인 백준 id = {}", form.getBaekJoonName());
@@ -176,9 +203,9 @@ public class MemberController {
     //-- 백준 연동 처리 --// : 미완성
     @PostMapping("/verify")
     @PreAuthorize("isAuthenticated()")
-    public String connect(
+    public String connectVerify(
             BaekJoonConnectForm form
-    ) {
+    ) throws IOException, ParseException {
         log.info("백준 연동 처리 요청 확인");
 
         if (form.getSendCode() != form.getVerifyCode()) {
@@ -188,9 +215,8 @@ public class MemberController {
         Member member = rq.getMember();
 
         // solved ac 를 호출해 해결한 문제 수가 저장된 BaekJoonDto 를 반환받음
-        BaekJoonDto dto = new BaekJoonDto();
-
-        RsData<Member> memberRs = memberService.connectBaekJoon(member, form.getBaekJoonName(), dto);
+        solvedApiService.getSolvedCount(member);
+        RsData<Member> memberRs = memberService.connectBaekJoon(member, form.getBaekJoonName());
         if (memberRs.isFail()) {
             log.info("연동 실패 error = {}", memberRs.getMsg());
             return rq.historyBack(memberRs.getMsg());

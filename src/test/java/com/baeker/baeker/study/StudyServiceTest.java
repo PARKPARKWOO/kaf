@@ -9,6 +9,7 @@ import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.myStudy.StudyStatus;
+import com.baeker.baeker.solvedApi.SolvedApiService;
 import com.baeker.baeker.study.form.StudyCreateForm;
 import com.baeker.baeker.study.form.StudyModifyForm;
 import com.baeker.baeker.study.snapshot.StudySnapShot;
@@ -40,8 +41,7 @@ class StudyServiceTest {
     }
 
     private void connect(Member member, String baekJoonName) {
-        BaekJoonDto dummy = new BaekJoonDto();
-        RsData<Member> memberRsData = memberService.connectBaekJoon(member, baekJoonName, dummy);
+        memberService.connectBaekJoon(member, baekJoonName);
     }
 
     private RsData<Study> createStudy(String name, String about, Integer capacity, Member member) {
@@ -82,9 +82,10 @@ class StudyServiceTest {
     @Test
     void 스터디_생성시_맴버의_solved_스터디로_반영() {
         Member member = create("user", "member");
+        memberService.connectBaekJoon(member, "Baek");
 
         BaekJoonDto dto = new BaekJoonDto(1,1,1,1,1,1);
-        memberService.connectBaekJoon(member, "Baek", dto);
+        publisher.publishEvent(new BaekJoonEvent(this, member, dto));
 
         Study study = createStudy("study", "", 10, member).getData();
         assertThat(study.solvedBaekJoon()).isEqualTo(6);

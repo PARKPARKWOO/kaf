@@ -1,36 +1,20 @@
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    google.charts.load("current", {packages:['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ["day", "solved count", { role: "style" } ],
-            ["mon", 8.94, "color: #8b5cf6"],
-            ["tue", 8.94, "color: #8b5cf6"],
-            ["wed", 10.49, "color: #8b5cf6"],
-            ["thu", 19.30, "color: #8b5cf6"],
-            ["fri", 21.45, "color: #8b5cf6"],
-            ["sat", 21.45, "color: #8b5cf6"],
-            ["sun", 21.45, "color: #8b5cf6"]
-        ]);
+<html layout:decorate="~{layout/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
 
-        var view = new google.visualization.DataView(data);
-        view.setColumns([0, 1,
-            { calc: "stringify",
-                sourceColumn: 1,
-                type: "string",
-                role: "annotation" },
-            2]);
+<head><title>BOJ 연동</title></head>
 
-        var options = {
-            title: "1주간 해결한 문제",
-            width: 600,
-            height: 400,
-            bar: {groupWidth: "80%"},
-            legend: { position: "none" },
-        };
-        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-        chart.draw(view, options);
-    }
-</script>
-<div id="columnchart_values" style="width: 900px; height: 300px;"></div>
+<main layout:fragment="content" class="flex-grow flex items-center justify-center min-h-screen flex flex-col">
+
+    <script th:replace="~{member/fragment/valid :: join}"></script>
+
+    <div class="max-w-2xl w-full px-4">
+        <h1 class="mb-4">
+            BOJ 연동하기
+        </h1>
+
+        <form th:replace="~{member/fragment/connect/connectForm :: connectForm(${baekJoonConnectForm})}"></form>
+
+    </div>
+
+</main>
+</html>
+

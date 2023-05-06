@@ -1,0 +1,20 @@
+<form th:fragment="connectForm (baekJoonConnectForm)"
+      th:action th:object="${baekJoonConnectForm}" method="post"
+      onsubmit="JoinForm__submit(this); return false;"
+      class="flex flex-col gap-6">
+
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">백준 아이디</span>
+    </label>
+    <input type="text" th:field="*{BaekJoonName}" placeholder="백준 아이디" class="input input-bordered" autofocus/>
+  </div>
+
+  <button class="btn btn-block btn-primary gap-1 mt-8">
+    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+    <span>연동하기</span>
+  </button>
+
+  <a class="btn" href="/member/profile">나중에 연동하기</a>
+
+</form>

@@ -161,9 +161,9 @@ public class MemberService {
 
     //-- 백준 id 연동 --//
     @Transactional
-    public RsData<Member> connectBaekJoon(Member member, String baekJoonName, BaekJoonDto dto) {
+    public RsData<Member> connectBaekJoon(Member member, String baekJoonName) {
 
-        Member connectBaekJoon = member.connectBaekJoon(baekJoonName, dto);
+        Member connectBaekJoon = member.connectBaekJoon(baekJoonName);
         Member saveMember = memberRepository.save(connectBaekJoon);
         this.saveSnapshot(member);
 
