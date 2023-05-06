@@ -1,22 +1,22 @@
-<div th:fragment="stat(study)"
+<div th:fragment="stat(study, snapshotList)"
      class="stats shadow mb-5">
 
     <div class="stat">
         <div class="stat-title">스터디 랭킹</div>
-        <div class="stat-value text-primary">25.6K</div>
-        <div class="stat-desc">21% more than last month</div>
+        <div class="stat-value text-primary">25th</div>
+        <div class="stat-desc">최근 25위 유지중</div>
     </div>
 
     <div class="stat">
         <div class="stat-title">해결한 문제</div>
-        <div class="stat-value text-secondary">2.6M</div>
-        <div class="stat-desc">21% more than last month</div>
+        <div class="stat-value text-secondary" th:text="${study.solvedBaekJoon}"></div>
+        <div class="stat-desc" th:text="|최근 ${snapshotList.get(0).solvedBaekJoon} 문제 해결|"></div>
     </div>
 
     <div class="stat">
         <div class="stat-title">해결한 미션</div>
-        <div class="stat-value">86%</div>
-        <div class="stat-desc text-secondary">31 tasks remaining</div>
+        <div class="stat-value">0</div>
+        <div class="stat-desc">최근 해결한 미션 없음</div>
     </div>
 
 </div>
