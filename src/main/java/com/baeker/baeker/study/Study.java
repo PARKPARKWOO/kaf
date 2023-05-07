@@ -39,6 +39,7 @@ public class Study extends ScoreBase {
     private List<StudyRule> studyRules = new ArrayList<>();
 
     @Builder.Default
+    @OrderBy("id desc")
     @OneToMany(mappedBy = "study", cascade = ALL)
     private List<StudySnapShot> snapShotList = new ArrayList<>();
 
@@ -78,18 +79,6 @@ public class Study extends ScoreBase {
     // 경험치 상승 //
     protected void xpUp(Integer addXp) {
         this.xp += addXp;
-    }
-
-    // 스터디 가입시 맴버의 백준 문제 추가 //
-    protected Study addBaekJoon(Member member) {
-        return this.toBuilder()
-                .bronze(this.getBronze() + member.getBronze())
-                .sliver(this.getSliver() + member.getSliver())
-                .gold(this.getGold() + member.getGold())
-                .diamond(this.getDiamond() + member.getDiamond())
-                .ruby(this.getRuby() + member.getRuby())
-                .platinum(this.getPlatinum() + member.getPlatinum())
-                .build();
     }
 
     // 백준 점수 최신화 //

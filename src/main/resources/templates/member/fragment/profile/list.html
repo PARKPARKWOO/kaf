@@ -26,7 +26,7 @@
 
     </div>
     <div th:if="${list eq 'rank'} and ${@rq.notConnectBaekJoon() ne true}" class="flex">
-        <div th:replace="~{member/fragment/member/baekJoon :: baekJoon(${list}, ${@rq.member})}"></div>
+        <div th:replace="~{member/fragment/member/baekJoon :: baekJoon(${@rq.member})}"></div>
 
         <div th:replace="~{member/fragment/profile/chart :: chart(${snapshotList})}"></div>
     </div>
