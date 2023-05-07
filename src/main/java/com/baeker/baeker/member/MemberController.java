@@ -154,6 +154,7 @@ public class MemberController {
         return "/member/connect";
     }
 
+    //-- 백준 연동 처리 --//
     @PostMapping("/connect")
     @PreAuthorize("isAuthenticated()")
     public String connect(
@@ -260,7 +261,7 @@ public class MemberController {
         List<MyStudy> myStudies = myStudyService.statusMember(member);
 
         model.addAttribute("snapshotList", snapshotList);
-        model.addAttribute("myStudies", myStudies);
+        model.addAttribute("myStudies", rq.getMember().getMyStudies());
         model.addAttribute("member", member);
         model.addAttribute("list", list);
 
