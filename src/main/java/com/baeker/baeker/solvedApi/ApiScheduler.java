@@ -44,18 +44,19 @@ public class ApiScheduler {
         log.info("스케줄러 실행");
         RsData<List<Member>> memberList = memberService.getAll();
         for (Member member : memberList.getData()) {
-            int Bronze = solvedApiService.getSolvedCount(member, 1, 6) - member.getBronze();
+            Long memberId = member.getId();
+            int Bronze = solvedApiService.getSolvedCount(memberId, 1, 6) - member.getBronze();
 
-            int Silver = solvedApiService.getSolvedCount(member, 6, 11) - member.getSliver();
+            int Silver = solvedApiService.getSolvedCount(memberId, 6, 11) - member.getSliver();
 
 
-            int Gold = solvedApiService.getSolvedCount(member, 11, 16) - member.getGold();
+            int Gold = solvedApiService.getSolvedCount(memberId, 11, 16) - member.getGold();
 
-            int Platinum = solvedApiService.getSolvedCount(member, 16, 21) - member.getPlatinum();
+            int Platinum = solvedApiService.getSolvedCount(memberId, 16, 21) - member.getPlatinum();
 
-            int Diamond = solvedApiService.getSolvedCount(member, 21, 26) - member.getDiamond();
+            int Diamond = solvedApiService.getSolvedCount(memberId, 21, 26) - member.getDiamond();
 
-            int Ruby = solvedApiService.getSolvedCount(member, 26, 31) - member.getRuby();
+            int Ruby = solvedApiService.getSolvedCount(memberId, 26, 31) - member.getRuby();
 
             BaekJoonDto dto = new BaekJoonDto(Bronze, Silver, Gold, Platinum, Diamond, Ruby);
             publisher.publishEvent(new BaekJoonEvent(this, member, dto));

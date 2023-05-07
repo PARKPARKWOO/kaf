@@ -29,35 +29,37 @@ public class SolvedApiService {
     /**
      * 난이도별 체크 후 문제풀이 수 리턴
      */
-    public Integer getSolvedCount(Member member, Integer min, Integer max) throws IOException, ParseException {
-        JSONArray test = this.solvedApiManager.getProblemCount(member);
-        Integer solvedCount = 0;
+    public Integer getSolvedCount(Long memberId, Integer min, Integer max) throws IOException, ParseException {
+        Member member = memberService.getMember(memberId).getData();
+        JSONArray test = this.solvedApiManager.getProblemCount(member.getBaekJoonName());
+        Long solvedCount = 0L;
         for (Object o : test) {
             JSONObject jsonObject = (JSONObject) o;
-            if ((int)jsonObject.get("level") >= min && (int) jsonObject.get("level") < max) {
-                solvedCount += (Integer) jsonObject.get("solved");
+            if ((Long)jsonObject.get("level") >= min && (Long) jsonObject.get("level") < max) {
+                solvedCount += (Long) jsonObject.get("solved");
             }
         }
 
-        return solvedCount;
+        return solvedCount.intValue();
     }
 
     /**
      * 수동으로 본인 기록 업데이트
      */
-    public void getSolvedCount(Member member) throws IOException, ParseException {
+    public void getSolvedCount(Long memberId) throws IOException, ParseException {
+        Member member = memberService.getMember(memberId).getData();
 
-        int Bronze = getSolvedCount(member, 1, 6) - member.getBronze();
+        int Bronze = getSolvedCount(memberId, 1, 6) - member.getBronze();
 
-        int Silver = getSolvedCount(member, 6, 11) - member.getSliver();
+        int Silver = getSolvedCount(memberId, 6, 11) - member.getSliver();
 
-        int Gold = getSolvedCount(member, 11, 16) - member.getGold();
+        int Gold = getSolvedCount(memberId, 11, 16) - member.getGold();
 
-        int Platinum = getSolvedCount(member, 16, 21) - member.getPlatinum();
+        int Platinum = getSolvedCount(memberId, 16, 21) - member.getPlatinum();
 
-        int Diamond = getSolvedCount(member, 21, 26) - member.getDiamond();
+        int Diamond = getSolvedCount(memberId, 21, 26) - member.getDiamond();
 
-        int Ruby = getSolvedCount(member, 26, 31) - member.getRuby();
+        int Ruby = getSolvedCount(memberId, 26, 31) - member.getRuby();
 
         BaekJoonDto dto = new BaekJoonDto(Bronze, Silver, Gold, Platinum, Diamond, Ruby);
         publisher.publishEvent(new BaekJoonEvent(this, member, dto));
