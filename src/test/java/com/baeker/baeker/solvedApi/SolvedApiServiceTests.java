@@ -12,11 +12,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
 
 @SpringBootTest
+@Transactional
 public class SolvedApiServiceTests {
     @Autowired
     private SolvedApiService solvedApiService;
@@ -55,6 +57,6 @@ public class SolvedApiServiceTests {
         Member member = create("user1", "member1");
         connect(member, "wy9295");
         Integer solvedCount = solvedApiService.getSolvedCount(member.getId(), 1, 6);
-        System.out.println(solvedCount);
+        System.out.println("wy9295 :" + solvedCount);
     }
 }
