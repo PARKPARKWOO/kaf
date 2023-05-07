@@ -1,40 +1,28 @@
 package com.baeker.baeker.myStudy;
 
+import com.baeker.baeker.base.entity.BaseEntity;
 import com.baeker.baeker.member.Member;
-import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.study.Study;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-
-import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class MyStudy {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+public class MyStudy extends BaseEntity {
 
     private String msg;
 
     @Enumerated(EnumType.STRING)
     private StudyStatus status;
-
-    @CreatedDate
-    private LocalDateTime joinDate;
-
 
     @ManyToOne(fetch = LAZY)
     private Member member;
@@ -92,15 +80,9 @@ public class MyStudy {
     //-- business logic --//
 
     // 가입, 초대 신청 승인 //
-    protected BaekJoon accept() {
-        BaekJoon baekJoon = this.member.getBaekJoon();
-
-        if (member.getBaekJoon() != null)
-            this.study.updateSolve(baekJoon);
-
+    protected void accept() {
         this.status = StudyStatus.MEMBER;
         this.msg = null;
-        return baekJoon;
     }
 
     // 초대, 가입 요청 메시지 변경 //

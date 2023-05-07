@@ -17,14 +17,14 @@
         <tr class="hover"
             th:each="member , loop : ${paging}">
 
-            <th th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></th>
+            <th th:text="${paging.number * paging.size + loop.index + 1}"></th>
 
             <td>
-                <a th:href="@{/member/member/{id}(id=${member.id})}">
+                <a th:href="@{/member/member/{id}/rank(id=${member.id})}">
                     <div class="flex items-center space-x-3">
                         <div class="avatar">
                             <div class="mask mask-squircle w-12 h-12">
-                                <img th:src="@{https://avatars.dicebear.com/api/avataaars/__${member.profileImg}__.svg}"/>
+                                <img th:src="@{${member.profileImg}}"/>
                             </div>
                         </div>
                         <div>
@@ -41,7 +41,7 @@
 
             <td>
                 <a class="flex justify-center"
-                   th:href="@{/member/member/{id}(id=${member.id})}">
+                   th:href="@{/member/member/{id}/rank(id=${member.id})}">
                     <span th:text="|0|"></span>
                     <br/>
                 </a>
@@ -49,7 +49,7 @@
 
             <td>
                 <a class="flex justify-center"
-                   th:href="@{/member/member/{id}(id=${member.id})}">
+                   th:href="@{/member/member/{id}/rank(id=${member.id})}">
                     <span th:text="${member.myStudies.size}"></span>
                 </a>
             </td>

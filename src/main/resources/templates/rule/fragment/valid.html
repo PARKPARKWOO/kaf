@@ -47,23 +47,17 @@
         }
 
         //-- OJ 사이트 검증 --//
-        form.provider.value = form.provider.value.trim();
+        const $checkedProviderRadioButton = $(form).find("[name=provider]:checked");
 
-        if (form.provider.value.length != 2) {
-            toastWarning('2글자로 작성해주세요!');
-            form.provider.focus();
-            return;
-        }
-
-        if (form.provider.value.length == 0) {
-            toastWarning('사용하려는 사이트를 작성해주세요.');
-            form.provider.focus();
+        if ($checkedProviderRadioButton.length == 0) {
+            toastWarning('OJ사이트를 정해주세요');
+            $(form).find("[name=provider]:first").focus();
             return;
         }
         //-- 난이도 검증 --//
-        const $checkedGenderRadioButton = $(form).find("[name=difficulty]:checked");
+        const $checkedDifficultyRadioButton = $(form).find("[name=difficulty]:checked");
 
-        if ($checkedGenderRadioButton.length == 0) {
+        if ($checkedDifficultyRadioButton.length == 0) {
             toastWarning('난이도를 선택해주세요.');
             $(form).find("[name=difficulty]:first").focus();
             return;

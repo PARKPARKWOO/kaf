@@ -1,0 +1,24 @@
+<div th:fragment="myImg(memberInfoForm)" class="carousel rounded-box w-32 h-32 flex flex-col">
+
+    <div class="carousel-item mask mask-squircle">
+        <div class="relative">
+
+            <label>
+                <input type="radio" checked
+                       class="peer hidden"
+                       th:field="${memberInfoForm.profileImg}"
+                       th:value="${memberInfoForm.profileImg}"
+                       onclick="selectImage(this)"/>
+
+                <div class="absolute inset-0 bg-gray-900 bg-opacity-60 hover:bg-opacity-30 transition peer-checked:bg-opacity-0"></div>
+
+                <img th:src="@{__${memberInfoForm.profileImg}__}"
+                     class="w-full"
+                     data-image="__${num}__"/>
+
+
+            </label>
+
+        </div>
+    </div>
+</div>

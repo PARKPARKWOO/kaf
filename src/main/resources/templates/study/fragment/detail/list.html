@@ -1,24 +1,38 @@
-<div th:fragment="list (study, list, myStudies, pending)"
-     class="overflow-x-auto w-[70%] mb-5">
+<div th:fragment="list (study, list, myStudies, pending, snapshotList)"
+     class="overflow-x-auto w-[70%] mb-5 min-h-screen">
 
     <div class="tabs flex justify-center mb-7">
 
-        <div class="tabs">
+        <div class="tabs" id="list">
+
+            <a th:href="@{/study/detail/rank/{id}#list(id=*{study.id})}"
+               class="tab tab-bordered"
+               th:classappend="${list == 'rank'} ? 'tab-active' : ''">스터디 홈</a>
+
             <a th:href="@{/study/detail/rule/{id}#list(id=*{study.id})}"
                class="tab tab-bordered"
-               th:classappend="${list == 'rule'} ? 'tab-active' : ''">스터디 규칙</a>
+               th:classappend="${list == 'rule'} ? 'tab-active' : ''">스터디 미션</a>
 
             <a th:href="@{/study/detail/member/{id}#list(id=*{study.id})}"
                class="tab tab-bordered"
                th:classappend="${list == 'member'} ? 'tab-active' : ''">맴버</a>
 
             <a th:href="@{/study/detail/pending/{id}#list(id=*{study.id})}"
-               th:if="${@rq.member.nickName eq study.leader}"
+               th:if="${@rq.login} and ${@rq.member.nickName eq study.leader}"
                class="tab tab-bordered"
                th:classappend="${list == 'pending'} ? 'tab-active' : ''">가입 요청</a>
         </div>
 
 
+    </div>
+    <div th:if="${list eq 'rank'}" class="flex flex-col">
+        <div th:replace="~{study/fragment/detail/stat :: stat(${study}, ${snapshotList})}"></div>
+
+        <div class="flex mt-8">
+            <div th:replace="~{study/fragment/detail/rank :: rank(${study})}"></div>
+
+            <div th:replace="~{member/fragment/profile/chart :: chart(${snapshotList})}"></div>
+        </div>
     </div>
 
     <form th:replace="~{study/fragment/detail/rules :: rules(${study.studyRules}, ${list})}"></form>

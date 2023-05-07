@@ -2,8 +2,8 @@ package com.baeker.baeker.myStudy;
 
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
-import com.baeker.baeker.member.embed.BaekJoon;
 import com.baeker.baeker.study.Study;
+import com.baeker.baeker.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,15 @@ public class MyStudyService {
 
     private final MyStudyRepository myStudyRepository;
 
-    //-- 새로운 스터디 개설 --//
+    /**
+     ** 생성 관련 method **
+     * Study 개설시 개설자 등록 작업
+     * 가입 신청
+     * 스터디에 초대
+     * 스터디 중복 가입여부 확인
+     */
+
+    //-- Study 개설시 개설자 등록 작업 --//
     @Transactional
     public MyStudy create(Member member, Study study) {
         MyStudy newStudy = MyStudy.createNewStudy(member, study);
@@ -70,43 +78,6 @@ public class MyStudyService {
         return RsData.of("S-1", inviter.getNickName() + "님을 스터디에 초대했습니다.", save);
     }
 
-    //-- 가입, 초대신청 승인 --//
-    @Transactional
-    public RsData<BaekJoon> accept(MyStudy myStudy) {
-
-        if (myStudy.getStudy().equals(StudyStatus.MEMBER))
-            return RsData.of("F-1", "이미 정식 스터디 맴버입니다.");
-
-        Study study = myStudy.getStudy();
-        if (study.getMyStudies().size() == study.getCapacity())
-            return RsData.of("F-2", "이미 최대 인원에 도달했습니다.");
-
-        BaekJoon addedSolved = myStudy.accept();
-        return RsData.of("S-1", "정식 회원으로 가입이 완료되었습니다.", addedSolved);
-    }
-
-
-    //-- find by id --//
-    public RsData<MyStudy> getMyStudy(Long id) {
-        Optional<MyStudy> byId = myStudyRepository.findById(id);
-
-        if (byId.isPresent())
-            return RsData.successOf(byId.get());
-
-        return RsData.of("F-1", "존재하지 않는 id 입니다.");
-    }
-
-    //-- find by member, study --//
-    public RsData<MyStudy> getMyStudy(Member member, Study study) {
-        List<MyStudy> myStudies = member.getMyStudies();
-
-        for (MyStudy myStudy : myStudies) {
-            if (myStudy.getStudy().equals(study))
-                return RsData.successOf(myStudy);
-        }
-        return RsData.of("F-1", "가입하지 않은 스터디 입니다.");
-    }
-
     //-- 스터디 중복 가입 확인 --//
     private static RsData<MyStudy> duplicationCheck(Member member, Study study) {
         List<MyStudy> myStudies = member.getMyStudies();
@@ -118,51 +89,29 @@ public class MyStudyService {
         return RsData.of("S-1", "성공");
     }
 
-    //-- member 등급인 my study 만 조회 --//
-    public List<MyStudy> statusMember(Member member) {
-        List<MyStudy> myStudies = new ArrayList<>();
-        List<MyStudy> myStudyList = member.getMyStudies();
 
-        for (MyStudy myStudy : myStudyList)
-            if (myStudy.getStatus().equals(StudyStatus.MEMBER))
-                myStudies.add(myStudy);
+    /**
+     ** 수정과 삭제 관련 method **
+     * 가입과 초대 승인
+     * 가입과 초대 메시지 변경
+     * 가입 요청과 초대 삭제
+     */
 
-        return myStudies;
-    }
+    //-- 가입, 초대신청 승인 --//
+    @Transactional
+    public RsData<MyStudy> accept(MyStudy myStudy) {
 
-    public List<MyStudy> statusMember(Study study) {
-        List<MyStudy> myStudies = new ArrayList<>();
-        List<MyStudy> myStudyList = study.getMyStudies();
+        if (myStudy.getStudy().equals(StudyStatus.MEMBER))
+            return RsData.of("F-1", "이미 정식 스터디 맴버입니다.");
 
-        for (MyStudy myStudy : myStudyList)
-            if (myStudy.getStatus().equals(StudyStatus.MEMBER))
-                myStudies.add(myStudy);
+        Study study = myStudy.getStudy();
+        if (study.getMyStudies().size() == study.getCapacity())
+            return RsData.of("F-2", "이미 최대 인원에 도달했습니다.");
 
-        return myStudies;
-    }
+        myStudy.accept();
 
 
-    //-- member 등급이 아닌 my study 조회 --//
-    public List<MyStudy> statusNotMember(Member member) {
-        List<MyStudy> pending = new ArrayList<>();
-        List<MyStudy> myStudies = member.getMyStudies();
-
-        for (MyStudy myStudy : myStudies)
-            if (!myStudy.getStatus().equals(StudyStatus.MEMBER))
-                pending.add(myStudy);
-
-        return pending;
-    }
-
-    public List<MyStudy> statusNotMember(Study study) {
-        List<MyStudy> pending = new ArrayList<>();
-        List<MyStudy> myStudies = study.getMyStudies();
-
-        for (MyStudy myStudy : myStudies)
-            if (!myStudy.getStatus().equals(StudyStatus.MEMBER))
-                pending.add(myStudy);
-
-        return pending;
+        return RsData.of("S-1", "정식 회원으로 가입이 완료되었습니다.");
     }
 
     //-- 초대, 가입 요청 메시지 변경 --//
@@ -185,4 +134,86 @@ public class MyStudyService {
         else
             return RsData.of("S-1", "가입 요청을 취소했습니다.");
     }
+
+
+    /**
+     ** 조회 관련 method **
+     * find by id
+     * find by member & study
+     * find Status == member by member
+     * find Status == member by study
+     * find Status != member by member
+     * find Status != member by study
+     */
+
+    //-- find by id --//
+    public RsData<MyStudy> getMyStudy(Long id) {
+        Optional<MyStudy> byId = myStudyRepository.findById(id);
+
+        if (byId.isPresent())
+            return RsData.successOf(byId.get());
+
+        return RsData.of("F-1", "존재하지 않는 id 입니다.");
+    }
+
+    //-- find by member, study --//
+    public RsData<MyStudy> getMyStudy(Member member, Study study) {
+        List<MyStudy> myStudies = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudies) {
+            if (myStudy.getStudy().equals(study))
+                return RsData.successOf(myStudy);
+        }
+        return RsData.of("F-1", "가입하지 않은 스터디 입니다.");
+    }
+
+    //-- member 등급인 my study 만 조회 by member --//
+    public List<MyStudy> statusMember(Member member) {
+        List<MyStudy> myStudies = new ArrayList<>();
+        List<MyStudy> myStudyList = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudyList)
+            if (myStudy.getStatus().equals(StudyStatus.MEMBER))
+                myStudies.add(myStudy);
+
+        return myStudies;
+    }
+
+    //-- member 등급인 my study 만 조회 by study --//
+    public List<MyStudy> statusMember(Study study) {
+        List<MyStudy> myStudies = new ArrayList<>();
+        List<MyStudy> myStudyList = study.getMyStudies();
+
+        for (MyStudy myStudy : myStudyList)
+            if (myStudy.getStatus().equals(StudyStatus.MEMBER))
+                myStudies.add(myStudy);
+
+        return myStudies;
+    }
+
+
+    //-- member 등급이 아닌 my study 조회 by member --//
+    public List<MyStudy> statusNotMember(Member member) {
+        List<MyStudy> pending = new ArrayList<>();
+        List<MyStudy> myStudies = member.getMyStudies();
+
+        for (MyStudy myStudy : myStudies)
+            if (!myStudy.getStatus().equals(StudyStatus.MEMBER))
+                pending.add(myStudy);
+
+        return pending;
+    }
+
+    //-- member 등급이 아닌 my study 조회 by study --//
+    public List<MyStudy> statusNotMember(Study study) {
+        List<MyStudy> pending = new ArrayList<>();
+        List<MyStudy> myStudies = study.getMyStudies();
+
+        for (MyStudy myStudy : myStudies)
+            if (!myStudy.getStatus().equals(StudyStatus.MEMBER))
+                pending.add(myStudy);
+
+        return pending;
+    }
 }
+

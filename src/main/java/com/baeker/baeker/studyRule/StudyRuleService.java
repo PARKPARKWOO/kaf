@@ -5,6 +5,7 @@ import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.rule.RuleForm;
+import com.baeker.baeker.rule.RuleService;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +30,17 @@ public class StudyRuleService {
 
     private final StudyService studyService;
 
+    private final RuleService ruleService;
+
 
     /**
      * 생성
      */
 
     @Transactional
-    public RsData<StudyRule> create(StudyRuleForm studyRuleForm, Rule rule, Study study) {
+    public RsData<StudyRule> create(StudyRuleForm studyRuleForm, Long ruleId, Study study) {
+        Rule rule = ruleService.getRule(ruleId).getData();
+
         StudyRule studyRule = StudyRule.builder()
                 .name(studyRuleForm.getName())
                 .about(studyRuleForm.getAbout())
@@ -62,7 +67,7 @@ public class StudyRuleService {
         RsData.of("S-1", "수정되었습니다.", modifyRule);
     }
 
-    public void setModify(StudyRule studyRule, StudyRuleForm studyRuleForm) {
+    public void setForm(StudyRule studyRule, StudyRuleForm studyRuleForm) {
         studyRuleForm.setName(studyRule.getName());
         studyRuleForm.setAbout(studyRule.getAbout());
     }

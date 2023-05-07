@@ -6,11 +6,11 @@
 
 <div align="center"><b>알고리즘 스터디를 효율적으로!</b></div>
 
-<div align="center"><a href="#"><b>🔗 show application</b></a></div>
+<div align="center"><a href="http://ec2-15-164-211-17.ap-northeast-2.compute.amazonaws.com:8080/"><b>🔗 show application</b></a></div>
 
 <div align="center"><a href="#"><b>🔗 Video</b></a></div>
 
-<div align="center"><a href="#"><b>🔗  History</b></a></div>
+<div align="center"><a href="https://dear-writer-fba.notion.site/Project-Baeker-190720a8ab574cac9637a1d43d5083c8"><b>🔗  History</b></a></div>
 
 ## about Baeker
 

@@ -40,7 +40,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             default -> username = oAuth2User.getName();
         }
 
-        Member member = memberService.whenSocialLogin(provider, username, nickName, email, token).getData();
+        Member member = memberService.whenSocialLogin(provider, username, nickName, email, token, profileImage).getData();
         return new CustomOAuth2User(member.getUsername(), member.getPassword(), member.getGrantedAuthorities());
     }
 
@@ -61,10 +61,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
         String nickname = (String) profile.get("nickname");
         String email = (String) kakaoAccount.get("email");
+        String profileImg = (String) profile.get("profile_image_url");
 
         this.token = userRequest.getAccessToken().getTokenValue();
 
         this.username = oAuth2User.getName();
+        this.profileImage = profileImg;
         this.nickName = nickname;
         this.email = email;
     }

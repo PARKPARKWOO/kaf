@@ -3,6 +3,7 @@ package com.baeker.baeker.studyRule;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.rule.Rule;
 import com.baeker.baeker.rule.RuleForm;
@@ -40,8 +41,12 @@ public class StudyRuleServiceTests {
     private StudyService studyService;
 
     private Member create(String username, String name) {
-        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", 1);
-        return memberService.join(form).getData();
+        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", "");
+        Member member = memberService.join(form).getData();
+
+        BaekJoonDto dummy = new BaekJoonDto();
+        RsData<Member> memberRsData = memberService.connectBaekJoon(member, name, dummy);
+        return member;
     }
 
     private RsData<Study> createStudy(String name, String about, Integer capacity, Member member) {
@@ -57,10 +62,10 @@ public class StudyRuleServiceTests {
         Member member = create("wy9295", "wy9295");
         Study study = createStudy("study", "study", 1, member).getData();
         StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
+        Rule rule = ruleService.create(ruleForm).getData();
 
         //생성 메서드 //
-        Rule rule = ruleService.create(ruleForm).getData();
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, study);
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule.getId(), study);
         StudyRule studyRule = rsData.getData();
         assertThat(studyRule.getName()).isEqualTo("aaaa");
         System.out.println(rsData.getMsg());
@@ -79,10 +84,10 @@ public class StudyRuleServiceTests {
         Member member = create("wy9295", "wy9295");
         Study study = createStudy("study", "study", 1, member).getData();
         StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
-
-        //생성 메서드 //
         Rule rule = ruleService.create(ruleForm).getData();
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, study);
+        //생성 메서드 //
+
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule.getId(), study);
         StudyRule studyRule = rsData.getData();
         assertThat(studyRule.getName()).isEqualTo("aaaa");
 
@@ -110,10 +115,9 @@ public class StudyRuleServiceTests {
         Member member = create("wy9295", "wy9295");
         Study study = createStudy("study", "study", 1, member).getData();
         StudyRuleForm studyRuleForm = new StudyRuleForm("aaaa", "소개", study.getId());
-
-        //생성 메서드 //
         Rule rule = ruleService.create(ruleForm).getData();
-        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule, study);
+        //생성 메서드 //
+        RsData<StudyRule> rsData = studyRuleService.create(studyRuleForm, rule.getId(), study);
         StudyRule studyRule = rsData.getData();
         assertThat(studyRule.getName()).isEqualTo("aaaa");
         System.out.println(rsData.getMsg());

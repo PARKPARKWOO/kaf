@@ -4,6 +4,7 @@ import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
+import com.baeker.baeker.member.form.MemberLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,9 +19,10 @@ public class HomeController {
 
     private final Rq rq;
 
-    //-- welcome page --//
+    //-- welcome page redirect --//
     @GetMapping("/")
     public String home(
+            MemberLoginForm form
     ) {
         log.info("홈페이지 요청 확인");
 
@@ -32,7 +34,6 @@ public class HomeController {
         log.info("로그아웃 회원 입장");
         return "member/home";
     }
-
 
     @GetMapping("/chat")
     public String chat() {

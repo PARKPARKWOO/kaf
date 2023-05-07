@@ -1,33 +1,27 @@
 package com.baeker.baeker.study;
 
+import com.baeker.baeker.base.entity.ScoreBase;
 import com.baeker.baeker.member.Member;
-import com.baeker.baeker.member.embed.BaekJoon;
-import com.baeker.baeker.member.embed.Programmers;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.study.snapshot.StudySnapShot;
 import com.baeker.baeker.studyRule.StudyRule;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
-public class Study {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+public class Study extends ScoreBase {
 
     @Column(unique = true)
     private String name;
@@ -35,15 +29,6 @@ public class Study {
     private String leader;
     private Integer capacity;
     private Integer xp;
-
-    @CreatedDate
-    private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
-
-    @Embedded
-    private BaekJoon baekJoon;
-    @Embedded
-    private Programmers programmers;
 
     @Builder.Default
     @OneToMany(mappedBy = "study")
@@ -53,9 +38,14 @@ public class Study {
     @OneToMany(mappedBy = "study")
     private List<StudyRule> studyRules = new ArrayList<>();
 
+    @Builder.Default
+    @OrderBy("id desc")
+    @OneToMany(mappedBy = "study", cascade = ALL)
+    private List<StudySnapShot> snapShotList = new ArrayList<>();
+
 
     //-- create method --//
-    public static Study createStudy(String name, String about, Integer capacity, Member member) {
+    protected static Study createStudy(String name, String about, Integer capacity, Member member) {
         return builder()
                 .name(name)
                 .about(about)
@@ -69,7 +59,7 @@ public class Study {
     //-- business logic --//
 
     // 이름, 소개, 최대 인원 변경 //
-    public Study modifyStudy(String name, String about, Integer capacity) {
+    protected Study modifyStudy(String name, String about, Integer capacity) {
         return this.toBuilder()
                 .name(name)
                 .about(about)
@@ -79,7 +69,7 @@ public class Study {
     }
 
     // 리더 변경 //
-    public Study modifyLeader(String leader) {
+    protected Study modifyLeader(String leader) {
         return this.toBuilder()
                 .leader(leader)
                 .modifyDate(LocalDateTime.now())
@@ -87,26 +77,20 @@ public class Study {
     }
 
     // 경험치 상승 //
-    public void xpUp(Integer addXp) {
+    protected void xpUp(Integer addXp) {
         this.xp += addXp;
     }
 
-    // 해결한 문제 수 생성 //
-    public void createSolve(BaekJoon baekJoon) {
-        this.baekJoon = baekJoon;
-    }
-
-    // 해결한 문제 수 업데이트 //
-    public void updateSolve(BaekJoon addedSolved) {
-        BaekJoon beakJoon = BaekJoon.builder()
-                .bronze(addedSolved.getBronze() + baekJoon.getBronze())
-                .sliver(addedSolved.getSliver() + baekJoon.getSliver())
-                .gold(addedSolved.getGold() + baekJoon.getGold())
-                .platinum(addedSolved.getPlatinum() + baekJoon.getPlatinum())
-                .diamond(addedSolved.getDiamond() + baekJoon.getDiamond())
-                .ruby(addedSolved.getRuby() + baekJoon.getRuby())
+    // 백준 점수 최신화 //
+    protected Study updateBaekJoon(BaekJoonDto dto) {
+        return this.toBuilder()
+                .bronze(this.getBronze() + dto.getBronze())
+                .sliver(this.getSliver() + dto.getSliver())
+                .gold(this.getGold() + dto.getGold())
+                .diamond(this.getDiamond() + dto.getDiamond())
+                .ruby(this.getRuby() + dto.getRuby())
+                .platinum(this.getPlatinum() + dto.getPlatinum())
                 .build();
-
-        this.baekJoon = beakJoon;
     }
+
 }

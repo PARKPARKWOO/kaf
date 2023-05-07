@@ -3,7 +3,7 @@ package com.baeker.baeker.myStudy;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
-import com.baeker.baeker.member.embed.BaekJoon;
+import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,14 +24,19 @@ class MyStudyServiceTest {
     @Autowired StudyService studyService;
 
     private Member create(String username, String name) {
-        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", 1);
-        return memberService.join(form).getData();
-    }
+        MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", "");
+        Member member = memberService.join(form).getData();
 
+        BaekJoonDto dummy = new BaekJoonDto(1,1,1,1,1,1);
+        RsData<Member> memberRsData = memberService.connectBaekJoon(member, name, dummy);
+        return member;
+    }
+    
     private Study createStudy(String name, Member member) {
         StudyCreateForm form = new StudyCreateForm(name, "about", 7);
         Study study = studyService.create(form, member).getData();
         myStudyService.create(member, study);
+        studyService.addBaekJoon(study, member);
         return study;
     }
 
@@ -41,6 +44,8 @@ class MyStudyServiceTest {
     void 스터디_가입_신청() {
         Member leader = create("user", "leader");
         Study study = createStudy("study", leader);
+
+        assertThat(study.solvedBaekJoon()).isEqualTo(6);
 
         Member member1 = create("user1", "member1");
         RsData<MyStudy> myStudyRs = myStudyService.join(member1, study, "hi");
@@ -57,12 +62,17 @@ class MyStudyServiceTest {
         // 중복 가입 금지
         RsData<MyStudy> joinDuplicate = myStudyService.join(member1, study, "hello");
         assertThat(joinDuplicate.getResultCode()).isEqualTo("F-1");
+
+        // 승인 전에는 solved 가 반영되지 않음
+        assertThat(study.solvedBaekJoon()).isEqualTo(6);
     }
 
     @Test
     void 스터디로_초대() {
         Member leader = create("user", "leader");
         Study study = createStudy("study", leader);
+
+        assertThat(study.solvedBaekJoon()).isEqualTo(6);
 
         Member member1 = create("user1", "member1");
         Member member2 = create("user2", "member2");
@@ -88,6 +98,9 @@ class MyStudyServiceTest {
         // 스터디 맴버로 승인되기전 초대 금지
         RsData<MyStudy> inviting = myStudyService.invite(member1, member2, study, "hi");
         assertThat(inviting.getResultCode()).isEqualTo("F-2");
+
+        // 승인 전에는 solved 가 반영되지 않음
+        assertThat(study.solvedBaekJoon()).isEqualTo(6);
     }
 
     @Test
@@ -95,35 +108,52 @@ class MyStudyServiceTest {
         Member leader = create("user", "leader");
         Study study = createStudy("study", leader);
 
+        assertThat(study.solvedBaekJoon()).isEqualTo(6);
+
         Member member1 = create("user1", "member1");
         Member member2 = create("user2", "member2");
 
         // member1 : 스터디 가입 신청
         RsData<MyStudy> myStudyRs1 = myStudyService.join(member1, study, "hi");
+        MyStudy myStudy1 = myStudyRs1.getData();
+
+
         assertThat(myStudyRs1.getResultCode()).isEqualTo("S-1");
-        assertThat(myStudyRs1.getData().getStatus()).isEqualTo(StudyStatus.PENDING);
+        assertThat(myStudy1.getStatus()).isEqualTo(StudyStatus.PENDING);
 
         // member1 : 정식 승인전 member2 초대 -> F-2
         RsData<MyStudy> invite1 = myStudyService.invite(member1, member2, study, "'hi");
         assertThat(invite1.getResultCode()).isEqualTo("F-2");
 
+
         // member1 : 가입 승인 PENDING -> MEMBER
-        RsData<BaekJoon> accept1 = myStudyService.accept(myStudyRs1.getData());
+        RsData<MyStudy> accept1 = myStudyService.accept(myStudy1);
+        studyService.addBaekJoon(myStudy1.getStudy(), myStudy1.getMember());
+
         assertThat(accept1.getResultCode()).isEqualTo("S-1");
-        assertThat(myStudyRs1.getData().getStatus()).isEqualTo(StudyStatus.MEMBER);
-        assertThat(myStudyRs1.getData().getMember().getNickName()).isEqualTo("member1");
+        assertThat(myStudy1.getStatus()).isEqualTo(StudyStatus.MEMBER);
+        assertThat(myStudy1.getMember().getNickName()).isEqualTo("member1");
+        // solved count 반영
+        assertThat(study.solvedBaekJoon()).isEqualTo(12);
+
 
         // member1 : 스터디로 member2 초대
         // member2 : INVITING
         RsData<MyStudy> invite2 = myStudyService.invite(member1, member2, study, "hi");
+        MyStudy myStudy2 = invite2.getData();
+
         assertThat(invite2.getResultCode()).isEqualTo("S-1");
-        assertThat(invite2.getData().getStatus()).isEqualTo(StudyStatus.INVITING);
+        assertThat(myStudy2.getStatus()).isEqualTo(StudyStatus.INVITING);
         
         // member2 : 가입 승인 INVITING -> MEMBER
-        RsData<BaekJoon> accept2 = myStudyService.accept(invite2.getData());
+        RsData<MyStudy> accept2 = myStudyService.accept(myStudy2);
+        studyService.addBaekJoon(myStudy2.getStudy(), myStudy2.getMember());
+
         assertThat(accept2.getResultCode()).isEqualTo("S-1");
-        assertThat(invite2.getData().getStatus()).isEqualTo(StudyStatus.MEMBER);
-        assertThat(invite2.getData().getMember().getNickName()).isEqualTo("member2");
+        assertThat(myStudy2.getStatus()).isEqualTo(StudyStatus.MEMBER);
+        assertThat(myStudy2.getMember().getNickName()).isEqualTo("member2");
+        // solved count 반영
+        assertThat(study.solvedBaekJoon()).isEqualTo(18);
     }
 
     @Test

@@ -1,33 +1,48 @@
-<div th:fragment="list (list, myStudies, pending)"
-     class="overflow-x-auto w-[70%] mb-5">
+<div th:fragment="list (list, myStudies, pending, snapshotList)"
+     class="overflow-x-auto w-[70%] mb-5 min-h-screen">
 
-  <div class="tabs flex justify-center mb-7">
+    <div class="tabs flex justify-center mb-7">
 
-    <div class="tabs" id="list">
+        <div class="tabs" id="list">
 
-      <a href="/member/profile/rank#list"
-         class="tab tab-bordered"
-         th:classappend="${list == 'rank'} ? 'tab-active' : ''">내 백준</a>
+            <a href="/member/profile/rank#list"
+               class="tab tab-bordered"
+               th:classappend="${list == 'rank'} ? 'tab-active' : ''">내 백준</a>
 
-      <a href="/member/profile/rank2#list"
-         class="tab tab-bordered"
-         th:classappend="${list == 'rank2'} ? 'tab-active' : ''">내 프로그래머스</a>
+            <a href="/member/profile/rank2#list"
+               class="tab tab-bordered"
+               th:classappend="${list == 'rank2'} ? 'tab-active' : ''">내 프로그래머스</a>
 
-      <a href="/member/profile/study#list"
-         class="tab tab-bordered"
-         th:classappend="${list == 'study'} ? 'tab-active' : ''">내 스터디</a>
+            <a href="/member/profile/study#list"
+               class="tab tab-bordered"
+               th:classappend="${list == 'study'} ? 'tab-active' : ''">내 스터디</a>
 
-      <a href="/member/profile/join#list"
-         class="tab tab-bordered"
-         th:classappend="${list == 'join'} ? 'tab-active' : ''">가입 대기중</a>
+            <a href="/member/profile/join#list"
+               class="tab tab-bordered"
+               th:classappend="${list == 'join'} ? 'tab-active' : ''">가입 대기중</a>
+
+        </div>
+
 
     </div>
+    <div th:if="${list eq 'rank'} and ${@rq.notConnectBaekJoon() ne true}" class="flex">
+        <div th:replace="~{member/fragment/member/baekJoon :: baekJoon(${@rq.member})}"></div>
 
+        <div th:replace="~{member/fragment/profile/chart :: chart(${snapshotList})}"></div>
+    </div>
 
-  </div>
+    <div th:if="${list eq 'rank'} and ${@rq.notConnectBaekJoon()}"
+         class="flex justify-center">
+        <span>연동된 백준 계정이 없습니다.</span>
+    </div>
 
-  <table th:replace="~{member/fragment/profile/study :: study(${list}, ${myStudies})}"></table>
+    <div th:if="${list eq 'rank2'}"
+         class="flex justify-center">
+        <span>연동된 프로그래머스 계정이 없습니다.</span>
+    </div>
 
-  <table th:replace="~{member/fragment/profile/join :: join(${list}, ${pending})}"></table>
+    <table th:replace="~{member/fragment/profile/study :: study(${list}, ${myStudies})}"></table>
+
+    <table th:replace="~{member/fragment/profile/join :: join(${list}, ${pending})}"></table>
 
 </div>

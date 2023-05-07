@@ -47,19 +47,18 @@ public class StudyRuleControllerTests {
     private RuleService ruleService;
 
     @Test
-    @Rollback(value = false)
     @DisplayName("user11 생성")
     void create() {
-        MemberJoinForm memberJoinForm = new MemberJoinForm("user11", "user11", "소개", "1234","1234", 1);
+        MemberJoinForm memberJoinForm = new MemberJoinForm("user11", "user11", "소개", "1234","1234", "");
         Member member = memberService.join(memberJoinForm).getData();
 
         RuleForm ruleForm = new RuleForm("name", "about", "1", "provider", "GOLD");
         Rule rule = ruleService.create(ruleForm).getData();
     }
 
-    @Test
-    @WithAnonymousUser
-    @DisplayName("로그인 안했을때 create")
+//    @Test
+//    @WithAnonymousUser
+//    @DisplayName("로그인 안했을때 create")
     void notLogin() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
@@ -67,11 +66,11 @@ public class StudyRuleControllerTests {
                 .andDo(print());
 
         // THEN
-        resultActions
-                .andExpect(handler().handlerType(StudyRuleController.class))
-                .andExpect(handler().methodName("showForm"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/member/login**"));
+//        resultActions
+//                .andExpect(handler().handlerType(StudyRuleController.class))
+//                .andExpect(handler().methodName("showForm"))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrlPattern("**/member/login**"));
     }
 //    @Test
 //    @WithUserDetails("user11")

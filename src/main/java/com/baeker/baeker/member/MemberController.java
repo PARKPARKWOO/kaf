@@ -2,16 +2,14 @@ package com.baeker.baeker.member;
 
 import com.baeker.baeker.base.request.Rq;
 import com.baeker.baeker.base.request.RsData;
-import com.baeker.baeker.member.form.MemberJoinForm;
-import com.baeker.baeker.member.form.MemberLoginForm;
-import com.baeker.baeker.member.form.MemberModifyForm;
+import com.baeker.baeker.member.embed.BaekJoonDto;
+import com.baeker.baeker.member.form.*;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
+
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.myStudy.form.MyStudyInviteForm;
-import com.baeker.baeker.myStudy.form.MyStudyJoinForm;
 import com.baeker.baeker.myStudy.form.MyStudyModfyMsgForm;
-import com.baeker.baeker.study.Study;
-import com.baeker.baeker.study.StudyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,9 +82,16 @@ public class MemberController {
         Member member = rq.getMember();
         log.info("내 프로필 요청 확인 member = {}", member.toString());
 
+        if (member.isNewMember()) {
+            log.info("신규 회원 확인, 개인정보 입력으로 redirect");
+            return "redirect:/member/info";
+        }
+
         List<MyStudy> myStudies = myStudyService.statusMember(member);
         List<MyStudy> pending = myStudyService.statusNotMember(member);
+        List<MemberSnapshot> snapshotList = member.getSnapshotList();
 
+        model.addAttribute("snapshotList", snapshotList);
         model.addAttribute("myStudies", myStudies);
         model.addAttribute("pending", pending);
         model.addAttribute("list", list);
@@ -94,11 +99,113 @@ public class MemberController {
         return "member/profile";
     }
 
+    //-- 내정보 등록 form --//
+    @GetMapping("/info")
+    @PreAuthorize("isAuthenticated()")
+    public String infoForm(
+            MemberInfoForm form,
+            Model model
+    ) {
+        Member member = rq.getMember();
+        log.info("내정보 폼 요청 확인 id = {}", member.getId());
+
+        form.setNickName(member.getNickName());
+        form.setProfileImg(member.getProfileImg());
+        List<Integer> random = memberService.random();
+
+        model.addAttribute("random", random);
+        log.info("내정보 폼 응답 완료");
+        return "member/info";
+    }
+
+    //-- 내정보 등록 처리 --//
+    @PostMapping("/info")
+    @PreAuthorize("isAuthenticated()")
+    public String info(
+            MemberInfoForm form
+    ) {
+        Member member = rq.getMember();
+        log.info("내정보 등록 처리 요청 확인 member id = {}", member.getId());
+
+        RsData<Member> modifyRs = memberService.modify(member, form);
+
+        if (modifyRs.isFail()) {
+            log.info("정보 등록에 실패했습니다. error = {}", modifyRs.getMsg());
+            return rq.historyBack(modifyRs.getMsg());
+        }
+
+        log.info("내정보 등록 성공");
+        return rq.redirectWithMsg("/", "회원 가입이 완료 되었습니다.");
+    }
+
+    //-- 백준 연동 폼 --// : 미완성
+    @GetMapping("/connect")
+    @PreAuthorize("isAuthenticated()")
+    public String connectForm() {
+        Member member = rq.getMember();
+        log.info("백준 연동 폼 요청 확인 member id = {}", member.getId());
+
+        return "/member/connect";
+    }
+
+    //-- 백준 연동 이메일 인증 --// : 미완성
+    @GetMapping("/verify")
+    @PreAuthorize("isAuthenticated()")
+    public String connectForm(
+            BaekJoonConnectForm form
+    ) {
+        log.info("백준 연동 이메일 인증 폼 요청 확인 백준 id = {}", form.getBaekJoonName());
+        RsData<Member> getMemberRs = memberService.getByBaekJoonName(form.getBaekJoonName());
+
+        if (getMemberRs.isSuccess()) {
+            log.info("이미 연동되어있는 백준 id");
+            return rq.historyBack("이미 연동되어있는 id 입니다.");
+        }
+
+        // solved ac 를 호출해 존재하는 id 인지 확인하고 해당 계정의 email 값을 반환
+
+        int code = memberService.verifyCode();
+        form.setSendCode(code);
+
+        // 반환 받은 email 에 code 를 보냄
+
+        log.info("인증 코드 발송 완료 code = {}", code);
+        return "/";
+    }
+
+    //-- 백준 연동 처리 --// : 미완성
+    @PostMapping("/verify")
+    @PreAuthorize("isAuthenticated()")
+    public String connect(
+            BaekJoonConnectForm form
+    ) {
+        log.info("백준 연동 처리 요청 확인");
+
+        if (form.getSendCode() != form.getVerifyCode()) {
+            log.info("인증 코드가 일치하지 않습니다.");
+            return rq.historyBack("인증 코드가 일치하지 않습니다.");
+        }
+        Member member = rq.getMember();
+
+        // solved ac 를 호출해 해결한 문제 수가 저장된 BaekJoonDto 를 반환받음
+        BaekJoonDto dto = new BaekJoonDto();
+
+        RsData<Member> memberRs = memberService.connectBaekJoon(member, form.getBaekJoonName(), dto);
+        if (memberRs.isFail()) {
+            log.info("연동 실패 error = {}", memberRs.getMsg());
+            return rq.historyBack(memberRs.getMsg());
+        }
+
+        log.info("백준 id 연동 성공 member id ={} / 백준 id = {}", member.getId(), form.getBaekJoonName());
+        return rq.redirectWithMsg("", memberRs.getMsg());
+    }
+
 
     //-- member profile --//
-    @GetMapping("/member/{id}")
+    @GetMapping("/member/{id}/{list}")
     public String profile(
             @PathVariable Long id,
+            @PathVariable String list,
             MyStudyInviteForm form,
             Model model
     ) {
@@ -123,7 +230,13 @@ public class MemberController {
             model.addAttribute("myStudies", myStudies);
         }
 
+        List<MemberSnapshot> snapshotList = member.getSnapshotList();
+        List<MyStudy> myStudies = myStudyService.statusMember(member);
+
+        model.addAttribute("snapshotList", snapshotList);
+        model.addAttribute("myStudies", myStudies);
         model.addAttribute("member", member);
+        model.addAttribute("list", list);
 
         log.info("member 조회 성공 member name = {}", member.getNickName());
         return "member/member";
@@ -183,7 +296,7 @@ public class MemberController {
         }
 
         log.info("프로필 수정 완료");
-        return rq.redirectWithMsg("/member/profile", memberRs.getMsg());
+        return rq.redirectWithMsg("/member/profile/rank", memberRs.getMsg());
     }
 
 }
