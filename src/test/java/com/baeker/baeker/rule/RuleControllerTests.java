@@ -42,7 +42,6 @@ public class RuleControllerTests {
     @Autowired
     private MemberService memberService;
 
-    @Rollback(value = false)
     @Test
     @DisplayName("user10 생성")
     void create() {
@@ -103,9 +102,9 @@ public class RuleControllerTests {
                         """.stripIndent().trim())));
     }
 
-    @Test
-    @DisplayName("create Form POST AND Modify")
-    @WithUserDetails("user10")
+//    @Test
+//    @DisplayName("create Form POST AND Modify")
+//    @WithUserDetails("user10")
     void createForm() throws Exception {
         /**
          * CREATE

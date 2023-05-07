@@ -47,7 +47,6 @@ public class StudyRuleControllerTests {
     private RuleService ruleService;
 
     @Test
-    @Rollback(value = false)
     @DisplayName("user11 생성")
     void create() {
         MemberJoinForm memberJoinForm = new MemberJoinForm("user11", "user11", "소개", "1234","1234", "");
