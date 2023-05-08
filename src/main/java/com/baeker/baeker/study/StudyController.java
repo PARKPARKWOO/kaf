@@ -37,7 +37,7 @@ public class StudyController {
     public String createForm(StudyCreateForm form) {
         log.info("스터디 생성폼 요청 확인");
         form.setCapacity(10);
-        return "/study/create";
+        return "study/create";
     }
 
     //-- 스터디 생성 처리 --//
@@ -93,7 +93,7 @@ public class StudyController {
         model.addAttribute("list", list);
         model.addAttribute("study", studyRs.getData());
         log.info("상세페이지 응답 완료");
-        return "/study/detail";
+        return "study/detail";
     }
 
     //-- 스터디 리스트 --//
