@@ -84,9 +84,9 @@ class MemberServiceTest {
     @Test
     void 백준_id_연동() throws IOException, ParseException {
         Member member = create("user1", "member1");
-        String baekJoonName = "sunnight9507";
 
         // 백준 id 존재 여부 확인
+        String baekJoonName = "sunnight9507";
         boolean user = solvedApiService.findUser(baekJoonName);
         assertThat(user).isTrue();
 

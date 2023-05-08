@@ -151,7 +151,7 @@ public class MemberController {
         Member member = rq.getMember();
         log.info("백준 연동 폼 요청 확인 member id = {}", member.getId());
 
-        return "/member/connect";
+        return "member/connect";
     }
 
     //-- 백준 연동 처리 --//
@@ -198,7 +198,7 @@ public class MemberController {
         // 반환 받은 email 에 code 를 보냄
 
         log.info("인증 코드 발송 완료 code = {}", code);
-        return "/";
+        return "";
     }
 
     //-- 백준 연동 처리 --// : 미완성
