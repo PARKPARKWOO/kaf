@@ -161,9 +161,9 @@ public class MemberService {
 
     //-- 백준 id 연동 --//
     @Transactional
-    public RsData<Member> connectBaekJoon(Member member, String baekJoonName, BaekJoonDto dto) {
+    public RsData<Member> connectBaekJoon(Member member, String baekJoonName) {
 
-        Member connectBaekJoon = member.connectBaekJoon(baekJoonName, dto);
+        Member connectBaekJoon = member.connectBaekJoon(baekJoonName);
         Member saveMember = memberRepository.save(connectBaekJoon);
         this.saveSnapshot(member);
 
@@ -270,6 +270,7 @@ public class MemberService {
     @Transactional
     public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
 
+        // bug 지점
         this.saveSnapshot(member, dto);
 
         Member updateMember = member.updateBaeJoon(dto);

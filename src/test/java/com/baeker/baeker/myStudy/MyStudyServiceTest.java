@@ -1,5 +1,6 @@
 package com.baeker.baeker.myStudy;
 
+import com.baeker.baeker.base.event.BaekJoonEvent;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
@@ -11,6 +12,7 @@ import com.baeker.baeker.study.form.StudyCreateForm;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,14 +23,16 @@ class MyStudyServiceTest {
 
     @Autowired MemberService memberService;
     @Autowired MyStudyService myStudyService;
+    @Autowired ApplicationEventPublisher publisher;
     @Autowired StudyService studyService;
 
     private Member create(String username, String name) {
         MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", "");
         Member member = memberService.join(form).getData();
 
+        memberService.connectBaekJoon(member, name);
         BaekJoonDto dummy = new BaekJoonDto(1,1,1,1,1,1);
-        RsData<Member> memberRsData = memberService.connectBaekJoon(member, name, dummy);
+        publisher.publishEvent(new BaekJoonEvent(this, member, dummy));
         return member;
     }
     
