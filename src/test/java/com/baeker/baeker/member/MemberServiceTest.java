@@ -84,23 +84,24 @@ class MemberServiceTest {
     @Test
     void 백준_id_연동() throws IOException, ParseException {
         Member member = create("user1", "member1");
+        String baekJoonName = "sunnight9507";
 
         // 백준 id 존재 여부 확인
-        boolean user = solvedApiService.findUser("shdrnrhd113");
+        boolean user = solvedApiService.findUser(baekJoonName);
         assertThat(user).isTrue();
 
         // 백준 id 연동
-        memberService.connectBaekJoon(member, "shdrnrhd113");
+        memberService.connectBaekJoon(member, baekJoonName);
         solvedApiService.getSolvedCount(member.getId());
 
-        assertThat(member.getBaekJoonName()).isEqualTo("shdrnrhd113");
+        assertThat(member.getBaekJoonName()).isEqualTo(baekJoonName);
         assertThat(member.getSnapshotList().size()).isEqualTo(7);
 
         String today = LocalDateTime.now().getDayOfWeek().toString().substring(0, 3);
         String dayOfWeek = member.getSnapshotList().get(0).getDayOfWeek();
 
         assertThat(today).isEqualTo(dayOfWeek);
-        assertThat(member.solvedBaekJoon()).isEqualTo(1);
+        assertThat(member.solvedBaekJoon()).isEqualTo(84);
     }
 
     @Test
