@@ -38,5 +38,5 @@ spring:
       ddl-auto: update
 scheduler:
   cron:
-    value: "0 0 18 * * *"
+    value: "0 20 21 * * *"
 
