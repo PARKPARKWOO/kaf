@@ -2,6 +2,8 @@ package com.baeker.baeker.study;
 
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
+import com.baeker.baeker.member.MemberRepository;
+import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.myStudy.MyStudy;
@@ -33,8 +35,7 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudySnapShotRepository studySnapShotRepository;
-
-
+    private final MemberRepository memberRepository;
     /**
      ** 생성 관련 method **
      * create
@@ -256,7 +257,8 @@ public class StudyService {
 
     //-- 백준 스케쥴 이벤트 처리 --//
     @Transactional
-    public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
+    public void whenBaekJoonEventType(Long id, BaekJoonDto dto) {
+        Member member = memberRepository.findById(id).get();
         List<MyStudy> myStudies = member.getMyStudies();
         String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
 

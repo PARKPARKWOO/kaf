@@ -19,7 +19,7 @@ public class BaekJoonEventListener {
     @EventListener
     public void listen(BaekJoonEvent event) {
         memberService.whenBaekJoonEventType(event.getMember(), event.getSolved());
-        studyService.whenBaekJoonEventType(event.getMember(), event.getSolved());
+        studyService.whenBaekJoonEventType(event.getMember().getId(), event.getSolved());
     }
 }
 
