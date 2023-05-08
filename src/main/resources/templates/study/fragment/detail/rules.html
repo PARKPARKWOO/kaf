@@ -28,8 +28,7 @@
          th:href="@{/studyRule/detail/{id}(id=*{id})}"></a>
     </td>
     <td class="grow-[1]">
-      <a th:if="${}"
-         th:text="${#temporals.format(studyRule.createDate, 'yyyy-MM-dd')}"
+      <a th:text="${#temporals.format(studyRule.createDate, 'yyyy-MM-dd')}"
          th:href="@{/studyRule/detail/{id}(id=*{id})}"></a>
     </td>
   </tr>
