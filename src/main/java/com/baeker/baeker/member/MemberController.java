@@ -170,7 +170,7 @@ public class MemberController {
             return rq.historyBack( baekJoonName + "은(는) 존재하지 않는 id 입니다.");
         }
         RsData<Member> connectRs = memberService.connectBaekJoon(rq.getMember(), baekJoonName);
-        solvedApiService.getSolvedCount(rq.getMember());
+        solvedApiService.getSolvedCount(rq.getMember().getId());
 
         log.info("백준 연동 성공 BaakJoon id = {}", baekJoonName);
         return rq.redirectWithMsg("/", connectRs.getMsg());
@@ -216,7 +216,7 @@ public class MemberController {
         Member member = rq.getMember();
 
         // solved ac 를 호출해 해결한 문제 수가 저장된 BaekJoonDto 를 반환받음
-        solvedApiService.getSolvedCount(member);
+        solvedApiService.getSolvedCount(member.getId());
         RsData<Member> memberRs = memberService.connectBaekJoon(member, form.getBaekJoonName());
         if (memberRs.isFail()) {
             log.info("연동 실패 error = {}", memberRs.getMsg());

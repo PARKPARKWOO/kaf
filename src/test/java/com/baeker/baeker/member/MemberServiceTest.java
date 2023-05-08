@@ -5,11 +5,6 @@ import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.snapshot.MemberSnapshot;
-
-
-
-import com.baeker.baeker.member.form.MemberJoinForm;
-
 import com.baeker.baeker.myStudy.MyStudyService;
 import com.baeker.baeker.solvedApi.SolvedApiService;
 import com.baeker.baeker.study.Study;
@@ -86,7 +81,7 @@ class MemberServiceTest {
         String nickName = findMember.get().getNickName();
     }
 
-//    @Test
+    @Test
     void 백준_id_연동() throws IOException, ParseException {
         Member member = create("user1", "member1");
 
@@ -96,14 +91,16 @@ class MemberServiceTest {
 
         // 백준 id 연동
         memberService.connectBaekJoon(member, "shdrnrhd113");
-        solvedApiService.getSolvedCount(member);
+        solvedApiService.getSolvedCount(member.getId());
 
-//        assertThat(member.getBaekJoonName()).isEqualTo("shdrnrhd113");
-//        assertThat(member.getSnapshotList().size()).isEqualTo(7);
-//
-//        String today = LocalDateTime.now().getDayOfWeek().toString().substring(0, 3);
-//        String dayOfWeek = member.getSnapshotList().get(0).getDayOfWeek();
-//        assertThat(today).isEqualTo(dayOfWeek);
+        assertThat(member.getBaekJoonName()).isEqualTo("shdrnrhd113");
+        assertThat(member.getSnapshotList().size()).isEqualTo(7);
+
+        String today = LocalDateTime.now().getDayOfWeek().toString().substring(0, 3);
+        String dayOfWeek = member.getSnapshotList().get(0).getDayOfWeek();
+
+        assertThat(today).isEqualTo(dayOfWeek);
+        assertThat(member.solvedBaekJoon()).isEqualTo(1);
     }
 
     @Test
@@ -123,6 +120,4 @@ class MemberServiceTest {
         assertThat(snapshotList.get(0).getDayOfWeek()).isEqualTo(today);
         assertThat(snapshotList.get(0).solvedBaekJoon()).isEqualTo(6);
     }
-
-
 }
