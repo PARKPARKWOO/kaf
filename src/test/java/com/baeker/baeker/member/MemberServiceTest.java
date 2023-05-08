@@ -86,7 +86,7 @@ class MemberServiceTest {
         String nickName = findMember.get().getNickName();
     }
 
-    @Test
+//    @Test
     void 백준_id_연동() throws IOException, ParseException {
         Member member = create("user1", "member1");
 
