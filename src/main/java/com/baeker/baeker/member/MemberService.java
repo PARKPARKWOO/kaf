@@ -270,6 +270,7 @@ public class MemberService {
     @Transactional
     public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
 
+        // bug 지점
         this.saveSnapshot(member, dto);
 
         Member updateMember = member.updateBaeJoon(dto);
