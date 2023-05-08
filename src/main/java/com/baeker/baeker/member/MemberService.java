@@ -241,10 +241,10 @@ public class MemberService {
     }
 
     //-- 스냅샷 저장 --//
-    private void saveSnapshot(Member member, BaekJoonDto dto) {
+    private void saveSnapshot(Long id, BaekJoonDto dto) {
 
         String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
-
+        Member member = getMember(id).getData();
         MemberSnapshot snapshot = member.getSnapshotList().get(0);
         String createDay = snapshot.getDayOfWeek();
 
@@ -271,7 +271,7 @@ public class MemberService {
     public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
 
         // bug 지점
-        this.saveSnapshot(member, dto);
+        this.saveSnapshot(member.getId(), dto);
 
         Member updateMember = member.updateBaeJoon(dto);
         memberRepository.save(updateMember);
