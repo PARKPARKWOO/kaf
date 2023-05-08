@@ -54,8 +54,6 @@ public class InitDB {
 
         public void init_alpha_and_study() throws IOException, ParseException {
 
-            RsData<List<Member>> all = memberService.getAll();
-
             // user 알파와 알파의 스터디 생성
             Member alpha = createMember("user1", "알파", "안녕하세요 알파입니다.", "https://avatars.dicebear.com/api/avataaars/600.svg", "sunnight9507");
 
@@ -110,8 +108,11 @@ public class InitDB {
         }
 
         private Member createMember(String username, String nickName, String about, String img, String baekJoonName) throws IOException, ParseException {
-            MemberJoinForm form = new MemberJoinForm(username, nickName, about, "1234", "1234", img);
+            MemberJoinForm form = new MemberJoinForm(username, nickName, "", "1234", "1234", "");
             Member member = memberService.join(form).getData();
+
+            if (!solvedApiService.findUser(baekJoonName))
+                throw new IllegalArgumentException("존재하지 않는 ID");
 
             memberService.connectBaekJoon(member, baekJoonName);
             solvedApiService.getSolvedCount(member.getId());
