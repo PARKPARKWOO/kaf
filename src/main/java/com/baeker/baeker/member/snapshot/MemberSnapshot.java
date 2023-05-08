@@ -4,6 +4,7 @@ import com.baeker.baeker.base.entity.ScoreBase;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.embed.BaekJoonDto;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class MemberSnapshot extends ScoreBase {
     private String baekJoonName;
     private String dayOfWeek;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
     //-- create score --//
