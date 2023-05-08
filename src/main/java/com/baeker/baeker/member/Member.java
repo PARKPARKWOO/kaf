@@ -26,8 +26,6 @@ public class Member extends ScoreBase {
 
     @Column(unique = true)
     private String username;
-    @Column(unique = true)
-    private String studyId;
     private String nickName;
     private String baekJoonName;
     private String about;

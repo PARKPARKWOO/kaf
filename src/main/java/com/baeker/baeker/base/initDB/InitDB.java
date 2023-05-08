@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//@Profile("dev")
-//@Configuration
+@Profile("dev")
+@Configuration
 @RequiredArgsConstructor
 public class InitDB {
 
@@ -62,25 +62,14 @@ public class InitDB {
             Study study = createStudy("알파의 스터디", "Provident cupiditate voluptatem et in.", 10, alpha);
             createStudy("알파알파", "Provident cupiditate voluptatem et in.", 10, alpha);
 
-            // 스넵샷 강제 생성 (총 문제 풀이 수 반영 x)
-//            for (int i = 6; i >= 0; i--) {
-//
-//                int num = (int) (Math.random() * 5);
-//                BaekJoonDto dto = new BaekJoonDto(num, num, num, num, num, num);
-//
-//                String dayOfWeek = LocalDateTime.now().minusDays(i).getDayOfWeek().toString();
-//
-//                memberService.initDbSnapshotCreate(alpha, dto, dayOfWeek);
-//            }
-
 
             // 더미 user 3명 생성후 알파 스터디 가입
-            for (int i = 3; i < 10; i++) {
-                Member member = createdummy("user" + i, "member" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 10 + ".svg", "Joon" + i);
-                MyStudy myStudy = myStudyService.join(member, study, "hi").getData();
-                myStudyService.accept(myStudy);
-                studyService.addBaekJoon(myStudy.getStudy(), myStudy.getMember());
-            }
+//            for (int i = 3; i < 10; i++) {
+//                Member member = createdummy("user" + i, "member" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 10 + ".svg", "Joon" + i);
+//                MyStudy myStudy = myStudyService.join(member, study, "hi").getData();
+//                myStudyService.accept(myStudy);
+//                studyService.addBaekJoon(myStudy.getStudy(), myStudy.getMember());
+//            }
         }
 
         public void init_beta_and_study() throws IOException, ParseException {
