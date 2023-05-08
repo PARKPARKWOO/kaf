@@ -33,7 +33,7 @@ public class SolvedApiServiceTests {
 
     private void connect(Member member, String baekJoonName) {
         BaekJoonDto dummy = new BaekJoonDto();
-        RsData<Member> memberRsData = memberService.connectBaekJoon(member, baekJoonName, dummy);
+        RsData<Member> memberRsData = memberService.connectBaekJoon(member, baekJoonName);
     }
 
     @Test

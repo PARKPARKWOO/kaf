@@ -161,9 +161,9 @@ public class MemberService {
 
     //-- 백준 id 연동 --//
     @Transactional
-    public RsData<Member> connectBaekJoon(Member member, String baekJoonName, BaekJoonDto dto) {
+    public RsData<Member> connectBaekJoon(Member member, String baekJoonName) {
 
-        Member connectBaekJoon = member.connectBaekJoon(baekJoonName, dto);
+        Member connectBaekJoon = member.connectBaekJoon(baekJoonName);
         Member saveMember = memberRepository.save(connectBaekJoon);
         this.saveSnapshot(member);
 
@@ -241,10 +241,10 @@ public class MemberService {
     }
 
     //-- 스냅샷 저장 --//
-    private void saveSnapshot(Member member, BaekJoonDto dto) {
+    private void saveSnapshot(Long id, BaekJoonDto dto) {
 
         String today = LocalDate.now().getDayOfWeek().toString().substring(0, 3);
-
+        Member member = getMember(id).getData();
         MemberSnapshot snapshot = member.getSnapshotList().get(0);
         String createDay = snapshot.getDayOfWeek();
 
@@ -270,7 +270,8 @@ public class MemberService {
     @Transactional
     public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
 
-        this.saveSnapshot(member, dto);
+        // bug 지점
+        this.saveSnapshot(member.getId(), dto);
 
         Member updateMember = member.updateBaeJoon(dto);
         memberRepository.save(updateMember);

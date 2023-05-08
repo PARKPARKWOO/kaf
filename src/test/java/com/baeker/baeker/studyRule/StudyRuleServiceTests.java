@@ -44,8 +44,7 @@ public class StudyRuleServiceTests {
         MemberJoinForm form = new MemberJoinForm(username, name, "", "1234", "1234", "");
         Member member = memberService.join(form).getData();
 
-        BaekJoonDto dummy = new BaekJoonDto();
-        RsData<Member> memberRsData = memberService.connectBaekJoon(member, name, dummy);
+        RsData<Member> memberRsData = memberService.connectBaekJoon(member, name);
         return member;
     }
 

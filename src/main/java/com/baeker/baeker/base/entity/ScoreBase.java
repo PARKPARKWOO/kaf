@@ -23,5 +23,4 @@ public abstract class ScoreBase extends  BaseEntity{
         return bronze + sliver + gold + diamond + ruby + platinum;
 
     }
-
 }

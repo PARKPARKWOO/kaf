@@ -26,8 +26,6 @@ public class Member extends ScoreBase {
 
     @Column(unique = true)
     private String username;
-    @Column(unique = true)
-    private String studyId;
     private String nickName;
     private String baekJoonName;
     private String about;
@@ -86,15 +84,9 @@ public class Member extends ScoreBase {
     }
 
     // 백준 아이디 등록 //
-    protected Member connectBaekJoon(String baekJoonName, BaekJoonDto dto) {
+    protected Member connectBaekJoon(String baekJoonName) {
         return this.toBuilder()
                 .baekJoonName(baekJoonName)
-                .bronze(dto.getBronze())
-                .sliver(dto.getSliver())
-                .gold(dto.getGold())
-                .diamond(dto.getDiamond())
-                .ruby(dto.getRuby())
-                .platinum(dto.getPlatinum())
                 .build();
     }
 
