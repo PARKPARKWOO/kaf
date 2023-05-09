@@ -24,6 +24,9 @@ public class RuleForm {
     @Size(min = 1, max = 10)
     private String xp;
 
+    @NotEmpty
+    private String count;
+
     @NotBlank
     private String provider;
 

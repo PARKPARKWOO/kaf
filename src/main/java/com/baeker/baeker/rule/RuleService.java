@@ -30,6 +30,7 @@ public class RuleService {
                 .name(ruleForm.getName())
                 .about(ruleForm.getAbout())
                 .xp(Integer.parseInt(ruleForm.getXp()))
+                .count(Integer.parseInt(ruleForm.getCount()))
                 .provider(ruleForm.getProvider())
                 .difficulty(ruleForm.getDifficulty())
                 .build();
@@ -39,6 +40,7 @@ public class RuleService {
 
     /**
      * 수정
+     * setForm 은 기존 작성되어있는 내용을 넣어주는 메서드
      */
 
     @Transactional
@@ -56,9 +58,12 @@ public class RuleService {
         RsData.of("S-1", "규칙이 수정 되었습니다.", rule1);
     }
 
-    public void setForm(Rule rule, RuleForm ruleForm) {
+    public void setForm(Long ruleId, RuleForm ruleForm) {
+        Rule rule = getRule(ruleId).getData();
         ruleForm.setName(rule.getName());
         ruleForm.setAbout(rule.getAbout());
+        ruleForm.setXp(rule.getXp().toString());
+        ruleForm.setCount(rule.getCount().toString());
         ruleForm.setProvider(rule.getProvider());
         ruleForm.setDifficulty(rule.getDifficulty());
     }
