@@ -11,11 +11,11 @@
             </div>
 
             <div class="bg-gray-100 px-6 py-4">
-                <span th:text="${#temporals.format(studyRule.selectDate, 'yyyy-MM-dd HH:mm')}"
+                <span th:text="${#temporals.format(studyRule.createDate, 'yyyy-MM-dd HH:mm')}"
                       class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
                 </span>
 
-                <span th:if="${studyRule.selectDate ge studyRule.modifyDate}"
+                <span th:if="${studyRule.createDate ge studyRule.modifyDate}"
                       th:text="${#temporals.format(studyRule.modifyDate, 'yyyy-MM-dd HH:mm')}"
                       class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
                 </span>
