@@ -18,6 +18,8 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class ApiScheduler {
 
     @Scheduled(cron = "${scheduler.cron.value}")
     public void checkStudyRule() throws IOException, ParseException {
-        log.info("스케줄러 실행");
+        log.info("스케줄러 실행 day of week = {}", LocalDate.now().getDayOfWeek());
         RsData<List<Member>> memberList = memberService.getAll();
         for (Member member : memberList.getData()) {
             try {
@@ -95,6 +97,6 @@ public class ApiScheduler {
                 log.info("###############" + e.toString() + "###############");
             }
         }
-
+        log.info("스케줄러 {} 요일 업데이트 완료", LocalDate.now().getDayOfWeek());
     }
 }
