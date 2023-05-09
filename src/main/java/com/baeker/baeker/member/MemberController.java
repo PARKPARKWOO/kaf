@@ -139,7 +139,7 @@ public class MemberController {
         }
 
         log.info("내정보 등록 성공");
-        return rq.redirectWithMsg("/", "회원 가입이 완료 되었습니다.");
+        return "redirect:/member/connect";
     }
 
     //-- 백준 연동 폼 --//

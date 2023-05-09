@@ -35,9 +35,9 @@ public class InitDB {
     @PostConstruct
     public void init() throws IOException, ParseException {
         initService.init_alpha_and_study();
-//        initService.init_beta_and_study();
-//        initService.init_dummy_user();
-//        initService.initData();
+        initService.init_beta_and_study();
+        initService.init_dummy_user();
+        initService.initData();
     }
 
     @Component
