@@ -215,5 +215,12 @@ public class MyStudyService {
 
         return pending;
     }
+
+    public void missionStatus(Long mystudyId, boolean complete) {
+        MyStudy myStudy = getMyStudy(mystudyId).getData();
+        if (complete) {
+            myStudy.toBuilder().mission(Mission.COMPLETE);
+        }
+    }
 }
 

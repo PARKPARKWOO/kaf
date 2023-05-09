@@ -92,7 +92,7 @@ public class ApiScheduler {
                 BaekJoonDto dto = new BaekJoonDto(Bronze, Silver, Gold, Platinum, Diamond, Ruby);
                 publisher.publishEvent(new BaekJoonEvent(this, member, dto));
             } catch (HttpClientErrorException | InterruptedException e) {
-                log.info(e.toString());
+                log.info("###############" + e.toString() + "###############");
             }
         }
 

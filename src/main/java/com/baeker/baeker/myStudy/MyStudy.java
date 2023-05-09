@@ -30,6 +30,8 @@ public class MyStudy extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     private Study study;
 
+    @Enumerated(EnumType.STRING)
+    private Mission mission;
 
     //-- create method --//
 

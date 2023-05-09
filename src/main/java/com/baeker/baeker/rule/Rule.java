@@ -36,6 +36,8 @@ public class Rule extends BaseEntity {
     private String provider;
 
     private Integer xp;
+
+    private Integer count;
     private String difficulty;
 
     @OneToMany(mappedBy = "rule", cascade = ALL)
