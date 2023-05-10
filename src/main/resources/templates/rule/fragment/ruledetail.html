@@ -10,6 +10,34 @@
                    th:text="${rule.about}"></p>
             </div>
 
+            <div class="px-6 py-4">
+                <label class="label">
+                    <span class="label-text">문제 풀이 수</span>
+                </label>
+                <p class="text-gray-700 text-base" th:text="${rule.count}"></p>
+            </div>
+
+            <div class="px-6 py-4">
+                <label class="label">
+                    <span class="label-text">난이도</span>
+                </label>
+                <p class="text-gray-700 text-base" th:text="${rule.difficulty}"></p>
+            </div>
+
+            <div class="px-6 py-4">
+                <label class="label">
+                    <span class="label-text">획득 경험치</span>
+                </label>
+                <p class="text-gray-700 text-base" th:text="${rule.xp}"></p>
+            </div>
+
+            <div class="px-6 py-4">
+                <label class="label">
+                    <span class="label-text">OJ 사이트</span>
+                </label>
+                <p class="text-gray-700 text-base" th:text="${rule.provider}"></p>
+            </div>
+
             <div class="bg-gray-100 px-6 py-4">
                 <span th:text="${#temporals.format(rule.createDate, 'yyyy-MM-dd HH:mm')}"
                       class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">

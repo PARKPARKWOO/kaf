@@ -100,7 +100,7 @@ public class InitDB {
         public void initData() {
 
             // rule 목록확인
-            RuleForm ruleForm = new RuleForm("이름", "소개", "1", "백준", "GOLD");
+            RuleForm ruleForm = new RuleForm("이름", "소개", "1", "5","백준", "GOLD");
 
             for (int i = 0; i < 15; i++) {
                 ruleService.create(ruleForm);
@@ -108,7 +108,7 @@ public class InitDB {
         }
 
         private Member createMember(String username, String nickName, String about, String img, String baekJoonName) throws IOException, ParseException {
-            MemberJoinForm form = new MemberJoinForm(username, nickName, "", "1234", "1234", "");
+            MemberJoinForm form = new MemberJoinForm(username, nickName, about, "1234", "1234", img);
             Member member = memberService.join(form).getData();
 
             if (!solvedApiService.findUser(baekJoonName))

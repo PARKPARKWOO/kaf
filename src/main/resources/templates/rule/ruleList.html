@@ -18,6 +18,7 @@
             <tr>
                 <th scope="col">번호</th>
                 <th scope="col">제목</th>
+                <th scope="col">OJ 사이트</th>
                 <th scope="col">작성일</th>
             </tr>
             </thead>
@@ -29,11 +30,13 @@
                     <div class="text-sm text-gray-500"
                          th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></div>
                 </td>
-
                 <td>
                     <a th:href="@{|/rule/detail/${rule.id}|}"
                        th:text="${rule.name}"
                        class="text-white hover:text-gray-400"></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div th:text="${rule.provider}"></div>
                 </td>
                 <!-- 작성일 -->
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

@@ -1,9 +1,7 @@
 <div th:fragment="list (list, myStudies, pending, snapshotList)"
-     class="overflow-x-auto w-[70%] mb-5 min-h-screen">
+     class="overflow-x-auto w-[70%] mb-5 min-h-screen" id="list">
 
-    <div class="tabs flex justify-center mb-7">
-
-        <div class="tabs" id="list">
+    <div class="tabs flex justify-center mb-7 mt-3">
 
             <a href="/member/profile/rank#list"
                class="tab tab-bordered"
@@ -17,14 +15,19 @@
                class="tab tab-bordered"
                th:classappend="${list == 'study'} ? 'tab-active' : ''">내 스터디</a>
 
-            <a href="/member/profile/join#list"
-               class="tab tab-bordered"
-               th:classappend="${list == 'join'} ? 'tab-active' : ''">가입 대기중</a>
+            <div class="indicator">
+                <span th:if="${pending.size > 0}"
+                      class="indicator-item text-accent">
+                    <i class="fa-solid fa-comment"></i>
+                </span>
 
-        </div>
-
+                <a href="/member/profile/join#list"
+                   class="tab tab-bordered"
+                   th:classappend="${list == 'join'} ? 'tab-active' : ''">가입 대기중</a>
+            </div>
 
     </div>
+
     <div th:if="${list eq 'rank'} and ${@rq.notConnectBaekJoon() ne true}" class="flex">
         <div th:replace="~{member/fragment/member/baekJoon :: baekJoon(${@rq.member})}"></div>
 
