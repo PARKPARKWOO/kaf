@@ -65,15 +65,15 @@
 ### Git Branch
 
 ```yaml
-feat : 새로운 기능 추가
-design : HTML 변경
-test : 테스트 코드 관련
+feat: 새로운 기능 추가
+design: HTML 변경
+test: 테스트 코드 관련
 
-fix : 버그 수정
-docs : 문서 수정
+fix: 버그 수정
+docs: 문서 수정
 
-refactor : 코드 리팩터링, 성능 개선
-remove : 파일을 삭제
+refactor: 코드 리팩터링, 성능 개선
+remove: 파일을 삭제
 
 chore : 그 외 자잘한 수정
 ```
