@@ -10,18 +10,20 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/study-rule")
 public class StudyRuleApiController {
     private final StudyRuleService studyRuleService;
     private final StudyService studyService;
     private final RuleService ruleService;
 
-    @GetMapping("/api/v1/studyRule/search")
+    @GetMapping("/search")
     public Result searchAll() {
         List<StudyRule> studyRules = studyRuleService.getAll();
         List<StudyRuleDto> dto = studyRules.stream()
@@ -30,7 +32,7 @@ public class StudyRuleApiController {
         return new Result(dto.size(), dto);
     }
 
-    @GetMapping("/api/v1/studyRule/search/{id}")
+    @GetMapping("/search/{id}")
     public Result searchStudyRule(@PathVariable("id") Long id) {
         List<StudyRule> studyRules = studyRuleService.getAll();
         List<StudyRuleDto> dto = studyRules.stream()

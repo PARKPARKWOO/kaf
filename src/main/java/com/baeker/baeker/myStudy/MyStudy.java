@@ -30,7 +30,6 @@ public class MyStudy extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     private Study study;
 
-
     //-- create method --//
 
     // 새로운 스터디 만들 때 //
@@ -91,4 +90,5 @@ public class MyStudy extends BaseEntity {
                 .msg(msg)
                 .build();
     }
+
 }

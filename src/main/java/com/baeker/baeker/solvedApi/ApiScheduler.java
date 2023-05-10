@@ -1,16 +1,27 @@
 package com.baeker.baeker.solvedApi;
 
 import com.baeker.baeker.base.event.BaekJoonEvent;
+import com.baeker.baeker.base.event.StudyEvent;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.member.embed.BaekJoonDto;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
+import com.baeker.baeker.member.snapshot.MemberSnapshotRepository;
+import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.study.Study;
+import com.baeker.baeker.study.StudyService;
+import com.baeker.baeker.study.snapshot.StudySnapShot;
+import com.baeker.baeker.study.snapshot.StudySnapShotRepository;
+import com.baeker.baeker.studyRule.StudyRule;
+import com.baeker.baeker.studyRule.StudyRuleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
@@ -36,6 +47,11 @@ public class ApiScheduler {
     private final MemberService memberService;
 
     private final ApplicationEventPublisher publisher;
+    private final StudyRuleService studyRuleService;
+    private final MemberSnapshotRepository memberSnapshotRepository;
+
+    private final StudyService studyService;
+    private final StudySnapShotRepository studySnapShotRepository;
 
     /**
      * 티어 별 check
@@ -64,20 +80,18 @@ public class ApiScheduler {
 //        }
 //    }
 
-    @Scheduled(cron = "${scheduler.cron.value}")
-    public void checkStudyRule() throws IOException, ParseException {
+    @Scheduled(cron = "${scheduler.cron.member}")
+    public void checkMember() throws IOException, ParseException {
         log.info("스케줄러 실행 day of week = {}", LocalDate.now().getDayOfWeek());
         RsData<List<Member>> memberList = memberService.getAll();
         for (Member member : memberList.getData()) {
             try {
-
                 Long memberId = member.getId();
                 int Bronze = solvedApiService.getSolvedCount(memberId, 1, 6) - member.getBronze();
                 Thread.sleep(1000);
 
                 int Silver = solvedApiService.getSolvedCount(memberId, 6, 11) - member.getSliver();
                 Thread.sleep(1000);
-
 
                 int Gold = solvedApiService.getSolvedCount(memberId, 11, 16) - member.getGold();
                 Thread.sleep(1000);
@@ -93,10 +107,24 @@ public class ApiScheduler {
 
                 BaekJoonDto dto = new BaekJoonDto(Bronze, Silver, Gold, Platinum, Diamond, Ruby);
                 publisher.publishEvent(new BaekJoonEvent(this, member, dto));
+
             } catch (HttpClientErrorException | InterruptedException e) {
-                log.info("###############" + e.toString() + "###############");
+                log.info("###############" + e + "###############");
             }
         }
         log.info("스케줄러 {} 요일 업데이트 완료", LocalDate.now().getDayOfWeek());
+
     }
+
+    @Scheduled(cron = "${scheduler.cron.study}")
+    public void checkStudy() {
+        log.info("스터디 스케줄러 ");
+        List<StudyRule> studyRules = studyRuleService.getAll();
+        for (StudyRule studyRule : studyRules) {
+            Long studyRuleId = studyRule.getId();
+
+            publisher.publishEvent(new StudyEvent(this, studyRuleId));
+        }
+    }
+
 }

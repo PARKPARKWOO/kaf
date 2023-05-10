@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class RuleApiController {
 
     private final RuleService ruleService;
@@ -22,7 +23,7 @@ public class RuleApiController {
     /**
      * 생성
      */
-    @PostMapping("/api/v1/rule")
+    @PostMapping("/rule")
     public CreateRuleResponse createRule(@RequestBody @Valid CreateRuleRequest request) {
         RuleForm ruleForm = new RuleForm(request.getName(), request.getAbout(), request.getXp().toString(),request.getCount().toString(), request.getProvider(), request.getDifficulty());
         Rule rule = ruleService.create(ruleForm).getData();
@@ -33,24 +34,24 @@ public class RuleApiController {
     /**
      * 수정
      */
-    @PutMapping("/api/v1/rule/{id}")
+    @PutMapping("/rule/{id}")
     public ModifyRuleResponse modifyRule(@PathVariable("id") Long id,
                                          @RequestBody @Valid ModifyRuleRequest request) {
         RuleForm ruleForm = new RuleForm(request.getName(), request.getAbout(), request.getXp().toString(),request.getCount().toString(), request.getProvider(), request.getDifficulty());
         ruleService.modify(id, ruleForm);
         Rule rule = ruleService.getRule(id).getData();
 
-        return new ModifyRuleResponse(rule.getName(), rule.getAbout(), rule.getXp(),rule.getProvider() ,rule.getDifficulty());
+        return new ModifyRuleResponse(rule.getName(), rule.getAbout(), rule.getXp(),rule.getCount() ,rule.getProvider() ,rule.getDifficulty());
     }
 
     /**
      * 조회
      */
-    @GetMapping("/api/v1/rule/search")
+    @GetMapping("/rule/search")
     public Result searchRule() {
         List<Rule> rules = ruleService.getRuleList();
         List<RuleDto> collect = rules.stream()
-                .map(m -> new RuleDto(m.getName(), m.getAbout(), m.getXp(), m.getProvider(), m.getDifficulty()))
+                .map(m -> new RuleDto(m.getName(), m.getAbout(), m.getXp(),m.getCount() ,m.getProvider(), m.getDifficulty()))
                 .toList();
         return new Result(collect);
     }
@@ -105,6 +106,7 @@ public class RuleApiController {
         private String name;
         private String about;
         private Integer xp;
+        private Integer count;
         private String provider;
         private String difficulty;
     }
@@ -125,6 +127,7 @@ public class RuleApiController {
         private String name;
         private String about;
         private Integer xp;
+        private Integer count;
         private String provider;
         private String difficulty;
     }

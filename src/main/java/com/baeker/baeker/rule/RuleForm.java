@@ -17,7 +17,6 @@ public class RuleForm {
     private String name;
 
     @Size(max = 30)
-    @NotBlank
     private String about;
 
     @NotEmpty

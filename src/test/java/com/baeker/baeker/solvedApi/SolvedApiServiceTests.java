@@ -1,5 +1,6 @@
 package com.baeker.baeker.solvedApi;
 
+import static com.baeker.baeker.study.Study.createStudy;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.baeker.baeker.base.request.RsData;
@@ -7,6 +8,9 @@ import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberService;
 import com.baeker.baeker.member.embed.BaekJoonDto;
 import com.baeker.baeker.member.form.MemberJoinForm;
+import com.baeker.baeker.member.snapshot.MemberSnapshot;
+import com.baeker.baeker.member.snapshot.MemberSnapshotRepository;
+import com.baeker.baeker.study.Study;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
+import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -24,6 +29,8 @@ public class SolvedApiServiceTests {
     private SolvedApiService solvedApiService;
     @Autowired
     private MemberService memberService;
+
+    @Autowired private MemberSnapshotRepository memberSnapshotRepository;
 
     private Member create(String username, String name) {
 
@@ -59,4 +66,7 @@ public class SolvedApiServiceTests {
         Integer solvedCount = solvedApiService.getSolvedCount(member.getId(), 1, 6);
         System.out.println("wy9295 :" + solvedCount);
     }
+
+
+
 }
