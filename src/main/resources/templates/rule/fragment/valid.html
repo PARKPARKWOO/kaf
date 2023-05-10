@@ -19,11 +19,6 @@
         //-- 소개 검증 --//
         form.about.value = form.about.value.trim();
 
-        if (form.about.value.length == 0) {
-            toastWarning('규칙명을 입력해주세요.');
-            form.about.focus();
-            return;
-        }
 
         if (form.about.value.length > 30) {
             toastWarning('30자 이내로 작성해주세요.');

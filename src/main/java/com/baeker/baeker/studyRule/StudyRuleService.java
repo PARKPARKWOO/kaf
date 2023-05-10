@@ -8,7 +8,9 @@ import com.baeker.baeker.rule.RuleForm;
 import com.baeker.baeker.rule.RuleService;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
+import com.baeker.baeker.study.snapshot.StudySnapShotRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class StudyRuleService {
 
     private final StudyRuleRepository studyRuleRepository;
@@ -31,6 +34,7 @@ public class StudyRuleService {
     private final StudyService studyService;
 
     private final RuleService ruleService;
+    private final StudySnapShotRepository studySnapShotRepository;
 
 
     /**
@@ -139,5 +143,44 @@ public class StudyRuleService {
 
     public Integer getXp(StudyRule studyRule) {
         return getXp(studyRule.getId());
+    }
+
+    public void setMission(Long id, boolean mission) {
+        StudyRule studyRule = getStudyRule(id).getData();
+        studyRule.setMission(mission);
+    }
+
+    /**
+     *
+     * @param id = studyRuleId
+     * else 에는 kakao 메시지 발송 기능 추가 필요
+     */
+    @Transactional
+    public void whenstudyEventType(Long id) {
+        StudyRule studyRule = getStudyRule(id).getData();
+        String studyName = studyRule.getStudy().getName();
+        int count = 0;
+        int ruleCount = studyRule.getRule().getCount();
+        String difficulty = studyRule.getRule().getDifficulty();
+
+        switch (difficulty) {
+            case "BRONZE" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getBronze();
+            case "SILVER" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getSliver();
+            case "GOLD" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getGold();
+            case "PLATINUM" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getPlatinum();
+            case "DIAMOND" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getDiamond();
+            case "RUBY" -> count = studySnapShotRepository.findByStudyName(studyName).get(6).getRuby();
+        }
+
+        if (count >= ruleCount) {
+            setMission(studyRule.getId(), true);
+            studyService.xpUp(studyRule.getRule().getXp(), studyRule.getStudy().getId());
+            log.info("study xp ++");
+        } else {
+            setMission(studyRule.getId(), false);
+            log.info("xp 추가안됨 ");
+        }
+
+
     }
 }

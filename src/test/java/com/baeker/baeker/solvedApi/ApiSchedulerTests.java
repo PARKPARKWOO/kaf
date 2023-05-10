@@ -33,7 +33,7 @@ public class ApiSchedulerTests {
     @DisplayName("스케줄러 테스트")
     void solvedCountSchedulerTest() throws IOException, ParseException {
         await().atMost(4, TimeUnit.SECONDS).untilAsserted(() -> {
-            verify(apiScheduler, atLeast(2)).checkStudyRule();
+            verify(apiScheduler, atLeast(2)).checkMember();
         });
     }
 

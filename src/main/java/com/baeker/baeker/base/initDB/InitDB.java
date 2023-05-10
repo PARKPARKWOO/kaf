@@ -66,7 +66,7 @@ public class InitDB {
 //                Member member = createdummy("user" + i, "member" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 10 + ".svg", "Joon" + i);
 //                MyStudy myStudy = myStudyService.join(member, study, "hi").getData();
 //                myStudyService.accept(myStudy);
-//                studyService.addBaekJoon(myStudy.getStudy(), myStudy.getMember());
+//                studyService.addBaekJoon(myStudy.getId(), myStudy.getMember());
 //            }
         }
 

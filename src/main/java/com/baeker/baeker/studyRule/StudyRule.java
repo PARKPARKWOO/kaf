@@ -32,6 +32,8 @@ public class StudyRule extends BaseEntity {
 
     private Double rate;  // double 랭킹?
 
+    @Enumerated(EnumType.STRING)
+    private Mission mission;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "rule_id")
     private Rule rule;
@@ -40,4 +42,12 @@ public class StudyRule extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "study_id")
     private Study study;
+
+    protected void setMission(boolean mission) {
+        if (mission) {
+            this.mission = Mission.COMPLETE;
+        } else {
+            this.mission = Mission.FAIL;
+        }
+    }
 }

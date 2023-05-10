@@ -49,5 +49,6 @@ jasypt:
 
 scheduler:
   cron:
-    value: "* * * * * *"
+    member: "* * * * * *"
+    study: "* * * * * *"
 
