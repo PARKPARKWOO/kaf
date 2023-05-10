@@ -1,6 +1,5 @@
 package com.baeker.baeker.solvedApi;
 
-import static com.baeker.baeker.study.Study.createStudy;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.baeker.baeker.base.request.RsData;

@@ -45,7 +45,7 @@ public class Study extends ScoreBase {
 
 
     //-- create method --//
-    public static Study createStudy(String name, String about, Integer capacity, Member member) {
+    protected static Study createStudy(String name, String about, Integer capacity, Member member) {
         return builder()
                 .name(name)
                 .about(about)
