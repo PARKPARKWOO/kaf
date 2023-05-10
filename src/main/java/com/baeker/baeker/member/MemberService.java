@@ -267,7 +267,6 @@ public class MemberService {
     }
 
     //-- 백준 Solved Count 이벤트 처리 --//
-    @Transactional
     public void whenBaekJoonEventType(Member member, BaekJoonDto dto) {
 
         // bug 지점

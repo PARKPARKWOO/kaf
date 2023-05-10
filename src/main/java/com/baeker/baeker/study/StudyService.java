@@ -254,7 +254,6 @@ public class StudyService {
     }
 
     //-- 백준 스케쥴 이벤트 처리 --//
-    @Transactional
     public void whenBaekJoonEventType(Long id, BaekJoonDto dto) {
         Member member = memberRepository.findById(id).get();
         List<MyStudy> myStudies = member.getMyStudies();
