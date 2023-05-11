@@ -1,4 +1,4 @@
-<div th:fragment="list (list, myStudies, member, snapshotList)"
+<div th:fragment="list (list, memberStudies, member, snapshotList)"
      class="overflow-x-auto w-[70%] mb-5 min-h-screen">
 
     <div class="tabs flex justify-center mb-7 mt-3">
@@ -37,7 +37,7 @@
         <span>연동된 프로그래머스 계정이 없습니다.</span>
     </div>
 
-    <table th:replace="~{member/fragment/member/study :: study (${list}, ${myStudies})}"></table>
+    <table th:replace="~{member/fragment/member/study :: study (${list}, ${memberStudies})}"></table>
 
 
 </div>

@@ -62,12 +62,12 @@ public class InitDB {
 
 
             // 더미 user 3명 생성후 알파 스터디 가입
-//            for (int i = 3; i < 10; i++) {
-//                Member member = createdummy("user" + i, "member" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 10 + ".svg", "Joon" + i);
-//                MyStudy myStudy = myStudyService.join(member, study, "hi").getData();
-//                myStudyService.accept(myStudy);
-//                studyService.addBaekJoon(myStudy.getId(), myStudy.getMember());
-//            }
+            for (int i = 3; i < 10; i++) {
+                Member member = createdummy("user" + i, "member" + i, "안녕하세요" + i, "https://avatars.dicebear.com/api/avataaars/" + i * 10 + ".svg", "Joon" + i);
+                MyStudy myStudy = myStudyService.join(member, study, "hi").getData();
+                myStudyService.accept(myStudy);
+                studyService.addBaekJoon(myStudy.getStudy(), myStudy.getMember());
+            }
         }
 
         public void init_beta_and_study() throws IOException, ParseException {
@@ -120,7 +120,7 @@ public class InitDB {
         }
 
         private Member createdummy(String username, String nickName, String about, String img, String baekJoonName) {
-            BaekJoonDto dto = new BaekJoonDto(3, 3, 3, 3, 3, 3);
+            BaekJoonDto dto = new BaekJoonDto(1, 2, 3, 4, 5, 6);
             return memberService.initDbMemberCreate("BAEKER", username, nickName, about, "1234", img, baekJoonName, dto);
         }
 

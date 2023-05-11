@@ -1,4 +1,4 @@
-<table th:fragment="study(list, myStudies)"
+<table th:fragment="study(list, memberStudies)"
        th:if="${list eq 'study'}"
        class="table w-full">
     <!-- head -->
@@ -14,7 +14,7 @@
     </thead>
     <tbody>
     <tr class="hover"
-        th:each="myStudy , loop : ${myStudies}"
+        th:each="myStudy , loop : ${memberStudies}"
         th:object="${myStudy.study}">
 
         <th>

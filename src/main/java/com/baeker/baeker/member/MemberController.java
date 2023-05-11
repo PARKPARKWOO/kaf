@@ -258,8 +258,9 @@ public class MemberController {
         }
 
         List<MemberSnapshot> snapshotList = member.getSnapshotList();
-        List<MyStudy> myStudies = myStudyService.statusMember(member);
+        List<MyStudy> memberStudies = myStudyService.statusMember(member);
 
+        model.addAttribute("memberStudies", memberStudies);
         model.addAttribute("snapshotList", snapshotList);
         model.addAttribute("member", member);
         model.addAttribute("list", list);
