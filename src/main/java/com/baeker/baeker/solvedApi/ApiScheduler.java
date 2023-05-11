@@ -80,7 +80,7 @@ public class ApiScheduler {
 //        }
 //    }
 
-//    @Scheduled(cron = "${scheduler.cron.member}")
+    @Scheduled(cron = "${scheduler.cron.member}")
     public void checkMember() throws IOException, ParseException {
         log.info("스케줄러 실행 day of week = {}", LocalDate.now().getDayOfWeek());
         RsData<List<Member>> memberList = memberService.getAll();
