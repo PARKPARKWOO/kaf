@@ -155,7 +155,6 @@ public class StudyRuleService {
      * @param id = studyRuleId
      * else 에는 kakao 메시지 발송 기능 추가 필요
      */
-    @Transactional
     public void whenstudyEventType(Long id) {
         StudyRule studyRule = getStudyRule(id).getData();
         String studyName = studyRule.getStudy().getName();
