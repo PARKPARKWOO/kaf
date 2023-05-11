@@ -18,9 +18,10 @@ import java.util.Optional;
 public class MyStudyService {
 
     private final MyStudyRepository myStudyRepository;
+    private final MyStudyQueryRepository myStudyQRepository;
 
     /**
-     ** 생성 관련 method **
+     * * 생성 관련 method **
      * Study 개설시 개설자 등록 작업
      * 가입 신청
      * 스터디에 초대
@@ -54,7 +55,7 @@ public class MyStudyService {
 
     //-- 맴버 스터디에 초대 --//
     @Transactional
-    public RsData<MyStudy> invite(Member inviter, Member invitee,  Study study, String msg) {
+    public RsData<MyStudy> invite(Member inviter, Member invitee, Study study, String msg) {
 
         // 초대를 한 사람이 스터디원인지 검증
         RsData<MyStudy> isStudyMember = getMyStudy(inviter, study);
@@ -91,7 +92,7 @@ public class MyStudyService {
 
 
     /**
-     ** 수정과 삭제 관련 method **
+     * * 수정과 삭제 관련 method **
      * 가입과 초대 승인
      * 가입과 초대 메시지 변경
      * 가입 요청과 초대 삭제
@@ -137,13 +138,14 @@ public class MyStudyService {
 
 
     /**
-     ** 조회 관련 method **
+     * * 조회 관련 method **
      * find by id
      * find by member & study
      * find Status == member by member
      * find Status == member by study
      * find Status != member by member
      * find Status != member by study
+     * find by Member when leader
      */
 
     //-- find by id --//
@@ -214,6 +216,16 @@ public class MyStudyService {
                 pending.add(myStudy);
 
         return pending;
+    }
+
+    //-- member 가 리더인 my study 조회 --//
+    public RsData<List<MyStudy>> getMyStudyOnlyLeader(Member member) {
+        List<MyStudy> leader = myStudyQRepository.findLeader(member);
+
+        if (leader.size() == 0)
+            return RsData.of("F-1", "내가 리더인 스터디가 없습니다.", leader);
+
+        return RsData.successOf(leader);
     }
 }
 

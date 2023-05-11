@@ -253,7 +253,7 @@ public class MemberController {
 
         // 로그인일 때만 스터디 리스트 model 에 전달
         if (rq.isLogin()) {
-            List<MyStudy> myStudies = memberService.getMyStudyOnlyLeader(rq.getMember());
+            List<MyStudy> myStudies = myStudyService.getMyStudyOnlyLeader(rq.getMember()).getData();
             model.addAttribute("myStudies", myStudies);
         }
 
@@ -261,7 +261,6 @@ public class MemberController {
         List<MyStudy> myStudies = myStudyService.statusMember(member);
 
         model.addAttribute("snapshotList", snapshotList);
-        model.addAttribute("myStudies", rq.getMember().getMyStudies());
         model.addAttribute("member", member);
         model.addAttribute("list", list);
 

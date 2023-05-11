@@ -7,6 +7,7 @@ import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
 import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.member.snapshot.MemberSnapshotRepository;
+import com.baeker.baeker.myStudy.MyStudyQueryRepository;
 import com.baeker.baeker.myStudy.MyStudy;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
@@ -32,7 +33,6 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberQueryRepository memberQRepository;
     private final PasswordEncoder encoder;
     private final StudyService studyService;
     private final MemberSnapshotRepository memberSnapshotRepository;
