@@ -32,6 +32,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberQueryRepository memberQRepository;
     private final PasswordEncoder encoder;
     private final StudyService studyService;
     private final MemberSnapshotRepository memberSnapshotRepository;
