@@ -160,13 +160,12 @@ public class MyStudyService {
 
     //-- find by member, study --//
     public RsData<MyStudy> getMyStudy(Member member, Study study) {
-        List<MyStudy> myStudies = member.getMyStudies();
+        List<MyStudy> myStudies = myStudyQRepository.getMyStudy(member, study);
 
-        for (MyStudy myStudy : myStudies) {
-            if (myStudy.getStudy().equals(study))
-                return RsData.successOf(myStudy);
-        }
-        return RsData.of("F-1", "가입하지 않은 스터디 입니다.");
+        if (myStudies.size() == 0)
+            return RsData.of("F-1", "가입하지 않은 스터디 입니다.");
+
+        return RsData.successOf(myStudies.get(0));
     }
 
     //-- member 가 정회원인 my study 조회 --//

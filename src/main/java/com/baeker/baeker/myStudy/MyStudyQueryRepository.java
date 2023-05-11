@@ -1,5 +1,6 @@
 package com.baeker.baeker.myStudy;
 
+import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.study.QStudy;
 import com.baeker.baeker.study.Study;
@@ -50,6 +51,17 @@ public class MyStudyQueryRepository {
                 .selectFrom(myStudy)
                 .where(myStudy.study.eq(study)
                         .and(myStudy.status.eq(StudyStatus.MEMBER)))
+                .fetch();
+    }
+
+    //-- member 와 study 가 일치하는 My Study 조회 --//
+    public List<MyStudy> getMyStudy(Member member, Study study) {
+        QMyStudy myStudy = QMyStudy.myStudy;
+
+        return query
+                .selectFrom(myStudy)
+                .where(myStudy.member.eq(member)
+                        .and(myStudy.study.eq(study)))
                 .fetch();
     }
 }
