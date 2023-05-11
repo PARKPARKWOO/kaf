@@ -45,7 +45,6 @@ public class MemberService {
      * find by 백준 name
      * find all
      * find All + paging
-     * member 가 leader 인 MyStudy 조회
      * Study 가입 여부 조회
      */
     //-- find by username --//
@@ -90,29 +89,6 @@ public class MemberService {
 
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return memberRepository.findAll(pageable);
-    }
-
-    //-- find Member 가 리더인 MyStudy 리스트 조회 --//
-    public List<MyStudy> getMyStudyOnlyLeader(Member member) {
-        List<MyStudy> onlyLeader = new ArrayList<>();
-        List<MyStudy> myStudies = member.getMyStudies();
-
-        for (MyStudy myStudy : myStudies)
-            if (member.getNickName().equals(myStudy.getStudy().getLeader()))
-                onlyLeader.add(myStudy);
-
-        return onlyLeader;
-    }
-
-    //-- 스터디 가입 여부 확인 --//
-    public boolean isMyStudy(Member member, Study study) {
-        List<MyStudy> myStudies = member.getMyStudies();
-
-        for (MyStudy myStudy : myStudies)
-            if (!myStudy.getStudy().equals(study))
-                return false;
-
-        return true;
     }
 
     /**

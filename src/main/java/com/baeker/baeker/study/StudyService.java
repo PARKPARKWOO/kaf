@@ -34,6 +34,7 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final StudySnapShotRepository studySnapShotRepository;
     private final MemberRepository memberRepository;
+
     /**
      ** 생성 관련 method **
      * create
@@ -62,7 +63,6 @@ public class StudyService {
      * * 조회 관련 method **
      * find by id
      * find by study name
-     * find member in study by member id, study id
      * find all member in study
      * find all
      * find all + paging
@@ -86,23 +86,6 @@ public class StudyService {
             return RsData.successOf(byName.get());
 
         return RsData.of("F-1", "존재 하지않는 name");
-    }
-
-    //-- 스터디원 id 로 member 찾기 --//
-    public RsData<Member> getMember(Long memberId, Long studyId) {
-        RsData<List<Member>> studyMemberRs = this.getAllMember(studyId);
-
-        if (studyMemberRs.isFail())
-            return RsData.of("F-1", studyMemberRs.getMsg());
-
-        List<Member> members = studyMemberRs.getData();
-
-        for (Member member : members) {
-            if (member.getId() == memberId)
-                return RsData.successOf(member);
-        }
-
-        return RsData.of("F-2", "스터디에 존재하지 않는 회원입니다.");
     }
 
     //-- find all member --//

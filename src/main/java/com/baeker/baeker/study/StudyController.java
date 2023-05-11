@@ -28,7 +28,6 @@ public class StudyController {
 
     private final StudyService studyService;
     private final MyStudyService myStudyService;
-    private final MemberService memberService;
     private final Rq rq;
 
     //-- 스터디 생성 폼 --//
@@ -80,7 +79,8 @@ public class StudyController {
 
         if (rq.isLogin()) {
             Member member = rq.getMember();
-            isMyStudy = memberService.isMyStudy(member, studyRs.getData());
+            RsData<MyStudy> myStudyRs = myStudyService.getMyStudy(member, studyRs.getData());
+            if (myStudyRs.isFail()) isMyStudy = false;
         }
 
         List<MyStudy> myStudies = myStudyService.statusMember(studyRs.getData());
