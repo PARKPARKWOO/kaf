@@ -169,28 +169,14 @@ public class MyStudyService {
         return RsData.of("F-1", "가입하지 않은 스터디 입니다.");
     }
 
-    //-- member 등급인 my study 만 조회 by member --//
+    //-- member 가 정회원인 my study 조회 --//
     public List<MyStudy> statusMember(Member member) {
-        List<MyStudy> myStudies = new ArrayList<>();
-        List<MyStudy> myStudyList = member.getMyStudies();
-
-        for (MyStudy myStudy : myStudyList)
-            if (myStudy.getStatus().equals(StudyStatus.MEMBER))
-                myStudies.add(myStudy);
-
-        return myStudies;
+        return myStudyQRepository.statusMember(member);
     }
 
-    //-- member 등급인 my study 만 조회 by study --//
+    //-- 스터디 가입 승인이 완료된 my study 조회 --//
     public List<MyStudy> statusMember(Study study) {
-        List<MyStudy> myStudies = new ArrayList<>();
-        List<MyStudy> myStudyList = study.getMyStudies();
-
-        for (MyStudy myStudy : myStudyList)
-            if (myStudy.getStatus().equals(StudyStatus.MEMBER))
-                myStudies.add(myStudy);
-
-        return myStudies;
+        return myStudyQRepository.statusMember(study);
     }
 
 

@@ -2,6 +2,7 @@ package com.baeker.baeker.myStudy;
 
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.study.QStudy;
+import com.baeker.baeker.study.Study;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
@@ -27,6 +28,28 @@ public class MyStudyQueryRepository {
                 .join(myStudy.study, study)
                 .where(myStudy.member.eq(member)
                         .and(study.leader.eq(member.getNickName())))
+                .fetch();
+    }
+
+    //-- MEMBER 등급 my study 조회 by Member--//
+    public List<MyStudy> statusMember(Member member) {
+        QMyStudy myStudy = QMyStudy.myStudy;
+
+        return query
+                .selectFrom(myStudy)
+                .where(myStudy.member.eq(member)
+                        .and(myStudy.status.eq(StudyStatus.MEMBER)))
+                .fetch();
+    }
+
+    //-- MEMBER 등급 my study 조회 by Study--//
+    public List<MyStudy> statusMember(Study study) {
+        QMyStudy myStudy = QMyStudy.myStudy;
+
+        return query
+                .selectFrom(myStudy)
+                .where(myStudy.study.eq(study)
+                        .and(myStudy.status.eq(StudyStatus.MEMBER)))
                 .fetch();
     }
 }

@@ -218,5 +218,31 @@ class MyStudyServiceTest {
             assertThat(myStudies.contains(myStudy)).isFalse();
     }
 
+    @Test
+    void MyStudy_정회원_조회() {
+        Member member1 = create("user1", "member1");
+        Member member2 = create("user2", "member2");
+        Member member3 = create("user3", "member3");
 
+        Study study1 = createStudy("study1", member1);
+        Study study2 = createStudy("study2", member2);
+
+        // 정식 승인 없이 가입만 요청
+        myStudyService.join(member2, study1, "");
+        myStudyService.join(member1, study2, "");
+        myStudyService.invite(member1, member3, study1, "");
+
+        // 승인 안된 모든 my study 조회
+        assertThat(study1.getMyStudies().size()).isEqualTo(3);
+        assertThat(study2.getMyStudies().size()).isEqualTo(2);
+
+        // member1 이 Member 등급인 my study 조회
+        List<MyStudy> myStudies = myStudyService.statusMember(member1);
+        assertThat(myStudies.size()).isEqualTo(1);
+        assertThat(myStudies.get(0).getStudy()).isEqualTo(study1);
+
+        // study1 의 member 등급인 my study 조회
+        List<MyStudy> myStudyList = myStudyService.statusMember(study1);
+        assertThat(myStudies.size()).isEqualTo(1);
+    }
 }

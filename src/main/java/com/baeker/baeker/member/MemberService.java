@@ -7,8 +7,8 @@ import com.baeker.baeker.member.form.MemberJoinForm;
 import com.baeker.baeker.member.form.MemberModifyForm;
 import com.baeker.baeker.member.snapshot.MemberSnapshot;
 import com.baeker.baeker.member.snapshot.MemberSnapshotRepository;
-import com.baeker.baeker.myStudy.MyStudyQueryRepository;
 import com.baeker.baeker.myStudy.MyStudy;
+import com.baeker.baeker.myStudy.MyStudyQueryRepository;
 import com.baeker.baeker.study.Study;
 import com.baeker.baeker.study.StudyService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +33,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MyStudyQueryRepository myStudyQRepository;
     private final PasswordEncoder encoder;
     private final StudyService studyService;
     private final MemberSnapshotRepository memberSnapshotRepository;
@@ -198,7 +199,7 @@ public class MemberService {
         if (nickName.contains("운영자"))
             return RsData.of("F-1", nickName + "(은)는 사용할 수 없는 이름입니다.");
 
-        List<MyStudy> myStudies = this.getMyStudyOnlyLeader(member);
+        List<MyStudy> myStudies = myStudyQRepository.findLeader(member);
 
         Member modifyMember = member.modifyMember(nickName, about, profileImg);
         Member saveMember = memberRepository.save(modifyMember);
