@@ -181,26 +181,12 @@ public class MyStudyService {
 
     //-- member 등급이 아닌 my study 조회 by member --//
     public List<MyStudy> statusNotMember(Member member) {
-        List<MyStudy> pending = new ArrayList<>();
-        List<MyStudy> myStudies = member.getMyStudies();
-
-        for (MyStudy myStudy : myStudies)
-            if (!myStudy.getStatus().equals(StudyStatus.MEMBER))
-                pending.add(myStudy);
-
-        return pending;
+        return myStudyQRepository.statusNotMember(member);
     }
 
     //-- member 등급이 아닌 my study 조회 by study --//
     public List<MyStudy> statusNotMember(Study study) {
-        List<MyStudy> pending = new ArrayList<>();
-        List<MyStudy> myStudies = study.getMyStudies();
-
-        for (MyStudy myStudy : myStudies)
-            if (!myStudy.getStatus().equals(StudyStatus.MEMBER))
-                pending.add(myStudy);
-
-        return pending;
+        return myStudyQRepository.statusNotMember(study);
     }
 
     //-- member 가 리더인 my study 조회 --//

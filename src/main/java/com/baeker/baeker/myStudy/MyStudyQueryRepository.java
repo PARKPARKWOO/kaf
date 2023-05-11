@@ -64,4 +64,26 @@ public class MyStudyQueryRepository {
                         .and(myStudy.study.eq(study)))
                 .fetch();
     }
+
+    //-- member 등급이 아닌 my study 조회 by member --//
+    public List<MyStudy> statusNotMember(Member member) {
+        QMyStudy myStudy = QMyStudy.myStudy;
+
+        return query
+                .selectFrom(myStudy)
+                .where(myStudy.member.eq(member)
+                        .and(myStudy.status.ne(StudyStatus.MEMBER)))
+                .fetch();
+    }
+
+    //-- member 등급이 아닌 my study 조회 by study --//
+    public List<MyStudy> statusNotMember(Study study) {
+        QMyStudy myStudy = QMyStudy.myStudy;
+
+        return query
+                .selectFrom(myStudy)
+                .where(myStudy.study.eq(study)
+                        .and(myStudy.status.ne(StudyStatus.MEMBER)))
+                .fetch();
+    }
 }
