@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -42,6 +44,11 @@ class MyStudyServiceTest {
         myStudyService.create(member, study);
         studyService.addBaekJoon(study, member);
         return study;
+    }
+
+    private void joinStudy(Member member1, Study study2) {
+        MyStudy myStudy = myStudyService.join(member1, study2, "").getData();
+        myStudyService.accept(myStudy);
     }
 
     @Test
@@ -176,5 +183,66 @@ class MyStudyServiceTest {
         MyStudy modifyMsg = myStudyService.modifyMsg(myStudy, "hello");
 
         assertThat(myStudy.getMsg()).isEqualTo("hello");
+    }
+
+    @Test
+    void Member_가_Leader_인_MyStudy_조회() {
+        Member member1 = create("user1", "member1");
+        Member member2 = create("user2", "member2");
+        Member member3 = create("user3", "member3");
+
+        Study study1 = createStudy("study1", member1);
+        Study study1_1 = createStudy("study1_1", member1);
+        Study study2 = createStudy("study2", member2);
+        Study study3 = createStudy("study3", member3);
+
+        joinStudy(member1, study2);
+        joinStudy(member1, study3);
+
+        // member1 이 가입한 스터디 수 확인
+        assertThat(member1.getMyStudies().size()).isEqualTo(4);
+
+        // member 가 리더인 my study 만 조회
+        RsData<List<MyStudy>> leaderRs = myStudyService.getMyStudyOnlyLeader(member1);
+        assertThat(leaderRs.isSuccess()).isTrue();
+        List<MyStudy> myStudies = leaderRs.getData();
+
+        // 검증
+        assertThat(myStudies.size()).isEqualTo(2);
+        assertThat(myStudies.contains(study1.getMyStudies().get(0))).isTrue();
+        assertThat(myStudies.contains(study1_1.getMyStudies().get(0))).isTrue();
+
+        // 리더가 아닌 my study 검증
+        List<MyStudy> notLeaderMyStudy = study2.getMyStudies();
+        for (MyStudy myStudy : notLeaderMyStudy)
+            assertThat(myStudies.contains(myStudy)).isFalse();
+    }
+
+    @Test
+    void MyStudy_정회원_조회() {
+        Member member1 = create("user1", "member1");
+        Member member2 = create("user2", "member2");
+        Member member3 = create("user3", "member3");
+
+        Study study1 = createStudy("study1", member1);
+        Study study2 = createStudy("study2", member2);
+
+        // 정식 승인 없이 가입만 요청
+        myStudyService.join(member2, study1, "");
+        myStudyService.join(member1, study2, "");
+        myStudyService.invite(member1, member3, study1, "");
+
+        // 승인 안된 모든 my study 조회
+        assertThat(study1.getMyStudies().size()).isEqualTo(3);
+        assertThat(study2.getMyStudies().size()).isEqualTo(2);
+
+        // member1 이 Member 등급인 my study 조회
+        List<MyStudy> myStudies = myStudyService.statusMember(member1);
+        assertThat(myStudies.size()).isEqualTo(1);
+        assertThat(myStudies.get(0).getStudy()).isEqualTo(study1);
+
+        // study1 의 member 등급인 my study 조회
+        List<MyStudy> myStudyList = myStudyService.statusMember(study1);
+        assertThat(myStudies.size()).isEqualTo(1);
     }
 }
