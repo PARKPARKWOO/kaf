@@ -169,8 +169,10 @@ public class MemberController {
             log.info("존재하지 않는 id 입니다.");
             return rq.historyBack( baekJoonName + "은(는) 존재하지 않는 id 입니다.");
         }
-        RsData<Member> connectRs = memberService.connectBaekJoon(rq.getMember(), baekJoonName);
-        solvedApiService.getSolvedCount(rq.getMember().getId());
+        RsData<Member> connectRs = memberService.connectBaekJoon(rq.getMember().getId(), baekJoonName);
+        Member member = rq.getMember();
+        MemberDto memberDto = new MemberDto(member.getId(),member.getBaekJoonName(), member.getBronze(),member.getSliver(), member.getGold(), member.getPlatinum(), member.getDiamond(), member.getRuby());
+        solvedApiService.getSolvedCount(memberDto, 1, 6);
 
         log.info("백준 연동 성공 BaakJoon id = {}", baekJoonName);
         return rq.redirectWithMsg("/", connectRs.getMsg());
@@ -214,10 +216,11 @@ public class MemberController {
             return rq.historyBack("인증 코드가 일치하지 않습니다.");
         }
         Member member = rq.getMember();
+        MemberDto memberDto = new MemberDto(member.getId(),member.getBaekJoonName(), member.getBronze(),member.getSliver(), member.getGold(), member.getPlatinum(), member.getDiamond(), member.getRuby());
 
         // solved ac 를 호출해 해결한 문제 수가 저장된 BaekJoonDto 를 반환받음
-        solvedApiService.getSolvedCount(member.getId());
-        RsData<Member> memberRs = memberService.connectBaekJoon(member, form.getBaekJoonName());
+        solvedApiService.getSolvedCount(memberDto, 1, 6);
+        RsData<Member> memberRs = memberService.connectBaekJoon(member.getId(), form.getBaekJoonName());
         if (memberRs.isFail()) {
             log.info("연동 실패 error = {}", memberRs.getMsg());
             return rq.historyBack(memberRs.getMsg());

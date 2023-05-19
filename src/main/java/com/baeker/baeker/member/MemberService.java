@@ -73,13 +73,17 @@ public class MemberService {
     }
 
     //-- find all --//
-    public RsData<List<Member>> getAll() {
+    public RsData<List<MemberDto>> getAll() {
         List<Member> memberList = memberRepository.findAll();
-
+        List<MemberDto> memberDtoList = new ArrayList<>();
+        for (Member member : memberList) {
+            MemberDto memberDto = new MemberDto(member.getId(), member.getBaekJoonName(), member.getBronze(), member.getSliver(), member.getGold(), member.getPlatinum(), member.getDiamond(), member.getRuby());
+            memberDtoList.add(memberDto);
+        }
         if (memberList.size() == 0)
-            return RsData.failOf(memberList);
+            return RsData.failOf(memberDtoList);
 
-        return RsData.of("S-1", "Size = {}" + memberList.size(), memberList);
+        return RsData.of("S-1", "Size = {}" + memberList.size(), memberDtoList);
     }
 
     //-- find all + paging --//
@@ -139,8 +143,8 @@ public class MemberService {
 
     //-- 백준 id 연동 --//
     @Transactional
-    public RsData<Member> connectBaekJoon(Member member, String baekJoonName) {
-
+    public RsData<Member> connectBaekJoon(Long id, String baekJoonName) {
+        Member member = getMember(id).getData();
         Member connectBaekJoon = member.connectBaekJoon(baekJoonName);
         Member saveMember = memberRepository.save(connectBaekJoon);
         this.saveSnapshot(member);
