@@ -3,6 +3,7 @@ package com.baeker.baeker.batch;
 import com.baeker.baeker.base.event.BaekJoonEvent;
 import com.baeker.baeker.base.request.RsData;
 import com.baeker.baeker.kafka.KafkaController;
+import com.baeker.baeker.kafka.KafkaProducer;
 import com.baeker.baeker.member.Member;
 import com.baeker.baeker.member.MemberDto;
 import com.baeker.baeker.member.MemberService;
@@ -47,6 +48,7 @@ public class BatchConfiguration {
     private final SolvedApiService solvedApiService;
     private final KafkaController kafkaController;
     private final MemberService memberService;
+    private final KafkaProducer producer;
 
     @Bean
     public Job testJob(JobRepository jobRepository, Step stepSolved) {
@@ -90,7 +92,7 @@ public class BatchConfiguration {
                     int Ruby = solvedApiService.getSolvedCount(member, 26, 31).get() - member.getRuby();
                     Thread.sleep(1000);
 
-                    BaekJoonDto dto = new BaekJoonDto(bronze , Silver, Gold, Platinum, Diamond, Ruby);
+                    BaekJoonDto dto = new BaekJoonDto(bronze, Silver, Gold, Platinum, Diamond, Ruby);
                     MemberDto memberDto = new MemberDto();
                     memberDto.setBaekJoonName(member.getBaekJoonName());
                     memberDto.setId(member.getId());
@@ -100,10 +102,12 @@ public class BatchConfiguration {
                     memberDto.setPlatinum(Platinum);
                     memberDto.setDiamond(Diamond);
                     memberDto.setRuby(Ruby);
-                    kafkaController.sendMessage(memberDto.getBaekJoonName());
+                    producer.sendMessage(memberDto);
                 } catch (NullPointerException e) {
                     log.info("###############" + e + "###############");
                     e.printStackTrace();
+                } catch (NotFoundException e) {
+                    log.info("데이터 못찾음");
                 }
             }
             return RepeatStatus.FINISHED;

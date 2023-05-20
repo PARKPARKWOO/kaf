@@ -1,6 +1,7 @@
 package com.baeker.baeker.kafka;
 
 import com.baeker.baeker.member.MemberDto;
+import com.baeker.baeker.member.MemberService;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -33,9 +34,8 @@ public class KafkaConfiguration {
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, MemberDtoSerializer.class.getName());
         props.put(ProducerConfig.LINGER_MS_CONFIG, linger);
-
         return props;
     }
 

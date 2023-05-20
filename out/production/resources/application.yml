@@ -4,7 +4,7 @@ spring:
       initialize-schema: always
 
   kafka:
-    bootstrap-servers: 3.39.24.149:9092
+    bootstrap-servers: localhost:9092
     consumer:
       group-id: baeker
       auto-offset-reset: earliest
